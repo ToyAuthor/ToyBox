@@ -1,0 +1,147 @@
+
+#pragma once
+
+#include <cmath>
+#include <cfloat>
+#include "toy/EnvironmentalMacro.hpp"
+#include "toy/Exception.hpp"
+
+
+namespace toy{
+namespace math{
+
+template <typename Type>
+Type Min(const Type a,const Type b)
+{
+	if(a>b)  return b;
+	else     return a;
+}
+
+template <typename Type>
+Type Min(const Type a,const Type b,const Type c)
+{
+	Type  result;
+
+	if(a>b)  result = b;
+	else     result = a;
+
+	if(result>c)  result = c;
+
+	return result;
+}
+
+template <typename Type>
+Type Min(const Type a,const Type b,const Type c,const Type d)
+{
+	Type  result;
+
+	if(a>b)  result = b;
+	else     result = a;
+
+	if(result>c)  result = c;
+	if(result>d)  result = d;
+
+	return result;
+}
+
+// Figure out a number base on 2 and bigger than t and most close t.
+template <typename Type>
+inline Type exp1(const Type t)
+{
+	Type    answer=2;
+
+	while(t>answer)
+	{
+		answer=answer<<1;
+	}
+
+	return answer;
+}
+
+// Same function with exp1().
+template <typename Type>
+inline Type exp2(const Type t)
+{
+	Type    answer=2;
+
+	while(t>answer)
+	{
+		answer*=2;
+	}
+
+	return answer;
+}
+
+// Figure out a number(f(x)=1+2+4+8+16+...) smaller than t and most close t.
+template <typename Type>
+inline Type exp3(const Type t)
+{
+	Type    answer=1;
+	Type    item  =1;
+
+	while(answer<t)
+	{
+		item=item<<1;
+		answer+=item;
+	}
+
+	answer-=item;
+	return answer;
+}
+
+/*
+ * cot(x) = cos(x)/sin(x)
+ * cot(x) = tan(PI/2 - x)----better  M_PI_2
+ */
+template <typename Type>
+inline Type cot(const Type t)
+{
+	return static_cast<Type>(::tan(1.57079632679489661923 - t));
+}
+
+template <typename Type>
+inline Type Sqrt(Type f)
+{
+	Type    result=(Type)0;
+
+	#if defined(TOY_GCC)&& TOY_OPTION_ENABLE_ASSEMBLY
+		/*__asm__ __volatile__
+		(
+			"fsqrt\n\t"
+			"fstp %0"
+			: "=m" (result)
+			: "g" (f)
+		);*/
+		__asm__ __volatile__
+		(
+			"fld %1\n\t"
+			"fsqrt\n\t"
+			"fstp %0"
+			: "=m" (result)
+			: "t" (f)
+		);
+		/*
+		__asm__ __volatile__
+		(
+			"fsqrt"
+			: "+t" (f)
+		);
+		result=f;*/
+	#elif defined(TOY_MSVC)&& TOY_OPTION_ENABLE_ASSEMBLY
+		__asm
+		{
+			fld [f]
+			fsqrt
+			fstp [result]
+		}
+	#else
+		result=sqrt(f);
+	#endif
+
+	return result;
+}
+
+
+
+}//namespace math
+}//namespace toy
