@@ -1,0 +1,3 @@
+
+Open "ToyBox/cmake/ToyThirdPartyPath.cmake"
+Modify the path of SFML.

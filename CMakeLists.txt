@@ -23,5 +23,6 @@ set(TOY_DEFAULT_LINK_DIR ${TOY_ROOT_BINARY_DIR}/lib )
 
 toy_IncludeTools()
 
+add_subdirectory(third-party)
 add_subdirectory(source/toy)
 add_subdirectory(examples)

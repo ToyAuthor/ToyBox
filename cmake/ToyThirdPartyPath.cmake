@@ -16,4 +16,14 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_libname_sfml_audio      "sfml-audio" )
 	set(TOY_libname_sfml_network    "sfml-network" )
 
+
+	set(TOY_include_zlib        "${TOY_ROOT_SOURCE_DIR}/third-party/zlib" "${TOY_ROOT_BINARY_DIR}/third-party/zlib" )
+	set(TOY_library_zlib        "${TOY_ROOT_BINARY_DIR}/third-party/zlib" )
+	set(TOY_libname_zlib        "zlib" )
+
+
+	set(TOY_include_libpng      "${TOY_ROOT_SOURCE_DIR}/third-party/libpng" "${TOY_ROOT_BINARY_DIR}/third-party/libpng" )
+	set(TOY_library_libpng      "${TOY_ROOT_BINARY_DIR}/third-party/libpng" )
+	set(TOY_libname_libpng      "png" )
+
 endmacro(toy_SetThirdPartyLibraryPath)
