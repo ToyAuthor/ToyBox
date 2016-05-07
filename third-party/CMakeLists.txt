@@ -6,3 +6,9 @@ set(ZLIB_INCLUDE_DIR ${TOY_include_zlib})
 set(ZLIB_LIBRARY     ${TOY_libname_zlib})
 
 add_subdirectory(libpng)
+
+if(UNIX)
+	add_subdirectory(p7zip)
+else()
+	add_subdirectory(7zip)
+endif()
