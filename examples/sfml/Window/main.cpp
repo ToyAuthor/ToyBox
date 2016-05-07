@@ -87,18 +87,16 @@ class Cube
 	private:
 
 		sf::Clock   clock;
-		GLuint      texture;
 };
 
-static std::shared_ptr<sf::RenderWindow> CreateWindow()
+static std::shared_ptr<sf::RenderWindow> CreateWindowS()
 {
 	sf::ContextSettings      contextSettings;
 	contextSettings.depthBits = 24;
 
 	auto window = std::make_shared<sf::RenderWindow>(
 		sf::VideoMode(800, 600),
-		//L"SFML 範例",
-		L"ToyBox;玩具箱;おもちゃ箱;장난감 상자;खिलौनो का बक्सा",
+		L"SFML 範例",
 		sf::Style::Default,
 		contextSettings);
 
@@ -159,7 +157,7 @@ int main()
 {
 	std::string   my_path(TOY_RESOURCE_PATH);
 
-	auto          window = CreateWindow();
+	auto          window = CreateWindowS();
 
 	sf::Texture   backgroundTexture;
 
