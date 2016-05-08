@@ -10,7 +10,9 @@ endif()
 
 
 set(SOURCE
+	Log.cpp
 	Image.cpp
+	Character.cpp
 )
 
 
