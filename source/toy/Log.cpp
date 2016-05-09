@@ -12,47 +12,44 @@
 void toy::Log(const char *fmt, ... )
 {
 	va_list         argptr;
-
 	va_start(argptr, fmt);
 
-	char      buffer[STRING_SIZE];
-
-	vsnprintf(buffer,STRING_SIZE,fmt,argptr);
-
 	#if defined(TOY_WINDOWS)
-		DWORD			ws;
-		wchar_t         buffer2[STRING_SIZE];
+		DWORD     ws;
+		char      bufferA[STRING_SIZE];
+		wchar_t   bufferW[STRING_SIZE];
 
-		toy::Utf8ToWChar(buffer2,buffer,std::strlen(buffer));
-		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),buffer2,wcslen(buffer2),&ws,NULL);
+		vsnprintf(bufferA,STRING_SIZE,fmt,argptr);
+		toy::Utf8ToWChar(bufferW,bufferA,std::strlen(bufferA));
+		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),bufferW,std::wcslen(bufferW),&ws,nullptr);
 	#else
-		printf("%s",buffer);
+		printf(fmt,argptr);
 	#endif
 
 	va_end(argptr);
 }
 
+// Only work on Windows. Too bad.
 void toy::Log(const wchar_t *fmt, ... )
 {
 	va_list         argptr;
-
 	va_start(argptr, fmt);
 
-	wchar_t      buffer[STRING_SIZE];
-
-	#if defined(TOY_MSVC)
-		_vsnwprintf_s(buffer,STRING_SIZE,(int)STRING_SIZE-1,fmt,argptr);
-	#elif defined(TOY_MINGW)
-		vsnwprintf(buffer,STRING_SIZE,fmt,argptr);
-	#else
-		vsnprintf(buffer,STRING_SIZE,fmt,argptr);   // It's wrong.
-	#endif
-
 	#if defined(TOY_WINDOWS)
+		wchar_t      buffer[STRING_SIZE];
+
+		#if defined(TOY_MSVC)
+			_vsnwprintf_s(buffer,STRING_SIZE,(int)STRING_SIZE-1,fmt,argptr);
+		#elif defined(TOY_MINGW)
+			vsnwprintf(buffer,STRING_SIZE,fmt,argptr);
+		#else
+			vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.
+		#endif
+
 		DWORD			ws;
-		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),buffer,wcslen(buffer),&ws,NULL);
+		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),buffer,std::wcslen(buffer),&ws,nullptr);
 	#else
-		printf("%s",buffer);  // It's wrong.
+		wprintf(fmt,argptr);    // No. It doesn't work on Linux.
 	#endif
 
 	va_end(argptr);

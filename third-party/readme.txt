@@ -3,13 +3,13 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
 
 
     SFML-2.3.2          zlib License
-    OpenAL-Soft         LGPL license
-    libjpeg             public domain
-    stb_image           public domain
-    freetype            FreeType license or GPL license
-    libogg              BSD license
-    libvorbis           BSD license
-    libflac             BSD license
+    OpenAL-Soft         LGPL License
+    libjpeg             Public Domain
+    stb_image           Public Domain
+    freetype            FreeType License or GPL License
+    libogg              BSD License
+    libvorbis           BSD License
+    libflac             BSD License
 
 
     zlib-1.2.8          zlib License

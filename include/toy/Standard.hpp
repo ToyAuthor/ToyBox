@@ -3,7 +3,8 @@
 #include <cstdint>
 #include <functional>
 #include <string>
-#include <wchar.h>
-#include <wctype.h>
+#include <memory>
+#include <cwchar>
+#include <cwctype>
 #include "toy/CompilerConfig.hpp"
 #include "toy/Log.hpp"

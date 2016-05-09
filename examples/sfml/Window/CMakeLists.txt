@@ -14,7 +14,7 @@ set(LIBS
 	${TOY_libname_sfml_system}
 	${TOY_libname_sfml_window}
 	${TOY_libname_sfml_graphics}
-	)
+)
 
 if(APPLE)
 	find_library(TOY_FW_OpenGL OpenGL)

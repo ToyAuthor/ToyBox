@@ -8,7 +8,7 @@ int main2()
 	toy::Log("Hello world\n");
 	toy::Log("哈囉\n");
 
-	toy::Root               root;                   // Please declare it before any object of ToyBox.
+	toy::Root      root;
 
 	return EXIT_SUCCESS;
 }
