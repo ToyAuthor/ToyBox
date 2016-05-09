@@ -11,7 +11,7 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
     libvorbis           BSD License
     libflac             BSD License
 
-
+    boost-1.60.0        Boost Software License
     zlib-1.2.8          zlib License
     libpng-1.6.12       libpng License
     7zip-9.20           GNU LGPL

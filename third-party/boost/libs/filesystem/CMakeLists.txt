@@ -1,0 +1,48 @@
+
+set(PROJECT_NAME boost_filesystem)
+
+project(${PROJECT_NAME})
+
+include_directories(${BOOST_INCLUDE_DIR})
+
+if(BOOST_BUILD_SHARED_LIBS)
+	add_definitions(-DBOOST_FILESYSTEM_DYN_LINK=1)
+else()
+	add_definitions(-DBOOST_FILESYSTEM_STATIC_LINK=1)
+endif()
+
+
+set(SOURCE
+	src/codecvt_error_category.cpp
+	src/operations.cpp
+	src/path.cpp
+	src/path_traits.cpp
+	src/portability.cpp
+	src/unique_path.cpp
+	src/utf8_codecvt_facet.cpp
+	src/windows_file_codecvt.cpp
+)
+
+set(LIB
+	boost_system
+)
+
+set(LIBRARY_OUTPUT_PATH ${BOOST_LIBRARY_OUTPUT_PATH})
+
+add_library(${PROJECT_NAME} ${BOOST_LIBRARY_TYPE} ${SOURCE})
+
+target_link_libraries(${PROJECT_NAME} ${LIB})
+
+if(MSVC)
+	set_target_properties(${PROJECT_NAME} PROPERTIES
+		LIBRARY_OUTPUT_DIRECTORY            ${BOOST_LIBRARY_OUTPUT_PATH}
+		LIBRARY_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
+		LIBRARY_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
+		RUNTIME_OUTPUT_DIRECTORY            ${BOOST_LIBRARY_OUTPUT_PATH}
+		RUNTIME_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
+		RUNTIME_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
+		ARCHIVE_OUTPUT_DIRECTORY            ${BOOST_LIBRARY_OUTPUT_PATH}
+		ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
+		ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
+	)
+endif()

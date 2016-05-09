@@ -1,0 +1,68 @@
+
+set(PROJECT_NAME boost_thread)
+
+project(${PROJECT_NAME})
+
+include_directories(${BOOST_INCLUDE_DIR})
+
+if(BOOST_BUILD_SHARED_LIBS)
+	add_definitions(-DBOOST_THREAD_BUILD_DLL=1)
+	#add_definitions(-DBOOST_THREAD_USE_DLL=1)
+else()
+	add_definitions(-DBOOST_THREAD_BUILD_LIB=1)
+	#add_definitions(-DBOOST_THREAD_USE_LIB=1)
+endif()
+
+
+set(SOURCE
+	src/future.cpp
+)
+
+set(LIB
+	boost_system
+)
+
+if(WIN32)
+
+	if(MINGW)
+		add_definitions(-O2 -g -fdiagnostics-show-option)
+	endif()
+
+	list(APPEND SOURCE
+		src/win32/thread.cpp
+		src/win32/tss_dll.cpp
+		src/win32/tss_pe.cpp
+	)
+
+elseif(UNIX)
+
+	add_definitions(-DBOOST_THREAD_POSIX)
+
+	list(APPEND SOURCE
+		src/pthread/thread.cpp
+		src/pthread/once.cpp
+	)
+
+endif()
+
+
+
+set(LIBRARY_OUTPUT_PATH ${BOOST_LIBRARY_OUTPUT_PATH})
+
+add_library(${PROJECT_NAME} ${BOOST_LIBRARY_TYPE} ${SOURCE})
+
+target_link_libraries(${PROJECT_NAME} ${LIB})
+
+if(MSVC)
+	set_target_properties(${PROJECT_NAME} PROPERTIES
+		LIBRARY_OUTPUT_DIRECTORY            ${BOOST_LIBRARY_OUTPUT_PATH}
+		LIBRARY_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
+		LIBRARY_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
+		RUNTIME_OUTPUT_DIRECTORY            ${BOOST_LIBRARY_OUTPUT_PATH}
+		RUNTIME_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
+		RUNTIME_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
+		ARCHIVE_OUTPUT_DIRECTORY            ${BOOST_LIBRARY_OUTPUT_PATH}
+		ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
+		ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
+	)
+endif()

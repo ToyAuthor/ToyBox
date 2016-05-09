@@ -1,4 +1,5 @@
 
+add_subdirectory(boost)
 add_subdirectory(zlib)
 
 # libpng need ZLIB_INCLUDE_DIR and ZLIB_LIBRARY

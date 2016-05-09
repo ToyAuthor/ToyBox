@@ -2,6 +2,14 @@
 macro(toy_SetThirdPartyLibraryPath)
 
 	if(WIN32)
+		set(TOY_include_boost       "D:/sdk/boost" )
+		set(TOY_library_boost       "${TOY_ROOT_BINARY_DIR}/third-party/boost" )
+	elseif(UNIX)
+		set(TOY_include_boost       "~/sdk/boost" )
+		set(TOY_library_boost       "${TOY_ROOT_BINARY_DIR}/third-party/boost" )
+	endif()
+
+	if(WIN32)
 		set(TOY_include_sfml        "D:/sdk/SFML/include" )
 		set(TOY_library_sfml        "D:/sdk/SFML/lib" )
 	elseif(UNIX)
