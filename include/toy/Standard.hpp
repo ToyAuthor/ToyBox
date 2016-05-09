@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <functional>
+#include <map>
+#include <vector>
 #include <string>
 #include <memory>
 #include <cwchar>

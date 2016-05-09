@@ -3,21 +3,17 @@
 #include <iostream>
 #include "toy/file/TextLoader.hpp"
 
-//--------------------boost--------------------start
-#if TOY_OPTION_ENABLE_BOOST
 
-	//#ifdef TOY_WINDOWS
-		// Following warning will be output, if you don't define it.
-		// warning: 'boost::system::generic_category' defined but not used
-		#ifndef BOOST_SYSTEM_NO_DEPRECATED
-		#define BOOST_SYSTEM_NO_DEPRECATED 1
-		#endif
-	//#endif
-
-	#include "boost/filesystem.hpp"
-
+/*
+ * Following warning will be output, if you don't define it.
+ * warning: 'boost::system::generic_category' defined but not used
+ */
+#ifndef BOOST_SYSTEM_NO_DEPRECATED
+#define BOOST_SYSTEM_NO_DEPRECATED 1
 #endif
-//--------------------boost--------------------end
+
+#include "boost/filesystem.hpp"
+
 
 
 namespace toy{
@@ -57,14 +53,12 @@ static inline void CleanStringStream(std::stringstream &ss)
 
 bool TextLoader::LoadText(std::string filename)
 {
-	#if TOY_OPTION_ENABLE_BOOST
-		if ( !boost::filesystem::exists( filename.c_str() ) )
-		{
-			// Can't find this file!
-			toy::Oops(TOY_MARK);
-			return 0;
-		}
-	#endif
+	if ( !boost::filesystem::exists( filename.c_str() ) )
+	{
+		// Can't find this file!
+		toy::Oops(TOY_MARK);
+		return 0;
+	}
 
 	std::ifstream    file(filename.c_str());
 

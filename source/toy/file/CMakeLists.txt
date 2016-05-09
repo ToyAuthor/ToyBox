@@ -16,6 +16,8 @@ set(SOURCE
 
 
 set(LIBS toy
+	boost_filesystem
+	boost_system
 	${TOY_libname_zlib}
 	${TOY_libname_libpng}
 	${TOY_libname_7zip}

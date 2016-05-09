@@ -19,9 +19,9 @@ class TOY_API TextLoader
 
 		~TextLoader();
 
-		bool    LoadText(std::string filename);         // Loading a text file.
-		bool    LoadText(char *buffer,int size);  // Loading a text from memory.(copy)
-		bool    NextLine(std::string &str);             // Same as std::getline().
+		bool    LoadText(std::string filename);     // Loading a text file.
+		bool    LoadText(char *buffer,int size);    // Loading a text from memory.(copy)
+		bool    NextLine(std::string &str);         // Same as std::getline().
 
 	private:
 
