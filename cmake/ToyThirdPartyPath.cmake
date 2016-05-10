@@ -25,6 +25,11 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_libname_sfml_network    "sfml-network" )
 
 
+	set(TOY_include_lua         "${TOY_ROOT_SOURCE_DIR}/third-party/lua" )
+	set(TOY_library_lua         "${TOY_ROOT_BINARY_DIR}/third-party/lua" )
+	set(TOY_libname_lua         "lua" )
+
+
 	set(TOY_include_zlib        "${TOY_ROOT_SOURCE_DIR}/third-party/zlib" "${TOY_ROOT_BINARY_DIR}/third-party/zlib" )
 	set(TOY_library_zlib        "${TOY_ROOT_BINARY_DIR}/third-party/zlib" )
 	set(TOY_libname_zlib        "zlib" )

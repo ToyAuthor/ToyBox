@@ -1,4 +1,15 @@
 
+set(TOY_ENABLE_3RD_PARTY_SHARED_LIB ${TOY_ENABLE_SHARED_LIBS})
+
+
+if(TOY_ENABLE_3RD_PARTY_SHARED_LIB)
+	set(TOY_3RD_PARTY_LIB_TYPE SHARED)
+else()
+	set(TOY_3RD_PARTY_LIB_TYPE STATIC)
+endif()
+
+add_subdirectory(lua)
+
 add_subdirectory(boost)
 add_subdirectory(zlib)
 
