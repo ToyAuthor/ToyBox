@@ -7,22 +7,22 @@
 
 namespace toy{
 
-
 class Parser
 {
 	public:
+
 		Parser(){}
-		Parser(std::string filename){LoadText(filename);}
+		Parser(std::string filename){loadText(filename);}
 		~Parser(){}
 
-		void    LoadText(std::string filename);
-		bool    NextLine(std::string &str);
-		int     GetLineNumber();
+		void    loadText(std::string filename);
+		bool    nextLine(std::string *str);
+		int     getLineNumber();
 
 	private:
 
-		int             mLineNumber =0;
-		std::ifstream   mFile;
+		int             _lineNumber =0;
+		std::ifstream   _file;
 };
 
 }

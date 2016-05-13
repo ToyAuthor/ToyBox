@@ -14,21 +14,21 @@ class Standard : public Base
 	public:
 
 		Standard(){}
-		virtual ~Standard(){Close();}
+		virtual ~Standard(){close();}
 
-		virtual bool    OpenDir(std::string path);
-		virtual bool    Open(std::string filepath);
-		virtual bool    Read(void *file,uint32_t size);
-		virtual bool    Write(void *file,uint32_t size);
-		virtual bool    Seek(enum Base::Option option,int32_t offset);
-		virtual void    Close();
-		virtual bool    IsEmpty();
-		virtual void*   GetFilePointer();
+		virtual bool    openDir(std::string path);
+		virtual bool    open(std::string filepath);
+		virtual bool    read(void *file,uint32_t size);
+		virtual bool    write(void *file,uint32_t size);
+		virtual bool    seek(enum Base::Option option,int32_t offset);
+		virtual void    close();
+		virtual bool    isEmpty();
+		virtual void*   getFilePointer();
 
 	private:
 
-		FILE*        mFile = nullptr;
-		std::string  mPath;
+		FILE*        _file = nullptr;
+		std::string  _path;
 };
 
 

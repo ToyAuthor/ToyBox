@@ -1,5 +1,5 @@
 #include "toy/parser/Translator.hpp"
-
+#include "toy/parser/Dictionary.hpp"
 
 using namespace toy;
 using namespace parser;
@@ -15,72 +15,49 @@ Translator::~Translator()
 	;
 }
 
-bool Translator::IsExist(std::string key)
+bool Translator::isExist(std::string key)
 {
-	return mDictionaryStack.back()->IsExist(key);
+	return _data.back()->isExist(key);
 }
 
-void Translator::Transle(std::string key)
+void Translator::transle(std::string key)
 {
-	mDictionaryStack.back()->mTree[key]();
+	_data.back()->_tree[key]();
 }
 
-void Translator::PublishNextLine()
+void Translator::publishNextLine()
 {
-	mDictionaryStack.back()->CallbackNextLine();
+	_data.back()->callbackNextLine();
 }
 
-void Translator::PublishUnknown(std::string key)
+void Translator::publishUnknown(std::string key)
 {
-	auto  ptr = mDictionaryStack.back();
-	ptr->CallbackUnknown(key);
+	auto  ptr = _data.back();
+	ptr->callbackUnknown(key);
 }
 
-void Translator::PushDictionary(DictionaryPtr ptr)
+void Translator::pushDictionary(DictionaryPtr ptr)
 {
-	mDictionaryStack.push_back(ptr);
+	_data.push_back(ptr);
 }
 
-void Translator::PopDictionary(int num)
+void Translator::popDictionary(int num)
 {
-	if( num == static_cast<decltype(num)>(mDictionaryStack.size()) )
+	auto   size = static_cast<decltype(num)>(_data.size());
+
+	if ( num == size )
 	{
 		// Don't clean all.
 		toy::Oops(TOY_MARK);
 	}
 
-	for(;num>0;num--)
+	for (; num>0 ; num-- )
 	{
-		mDictionaryStack.pop_back();
+		_data.pop_back();
 	}
 }
 
-Translator::DictionaryPtr Translator::GetDictionary()
+Translator::DictionaryPtr Translator::getDictionary()
 {
-	return mDictionaryStack.back();
-}
-
-//------------------------------------------------------------------------------
-
-bool Translator::Dictionary::IsExist(std::string key)
-{
-	if(mTree.find(key) == mTree.end())
-	{
-		return 0;
-	}
-
-	return 1;
-}
-
-void Translator::Dictionary::SetKeyValue(std::string key,std::function<void(void)> value)
-{
-	if( IsExist(key) )
-	{
-		// You can't insert a same key.
-		toy::Oops(TOY_MARK);
-	}
-	else
-	{
-		mTree[key]=value;
-	}
+	return _data.back();
 }

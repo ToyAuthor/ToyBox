@@ -38,29 +38,29 @@ class TOY_API File
 		File(enum Mode mode=STD);
 		~File();
 
-		bool    OpenDir(std::string path);           // Open a folder or archive.
-		bool    Open(std::string filepath);
-		bool    Read(void *file,uint32_t size);
-		bool    Write(void *file,uint32_t size);
-		bool    Seek(enum SeekOption option,int32_t offset);
+		bool    openDir(std::string path);           // Open a folder or archive.
+		bool    open(std::string filepath);
+		bool    read(void *file,uint32_t size);
+		bool    write(void *file,uint32_t size);
+		bool    seek(enum SeekOption option,int32_t offset);
 
-//		void    Close();// Do it later.
+//		void    close();// Do it later.
 
-		bool    IsEmpty();
+		bool    isEmpty();
 
-		void    ChangeMode(enum Mode);
-//		bool    ReadFrom(const tchar *file);    // A path or a archive.
-//		bool    ReadFrom(String file);
+		void    changeMode(enum Mode);
+//		bool    readFrom(const tchar *file);    // A path or a archive.
+//		bool    readFrom(String file);
 
-		std::string   GetFileName();
-		void*   GetFilePointer();               // It's made for libpng. Bad design.
+		std::string   getFileName();
+		void*   getFilePointer();               // It's made for libpng. Bad design.
 
 	private:
 
-		void    FreeIO();
+		void    freeIO();
 
-		file::io::Base*     mIO;
-		enum Mode           mMode;
+		file::io::Base*     _io = nullptr;
+		enum Mode           _mode = STD;
 
 };
 

@@ -68,6 +68,7 @@ static int Buf_EnsureSize(CBuf *dest, size_t size)
 	Buf_Free(dest, &g_Alloc);
 	return Buf_Create(dest, size, &g_Alloc);
 }
+
 #if defined(TOY_LINUX) || defined(TOY_MAC)
 static Byte kUtf8Limits[5] = { 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 
@@ -198,48 +199,48 @@ static int SzCheckName(const char *name1,UInt16 *name2)
 
 Zip7::Zip7()
 {
-	this->allocImp.Alloc = SzAlloc;
-	this->allocImp.Free = SzFree;
-	this->allocTempImp.Alloc = SzAllocTemp;
-	this->allocTempImp.Free = SzFreeTemp;
-	this->temp = NULL;
-	this->outBuffer=0;
+	_allocImp.Alloc = SzAlloc;
+	_allocImp.Free = SzFree;
+	_allocTempImp.Alloc = SzAllocTemp;
+	_allocTempImp.Free = SzFreeTemp;
+	_temp = NULL;
+	_outBuffer=0;
 
-	SzArEx_Init(&(this->db));
+	SzArEx_Init(&(_db));
 }
 
-bool Zip7::OpenDir(std::string path)
+bool Zip7::openDir(std::string path)
 {
-	if(InFile_Open(&(this->archiveStream.file),path.c_str()))
+	if ( InFile_Open(&(_archiveStream.file),path.c_str()) )
 	{
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return 0;
 	}
 
 	SRes res;
 
-	FileInStream_CreateVTable(&(this->archiveStream));
-	LookToRead_CreateVTable(&(this->lookStream), False);
-	this->lookStream.realStream = &(this->archiveStream.s);
-	LookToRead_Init(&(this->lookStream));
+	FileInStream_CreateVTable(&(_archiveStream));
+	LookToRead_CreateVTable(&(_lookStream), False);
+	_lookStream.realStream = &(_archiveStream.s);
+	LookToRead_Init(&(_lookStream));
 	CrcGenerateTable();
-	SzArEx_Init(&(this->db));
+	SzArEx_Init(&(_db));
 
-	res = SzArEx_Open(&(this->db), &(this->lookStream.s), &(this->allocImp), &(this->allocTempImp));
+	res = SzArEx_Open(&(_db), &(_lookStream.s), &(_allocImp), &(_allocTempImp));
 
 	if (res != SZ_OK)
 	{
 		Oops(TOY_MARK);
-		SzArEx_Free(&(this->db), &(this->allocImp));
-		SzFree(NULL, this->temp);
-		File_Close(&(this->archiveStream.file));
+		SzArEx_Free(&(_db), &(_allocImp));
+		SzFree(NULL, _temp);
+		File_Close(&(_archiveStream.file));
 		return 0;
 	}
 
 	return 1;
 }
 
-bool Zip7::Open(std::string filepath)
+bool Zip7::open(std::string filepath)
 {
 	size_t	len;
 	size_t	tempSize = 0;
@@ -250,112 +251,117 @@ bool Zip7::Open(std::string filepath)
 	size_t	outSizeProcessed = 0;
 
 	UInt32	i=0;
-	UInt32	number_of_files=this->db.db.NumFiles;
-	for (;i<number_of_files;i++)
-	{
-		const CSzFileItem *f = this->db.db.Files + i;
+	UInt32	number_of_files=_db.db.NumFiles;
 
-		if(f->IsDir)
+	for ( ; i<number_of_files ; i++ )
+	{
+		const CSzFileItem *f = _db.db.Files + i;
+
+		if ( f->IsDir )
 		{
 			continue;
 		}
 
-		len=SzArEx_GetFileNameUtf16(&(this->db), i, NULL);
+		len = SzArEx_GetFileNameUtf16(&(_db), i, NULL);
 
-		if(len > tempSize)
+		if ( len > tempSize )
 		{
-			SzFree(NULL, this->temp);
+			SzFree(NULL, _temp);
 			tempSize = len;
-			this->temp = (UInt16 *)SzAlloc(NULL, tempSize * sizeof(this->temp[0]));
-			if(this->temp == 0)
+			_temp = (UInt16 *)SzAlloc(NULL, tempSize * sizeof(_temp[0]));
+			if ( _temp == 0 )
 			{
-				Oops(TOY_MARK);
+				toy::Oops(TOY_MARK);
 				return 0;
 			}
 		}
 
-		SzArEx_GetFileNameUtf16(&(this->db), i, this->temp);
+		SzArEx_GetFileNameUtf16(&(_db), i, _temp);
 
-		if(SzCheckName(filepath.c_str(),this->temp))
+		if ( SzCheckName(filepath.c_str(),_temp) )
 		{
-			res = SzArEx_Extract(&(this->db), &(this->lookStream.s), i,
-			&blockIndex, &(this->outBuffer), &outBufferSize,
+			res = SzArEx_Extract(&(_db), &(_lookStream.s), i,
+			&blockIndex, &(_outBuffer), &outBufferSize,
 			&offset, &outSizeProcessed,
-			&(this->allocImp), &(this->allocTempImp));
+			&(_allocImp), &(_allocTempImp));
 			if(res == SZ_OK)
 			{
-				mFileSize=outSizeProcessed;
-				mFilePointer=(void*)((this->outBuffer)+offset);
+				_fileSize = outSizeProcessed;
+				_filePointer = (void*)((_outBuffer)+offset);
 				return 1;
 			}
 			else
 			{
 				Oops(TOY_MARK);
-				mFileSize=0;
-				mFilePointer=0;
+				_fileSize = 0;
+				_filePointer = nullptr;
 				return 0;
 			}
 		}
 	}
 
-	Oops(TOY_MARK);
+	toy::Oops(TOY_MARK);
 
-	mFileSize=0;
-	mFilePointer=0;
+	_fileSize = 0;
+	_filePointer = nullptr;
 	return 0;
 }
 
-bool Zip7::Read(void *file, uint32_t size)
+bool Zip7::read(void *file, uint32_t size)
 {
-	if(mFileSize<size)
+	if ( _fileSize<size )
 	{
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return 0;
 	}
 
-	Byte  *data=(Byte*)mFilePointer;
+	Byte  *data=(Byte*)_filePointer;
 
-	memcpy(file,mFilePointer,size);
+	memcpy(file,_filePointer,size);
 
 	data+=size;
 
-	mFilePointer=(void*)data;
+	_filePointer=(void*)data;
 
 	return 1;
 }
 
-bool Zip7::Write(void *,uint32_t )
+bool Zip7::write(void *,uint32_t )
 {
 	// Not ready yet
-	Oops(TOY_MARK);
+	toy::Oops(TOY_MARK);
 	return 1;
 }
-bool Zip7::Seek(enum Base::Option ,int32_t )
+
+bool Zip7::seek(enum Base::Option ,int32_t )
 {
 	// Not ready yet
-	Oops(TOY_MARK);
+	toy::Oops(TOY_MARK);
 	return 1;
 }
-void Zip7::Close()
+
+void Zip7::close()
 {
-	IAlloc_Free(&(this->allocImp), this->outBuffer);
+	IAlloc_Free(&(_allocImp), _outBuffer);
 
-	SzArEx_Free(&(this->db), &(this->allocImp));
+	SzArEx_Free(&(_db), &(_allocImp));
 
-	if(this->temp)
+	if ( _temp )
 	{
-		SzFree(NULL, this->temp);
-		this->temp=NULL;
+		SzFree(NULL, _temp);
+		_temp=NULL;
 	}
-	File_Close(&(this->archiveStream.file));
+	File_Close(&(_archiveStream.file));
 }
-bool Zip7::IsEmpty()
+
+bool Zip7::isEmpty()
 {
 	return 1;
 }
-void* Zip7::GetFilePointer()
+
+void* Zip7::getFilePointer()
 {
 	// There is no way to do it.
-	Oops(TOY_MARK);
+	toy::Oops(TOY_MARK);
 	return nullptr;
 }

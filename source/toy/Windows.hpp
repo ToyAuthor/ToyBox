@@ -18,12 +18,6 @@
 	#ifdef TOY_MSVC
 		#pragma comment(lib,"user32.lib")
 		#pragma comment(lib,"kernel32.lib")
-
-		#if TOY_OPTION_USING_MSVC_LINK
-			#pragma comment(lib,"gdi32.lib")
-			#pragma comment(lib,"opengl32.lib")
-			#pragma comment(lib,"glu32.lib")
-		#endif
 	#endif
 
 #endif//TOY_WINDOWS

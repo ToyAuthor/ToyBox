@@ -2,46 +2,34 @@
 #pragma once
 
 
-#include "toy/EnvironmentalMacro.hpp"
+#include "toy/Environment.hpp"
 
 
-#if defined(TOY_MSVC)
+#ifdef TOY_MSVC
 	#pragma warning(disable:4251)
 #endif
 
 
-/*
-------------They defined by CMake now------------start
-See "ToyBox/cmake/ToyOptions.cmake"
-
+/*------------They defined at "ToyBox/cmake/ToyOptions.cmake"------------
 #define TOY_OPTION_RELEASE              1   // Set it to 0, if you want to debug.
 #define TOY_OPTION_DYNAMIC_LIBRARY      1   // It's only work on Windows, To build dynamic link library.
-
-------------They defined by CMake now------------end
 */
 
 
 #define TOY_OPTION_ENABLE_ASSEMBLY      1
 #define TOY_OPTION_CHECK                1   // Test and check error.
 #define TOY_OPTION_CHECK_CAREFUL        1   // It spent more time to check error.
-#define TOY_OPTION_USING_MSVC_LINK      0   // Add "#pragma comment(lib,"*.lib")" to link some library.
 
 
-// Visual Studio on 64 bit is not support assembly language.
-#if defined(TOY_MSVC) && defined(TOY_64_BIT)
-	#undef  TOY_OPTION_ENABLE_ASSEMBLY
-	#define TOY_OPTION_ENABLE_ASSEMBLY      0
+
+#if defined(TOY_MSVC) && defined(TOY_64_BIT) && TOY_OPTION_ENABLE_ASSEMBLY
+	#error "Visual Studio is not support assembly language on 64 bit system."
 #endif
 
 
-#if TOY_OPTION_RELEASE
-	#undef  TOY_OPTION_CHECK_CAREFUL
-	#define TOY_OPTION_CHECK_CAREFUL        0
+#ifndef _UNICODE
+#define _UNICODE    // "UNICODE" is defined at "ToyBox/source/toy/Windows.hpp"
 #endif
-
-
-#define _UNICODE    // "UNICODE" is define at "ToyBox/source/toy/Windows.hpp"
-
 
 
 //---------------To define TOY_API---------------start
@@ -60,12 +48,3 @@ See "ToyBox/cmake/ToyOptions.cmake"
 #endif
 
 //---------------To define TOY_API---------------end
-
-
-//-----------------------------Option check-----------------------------start
-
-#if !defined(TOY_MSVC) && TOY_OPTION_USING_MSVC_LINK
-	#error "It's not Visual Studio. Please set TOY_OPTION_USING_MSVC_LINK to 0"
-#endif
-
-//-----------------------------Option check-----------------------------end

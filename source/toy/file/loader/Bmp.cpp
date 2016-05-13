@@ -108,8 +108,8 @@ static inline void BGR_to_RGB( uint8_t* data,   // The address of image.
 
 static inline void BGR_to_RGBA(ImageOpener *image)
 {
-	uint32_t    size = image->GetSize()*3;   // 1 pixel == 3 byte.
-	uint8_t*    data = image->GetData();
+	uint32_t    size = image->getSize()*3;   // 1 pixel == 3 byte.
+	uint8_t*    data = image->getData();
 
 	BGR_to_RGB(data,size);
 	RGB_to_RGBA(data,size,0);
@@ -119,8 +119,8 @@ static inline void ReadInfo(File *pIO, struct BMP_Info *info)
 {
 	struct BMP_Head     head;
 
-	pIO->Read(&head,sizeof(struct BMP_Head));
-	pIO->Read(info,head.bfOffBits-sizeof(struct BMP_Head));
+	pIO->read(&head,sizeof(struct BMP_Head));
+	pIO->read(info,head.bfOffBits-sizeof(struct BMP_Head));
 }
 
 static inline void LoadImage( File *pIO, ImageOpener *image )
@@ -139,13 +139,13 @@ static inline void LoadImage( File *pIO, ImageOpener *image )
 		Oops(TOY_MARK);
 	}
 
-	image->SetHeight(height);
-	image->SetWidth(width);
-	image->GetAllocator()->SetSize((size/3)*4);  // Allocate more memory. May be we need it later.
+	image->setHeight(height);
+	image->setWidth(width);
+	image->getAllocator()->setSize((size/3)*4);  // Allocate more memory. May be we need it later.
 
 	// I need to checkout memory enough over here.
 
-	pIO->Read(image->GetData(),size);
+	pIO->read(image->getData(),size);
 }
 
 bool loader::Bmp::Load(File *pIO,Image *map)
@@ -166,10 +166,10 @@ bool loader::Bmp::Save(File *pIO,Image *map)
 {
 	struct BMP_Head     head;
 	struct BMP_Info     info;
-	int32_t             width = map->GetWidth();
-	int32_t             height= map->GetHeight();
+	int32_t             width = map->getWidth();
+	int32_t             height= map->getHeight();
 
-	pIO->Seek(File::SET,0);
+	pIO->seek(File::SET,0);
 
 	info.biSize = sizeof(struct BMP_Head);
 	info.biWidth = width;
@@ -187,10 +187,10 @@ bool loader::Bmp::Save(File *pIO,Image *map)
 
 	// handle pBuf
 
-	pIO->Write(&head, sizeof(struct BMP_Head));
-	pIO->Write(&info, sizeof(struct BMP_Info));
+	pIO->write(&head, sizeof(struct BMP_Head));
+	pIO->write(&info, sizeof(struct BMP_Info));
 
-	pIO->Write(pBuf, info.biSizeImage);
+	pIO->write(pBuf, info.biSizeImage);
 
 	free(pBuf);
 

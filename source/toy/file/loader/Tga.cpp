@@ -95,9 +95,9 @@ bool loader::Tga::Load(File *pIO,Image *map)
 	ImageOpener        image(map);
 	struct TGA_Head    header;
 
-	pIO->Seek(File::SET,0);
+	pIO->seek(File::SET,0);
 
-	pIO->Read(&header, sizeof(struct TGA_Head));
+	pIO->read(&header, sizeof(struct TGA_Head));
 
 	uint32_t    width =(uint32_t)header.width;
 	uint32_t    height=(uint32_t)header.height;
@@ -125,27 +125,27 @@ bool loader::Tga::Load(File *pIO,Image *map)
 	   header.bitsperpixel!=32)  return 0;
 
 
-	image.SetWidth(width);
-	image.SetHeight(height);
+	image.setWidth(width);
+	image.setHeight(height);
 
 	if(header.bitsperpixel==32)//GBRA format
 	{
 		uint32_t   size = width * height * 4;
 
-		image.GetAllocator()->SetSize(size);
+		image.getAllocator()->setSize(size);
 
-		uint8_t*   data=(uint8_t*)image.GetData();
+		uint8_t*   data=(uint8_t*)image.getData();
 
 		if( (header.imagedescriptor & 0x20) == 0)// bottom-left
 		{
-			pIO->Read(data,size);
+			pIO->read(data,size);
 			BGRA_to_RGBA(data,size);
 		}
 		else// top-left(upside down)
 		{
 			uint8_t*   temp=(uint8_t*)malloc(size);
 
-			pIO->Read(temp,size);
+			pIO->read(temp,size);
 
 			width*=4;
 
@@ -167,13 +167,13 @@ bool loader::Tga::Load(File *pIO,Image *map)
 	{
 		uint32_t   size = width * height * 3;
 
-		image.GetAllocator()->SetSize(width*height*4);// Finally, we want RBGA format not RBG.
+		image.getAllocator()->setSize(width*height*4);// Finally, we want RBGA format not RBG.
 
-		uint8_t*   data=(uint8_t*)image.GetData();
+		uint8_t*   data=(uint8_t*)image.getData();
 
 		if( (header.imagedescriptor & 0x20) == 0)// bottom-left
 		{
-			pIO->Read(data,size);
+			pIO->read(data,size);
 
 			BGR_to_RGB(data,size);
 			RGB_to_RGBA(data,size,0);
@@ -182,7 +182,7 @@ bool loader::Tga::Load(File *pIO,Image *map)
 		{
 			uint8_t*   temp=(uint8_t*)malloc(size);
 
-			pIO->Read(temp,size);
+			pIO->read(temp,size);
 
 			width*=3;
 
@@ -206,10 +206,10 @@ bool loader::Tga::Load(File *pIO,Image *map)
 
 bool loader::Tga::Save(File *pIO,Image *map)
 {
-	pIO->Seek(File::SET,0);
+	pIO->seek(File::SET,0);
 
-	uint32_t    width =map->GetWidth();
-	uint32_t    height=map->GetHeight();
+	uint32_t    width =map->getWidth();
+	uint32_t    height=map->getHeight();
 
 	struct TGA_Head    header;
 
@@ -227,7 +227,7 @@ bool loader::Tga::Save(File *pIO,Image *map)
 
 	uint8_t*   data=(uint8_t*)malloc(size);
 
-	memcpy(data,(uint8_t*)map->GetData(),size);
+	memcpy(data,(uint8_t*)map->getData(),size);
 
 	uint8_t    temp;
 
@@ -239,8 +239,8 @@ bool loader::Tga::Save(File *pIO,Image *map)
 		data[i]=temp;
 	}
 
-	pIO->Write(&header,sizeof(struct TGA_Head));
-	pIO->Write(data,size);
+	pIO->write(&header,sizeof(struct TGA_Head));
+	pIO->write(data,size);
 
 	free(data);
 

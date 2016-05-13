@@ -20,6 +20,10 @@
 
 	#define TOY_ANDROID
 
+	// I don't know how to detect this. Please choose it by yourself.
+	#define TOY_ANDR32
+	//#define TOY_ANDR64
+
 #elif __APPLE__
 
 	#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR || TARGET_OS_EMBEDDED
@@ -58,7 +62,7 @@
 #endif
 
 
-#if defined(TOY_LIN32) || defined(TOY_WIN32) || defined(TOY_ANDROID)
+#if defined(TOY_LIN32) || defined(TOY_WIN32) || defined(TOY_ANDR32) || defined(TOY_MAC32)
 	#define TOY_32_BIT
 #else
 	#define TOY_64_BIT
@@ -99,8 +103,13 @@
 
 #elif defined(TOY_MAC)
 
-	#define TOY_GCC
-	#define TOY_LLVM
+	#if defined(__GNUC__)
+		#define TOY_GCC
+	#elif defined(__llvm__)
+		#define TOY_LLVM
+	#else
+		#define TOY_UNKNOWN_COMPILER
+	#endif
 
 #else
 	#define TOY_UNKNOWN_COMPILER
@@ -115,18 +124,18 @@
 
 //------------------Visual Studio------------------start
 
-#ifdef TOY_MSVC
+#if defined(TOY_MSVC)
 
 	#if (_MSC_VER == 1900)
-
 		#define TOY_VC_2015
-
+	#elif (_MSC_VER == 2000)
+		#define TOY_VC_2016
 	#elif (_MSC_VER <  1900)
-		#error "Not support this compiler"
+		#error "Too old"
 	#else
 		#error "Can't detect the version of Visual Studio"
 	#endif
 
-#endif//TOY_MSVC
+#endif
 
 //------------------Visual Studio------------------end

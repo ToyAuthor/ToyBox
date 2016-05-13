@@ -18,17 +18,17 @@ static bool IsNotPng(File *pIO)
 	const int       size = 8;
 	unsigned char   header[size];
 
-	if( !pIO->Read(header,size) )
+	if( !pIO->read(header,size) )
 	{
 		// Cannot read file.
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return 1;
 	}
 
 	if( png_sig_cmp(header, 0, size) )
 	{
 		// It's not a PNG file.
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return 1;
 	}
 
@@ -41,7 +41,7 @@ static inline png_structp CreateReadDevice()
 
 	if( !handle )
 	{
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return NULL;
 	}
 
@@ -52,7 +52,7 @@ static png_infop CreateInfo(png_structp handle,File *pIO)
 {
 	if( !handle )
 	{
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return NULL;
 	}
 
@@ -62,7 +62,7 @@ static png_infop CreateInfo(png_structp handle,File *pIO)
 
 	if( !info )
 	{
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		png_destroy_read_struct(&handle, NULL, NULL);
 		return NULL;
 	}
@@ -71,12 +71,12 @@ static png_infop CreateInfo(png_structp handle,File *pIO)
 		if( setjmp(png_jmpbuf(handle)) )
 		{
 			png_destroy_read_struct(&handle, &info, NULL);
-			Oops(TOY_MARK);
+			toy::Oops(TOY_MARK);
 			return NULL;
 		}
 	#endif
 
-	png_init_io(handle, (png_FILE_p)pIO->GetFilePointer());  // Try to remove this way.
+	png_init_io(handle, (png_FILE_p)pIO->getFilePointer());  // Try to remove this way.
 	png_set_sig_bytes(handle, 8);   // Let libpng know you have been call png_sig_cmp().
 	png_read_info(handle, info);
 
@@ -89,9 +89,9 @@ static void CopyImageSize(ImageOpener *image,png_structp handle, png_infop info)
 	int    height = png_get_image_height(handle, info);
 	int    width  = png_get_image_width (handle, info);
 
-	image->SetHeight(height);
-	image->SetWidth(width);
-	image->GetAllocator()->SetSize( sizeof(png_byte) * 4 * width * height );
+	image->setHeight(height);
+	image->setWidth(width);
+	image->getAllocator()->setSize( sizeof(png_byte) * 4 * width * height );
 }
 
 static int CountRowSize( int width, png_structp handle, png_infop info )
@@ -101,7 +101,7 @@ static int CountRowSize( int width, png_structp handle, png_infop info )
 	if (png_get_bit_depth(handle, info) == 16)
 	{
 		// Not support yet.(Maybe never do)
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		rowbytes = width * 8;
 	}
 	else
@@ -114,11 +114,11 @@ static int CountRowSize( int width, png_structp handle, png_infop info )
 
 static png_bytep* NewImageIndex( ImageOpener *image, int rowbytes )
 {
-	png_bytep*   row_pointers = (png_bytep*)malloc(sizeof(png_bytep)*image->GetHeight());
+	png_bytep*   row_pointers = (png_bytep*)malloc(sizeof(png_bytep)*image->getHeight());
 
-	uint8_t   *data=(uint8_t*)image->GetData();
+	uint8_t   *data = (uint8_t*)image->getData();
 
-	for( int y=image->GetHeight()-1 ; y>=0 ; y--,data+=rowbytes )
+	for( int y=image->getHeight()-1 ; y>=0 ; y--,data+=rowbytes )
 	{
 		row_pointers[y] = (png_byte*)data;
 	}
@@ -128,7 +128,7 @@ static png_bytep* NewImageIndex( ImageOpener *image, int rowbytes )
 
 static void LoadImage( ImageOpener *image, png_structp handle, png_infop info )
 {
-	int    rowbytes = CountRowSize( image->GetWidth(), handle, info );
+	int    rowbytes = CountRowSize( image->getWidth(), handle, info );
 
 	png_bytep*   address = NewImageIndex( image, rowbytes );
 	png_read_image( handle, address );

@@ -17,18 +17,18 @@ class StringCutter
 		StringCutter();
 		~StringCutter();
 
-		void    LoadString(std::string &str);
-		bool    NextWord(std::string &str);
+		void    loadString(std::string &str);
+		bool    nextWord(std::string &str);
 
-		void    PushConfig(ConfigPtr);
-		void    PopConfig(int number=1);
+		void    pushConfig(ConfigPtr);
+		void    popConfig(int number=1);
 
 	private:
 
-		std::string              mString;
-		int                      mIndex;
+		std::string              _string;
+		int                      _index = 0;
 
-		std::vector<ConfigPtr>         mConfigStack;
+		std::vector<ConfigPtr>   _configStack;
 };
 
 

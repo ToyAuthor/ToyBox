@@ -24,29 +24,29 @@ class Zip7 : public Base
 	public:
 
 		Zip7();
-		virtual ~Zip7(){Close();}
+		virtual ~Zip7(){close();}
 
-		virtual bool    OpenDir(std::string path);
-		virtual bool    Open(std::string filepath);
-		virtual bool    Read(void *file,uint32_t size);
-		virtual bool    Write(void *file,uint32_t size);
-		virtual bool    Seek(enum Base::Option option,int32_t offset);
-		virtual void    Close();
-		virtual bool    IsEmpty();
-		virtual void*   GetFilePointer();    // prohibit
+		virtual bool    openDir(std::string path);
+		virtual bool    open(std::string filepath);
+		virtual bool    read(void *file,uint32_t size);
+		virtual bool    write(void *file,uint32_t size);
+		virtual bool    seek(enum Base::Option option,int32_t offset);
+		virtual void    close();
+		virtual bool    isEmpty();
+		virtual void*   getFilePointer();    // prohibit
 
 	private:
 
-		CFileInStream   archiveStream;
-		CLookToRead     lookStream;
-		CSzArEx         db;
-		ISzAlloc        allocImp;
-		ISzAlloc        allocTempImp;
-		UInt16*         temp;
-		Byte*           outBuffer;
+		CFileInStream   _archiveStream;
+		CLookToRead     _lookStream;
+		CSzArEx         _db;
+		ISzAlloc        _allocImp;
+		ISzAlloc        _allocTempImp;
+		UInt16*         _temp = nullptr;
+		Byte*           _outBuffer = nullptr;
 
-		size_t          mFileSize;
-		void*           mFilePointer;
+		size_t          _fileSize = 0;
+		void*           _filePointer = nullptr;
 };
 
 

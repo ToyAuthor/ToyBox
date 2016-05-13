@@ -9,7 +9,7 @@
 namespace toy
 {
 
-using math::exp1;
+using math::Exp1;
 
 
 
@@ -28,91 +28,93 @@ class Allocator01
 
 		~Allocator01()
 		{
-			Free();
+			free();
 		}
 
-		bool Copy(void *p,size_t s)
+		bool copy(void *p,size_t s)
 		{
-			SetSize(s);
-			memcpy(mData,p,s);
+			setSize(s);
+			memcpy(_data,p,s);
 			return 1;
 		}
 
-		void Free()
+		void free()
 		{
-			if(mData)
+			if(_data)
 			{
-				free(mData);
-				mData=0;
-				mSize=0;
-				mTrueSize=0;
+				::free(_data);
+				_data = 0;
+				_size = 0;
+				_trueSize = 0;
 			}
 		}
 
 		// Allocate memory for user.
-		bool SetSize(size_t s)
+		bool setSize(size_t s)
 		{
-			mSize=s;
-			if(s>mTrueSize)
-			{
-				size_t		new_size=exp1<size_t>(s);
+			_size = s;
 
-				if(mData==0)
+			if ( s>_trueSize )
+			{
+				size_t		new_size=Exp1<size_t>(s);
+
+				if ( _data==0 )
 				{
-					mData=malloc(new_size);
+					_data = malloc(new_size);
 				}
 				else
 				{
-					mData=realloc(mData,new_size);
+					_data = realloc(_data,new_size);
 				}
-				mTrueSize=new_size;
+				_trueSize = new_size;
 			}
 
 			return 1;
 		}
 
 		// Almost same as SetSize(). It can release the memory unused.
-		bool FitSize(size_t s)
+		bool fitSize(size_t s)
 		{
-			mSize=s;
-			size_t		new_size=exp1<size_t>(s);
+			_size = s;
 
-			if(new_size>mTrueSize)
+			size_t		new_size = Exp1<size_t>(s);
+
+			if ( new_size>_trueSize )
 			{
-				if(mData==0)
+				if(_data==0)
 				{
-					mData=malloc(new_size);
+					_data = malloc(new_size);
 				}
 				else
 				{
-					mData=realloc(mData,new_size);
+					_data = realloc(_data,new_size);
 				}
-				mTrueSize=new_size;
+				_trueSize = new_size;
 			}
-			else if(new_size<mTrueSize)
+			else if ( new_size<_trueSize )
 			{
-				mData=realloc(mData,new_size);
-				mTrueSize=new_size;
+				_data = realloc(_data,new_size);
+				_trueSize = new_size;
 			}
 
 			return 1;
 		}
 
-		void* GetData() const
+		void* getData() const
 		{
-			return mData;
+			return _data;
 		}
 
-		size_t GetSize() const
+		size_t getSize() const
 		{
-			return mSize;
+			return _size;
 		}
 
 	private:
 
-		void*   mData = nullptr;
-		size_t  mSize = 0;
-		size_t  mTrueSize = 0;
+		void*   _data = nullptr;
+		size_t  _size = 0;
+		size_t  _trueSize = 0;
 };
 
 

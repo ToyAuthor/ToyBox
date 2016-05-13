@@ -18,34 +18,34 @@ class TOY_API Image
 		Image();
 		~Image();
 
-		void    Clean();
+		void    clean();
 
 		// Give you a memory about the image data. Return NULL if it's a empty object.
-		uint8_t* GetData() const
+		uint8_t* getData() const
 		{
-			return (uint8_t*)(mData.GetData());
+			return (uint8_t*)(_data.getData());
 		}
 
-		int32_t GetHeight() const
+		int32_t getHeight() const
 		{
-			return mHeight;
+			return _height;
 		}
 
-		int32_t GetWidth() const
+		int32_t getWidth() const
 		{
-			return mWidth;
+			return _width;
 		}
 
-		int32_t GetSize() const
+		int32_t getSize() const
 		{
-			return mWidth * mHeight;
+			return _width * _height;
 		}
 
 	private:
 
-		Allocator01     mData;      // Saving a image data on memory.
-		int32_t         mHeight = 0;
-		int32_t         mWidth = 0;
+		Allocator01     _data;      // Saving a image data on memory.
+		int32_t         _height = 0;
+		int32_t         _width = 0;
 };
 
 // You can use it to modify the inside of Image.
@@ -53,56 +53,56 @@ class ImageOpener
 {
 	public:
 
-		ImageOpener(Image *core):mCore(core)
+		ImageOpener(Image *core):_core(core)
 		{
 			;
 		}
 
 		~ImageOpener(){}
 
-		Allocator01* GetAllocator()
+		Allocator01* getAllocator()
 		{
-			return &(mCore->mData);
+			return &(_core->_data);
 		}
 
-		uint8_t* GetData() const
+		uint8_t* getData() const
 		{
-			return mCore->GetData();
+			return _core->getData();
 		}
 
-		int32_t GetHeight() const
+		int32_t getHeight() const
 		{
-			return mCore->mHeight;
+			return _core->_height;
 		}
 
-		int32_t GetWidth() const
+		int32_t getWidth() const
 		{
-			return mCore->mWidth;
+			return _core->_width;
 		}
 
-		int32_t GetSize() const
+		int32_t getSize() const
 		{
-			return mCore->GetSize();
+			return _core->getSize();
 		}
 
-		void SetSize(size_t n)
+		void setSize(size_t n)
 		{
-			mCore->mData.SetSize(n);
+			_core->_data.setSize(n);
 		}
 
-		void SetHeight(int32_t n)
+		void setHeight(int32_t n)
 		{
-			mCore->mHeight=n;
+			_core->_height=n;
 		}
 
-		void SetWidth(int32_t n)
+		void setWidth(int32_t n)
 		{
-			mCore->mWidth=n;
+			_core->_width=n;
 		}
 
 	private:
 
-		Image   *mCore;
+		Image   *_core;
 };
 
 }//namespace toy

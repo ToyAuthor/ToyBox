@@ -14,7 +14,7 @@ StringCutterConfig::~StringCutterConfig()
 	;
 }
 
-void StringCutterConfig::DefaultSetting()
+void StringCutterConfig::useDefault()
 {
 	ignoreCharList.push(' ');
 	ignoreCharList.push('\t');

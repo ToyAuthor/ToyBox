@@ -15,23 +15,23 @@ class Zlib : public Base
 {
 	public:
 
-		Zlib();
-		virtual ~Zlib(){Close();}
+		Zlib(){}
+		virtual ~Zlib(){close();}
 
-		virtual bool    OpenDir(std::string path);
-		virtual bool    Open(std::string filepath);
-		virtual bool    Read(void *file,uint32_t size);
-		virtual bool    Write(void *file,uint32_t size);
-		virtual bool    Seek(enum Base::Option option,int32_t offset);
-		virtual void    Close();
-		virtual bool    IsEmpty();
-		virtual void*   GetFilePointer();    // prohibit
+		virtual bool    openDir(std::string path);
+		virtual bool    open(std::string filepath);
+		virtual bool    read(void *file,uint32_t size);
+		virtual bool    write(void *file,uint32_t size);
+		virtual bool    seek(enum Base::Option option,int32_t offset);
+		virtual void    close();
+		virtual bool    isEmpty();
+		virtual void*   getFilePointer();    // prohibit
 
 	private:
 
-		unzFile            mHandle;
-		unz_global_info    mInfo;
-		int                fFileOpened;
+		unzFile            _handle = nullptr;
+		unz_global_info    _info = {0,0};
+		int                _isFileOpened = 0;
 
 };
 

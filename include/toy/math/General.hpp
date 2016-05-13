@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <cfloat>
-#include "toy/EnvironmentalMacro.hpp"
+#include "toy/Environment.hpp"
 #include "toy/Exception.hpp"
 
 
@@ -46,7 +46,7 @@ Type Min(const Type a,const Type b,const Type c,const Type d)
 
 // Figure out a number base on 2 and bigger than t and most close t.
 template <typename Type>
-inline Type exp1(const Type t)
+inline Type Exp1(const Type t)
 {
 	Type    answer=2;
 
@@ -60,7 +60,7 @@ inline Type exp1(const Type t)
 
 // Same function with exp1().
 template <typename Type>
-inline Type exp2(const Type t)
+inline Type Exp2(const Type t)
 {
 	Type    answer=2;
 
@@ -74,7 +74,7 @@ inline Type exp2(const Type t)
 
 // Figure out a number(f(x)=1+2+4+8+16+...) smaller than t and most close t.
 template <typename Type>
-inline Type exp3(const Type t)
+inline Type Exp3(const Type t)
 {
 	Type    answer=1;
 	Type    item  =1;
@@ -94,7 +94,7 @@ inline Type exp3(const Type t)
  * cot(x) = tan(PI/2 - x)----better  M_PI_2
  */
 template <typename Type>
-inline Type cot(const Type t)
+inline Type Cot(const Type t)
 {
 	return static_cast<Type>(::tan(1.57079632679489661923 - t));
 }
@@ -104,36 +104,38 @@ inline Type Sqrt(Type f)
 {
 	Type    result=(Type)0;
 
-	#if defined(TOY_GCC)&& TOY_OPTION_ENABLE_ASSEMBLY
-		/*__asm__ __volatile__
-		(
-			"fsqrt\n\t"
-			"fstp %0"
-			: "=m" (result)
-			: "g" (f)
-		);*/
-		__asm__ __volatile__
-		(
-			"fld %1\n\t"
-			"fsqrt\n\t"
-			"fstp %0"
-			: "=m" (result)
-			: "t" (f)
-		);
-		/*
-		__asm__ __volatile__
-		(
-			"fsqrt"
-			: "+t" (f)
-		);
-		result=f;*/
-	#elif defined(TOY_MSVC)&& TOY_OPTION_ENABLE_ASSEMBLY
+	#if TOY_OPTION_ENABLE_ASSEMBLY
+		#if defined(TOY_MSVC)
 		__asm
 		{
 			fld [f]
 			fsqrt
 			fstp [result]
 		}
+		#else
+			/*__asm__ __volatile__
+			(
+				"fsqrt\n\t"
+				"fstp %0"
+				: "=m" (result)
+				: "g" (f)
+			);*/
+			__asm__ __volatile__
+			(
+				"fld %1\n\t"
+				"fsqrt\n\t"
+				"fstp %0"
+				: "=m" (result)
+				: "t" (f)
+			);
+			/*
+			__asm__ __volatile__
+			(
+				"fsqrt"
+				: "+t" (f)
+			);
+			result=f;*/
+		#endif
 	#else
 		result=sqrt(f);
 	#endif

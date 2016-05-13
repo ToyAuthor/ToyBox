@@ -25,6 +25,10 @@ int main()
 	{
 		toy::Log(e);
 	}
+	catch(std::exception &e)
+	{
+		toy::Log(e.what());
+	}
 
 	return result;
 }

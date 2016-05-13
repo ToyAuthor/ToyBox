@@ -7,40 +7,40 @@
 
 using namespace toy;
 
-File::File(enum Mode mode):mIO(0)
+File::File(enum Mode mode)
 {
-	ChangeMode(mode);
+	changeMode(mode);
 }
 File::~File()
 {
-	FreeIO();
+	freeIO();
 }
-void File::FreeIO()
+void File::freeIO()
 {
-	if(mIO)
+	if (_io)
 	{
-		delete mIO;
-		mMode=File::NONE;
-		mIO=0;
+		delete _io;
+		_mode=File::NONE;
+		_io=0;
 	}
 }
-void File::ChangeMode(enum Mode mode)
+void File::changeMode(enum Mode mode)
 {
-	if(mMode==mode)return;
+	if ( _mode==mode ) return;
 
-	FreeIO();
-	mMode=mode;
+	freeIO();
+	_mode=mode;
 
-	switch(mode)
+	switch (mode)
 	{
 		case STD:
-			mIO=static_cast<file::io::Base*>(new file::io::Standard);
+			_io=static_cast<file::io::Base*>(new file::io::Standard);
 			break;
 		case ZIP7:
-			mIO=static_cast<file::io::Base*>(new file::io::Zip7);
+			_io=static_cast<file::io::Base*>(new file::io::Zip7);
 			break;
 		case ZIP:
-			mIO=static_cast<file::io::Base*>(new file::io::Zlib);
+			_io=static_cast<file::io::Base*>(new file::io::Zlib);
 			break;
 		case NONE:
 		default:
@@ -48,35 +48,35 @@ void File::ChangeMode(enum Mode mode)
 			Oops(TOY_MARK);
 	}
 }
-bool File::OpenDir(std::string path)
+bool File::openDir(std::string path)
 {
-	return mIO->OpenDir(path);
+	return _io->openDir(path);
 }
-bool File::Open(std::string filepath)
+bool File::open(std::string filepath)
 {
-	return mIO->Open(filepath);
+	return _io->open(filepath);
 }
-bool File::Read(void *file,uint32_t size)
+bool File::read(void *file,uint32_t size)
 {
-	return mIO->Read(file,size);
+	return _io->read(file,size);
 }
-bool File::Write(void *file,uint32_t size)
+bool File::write(void *file,uint32_t size)
 {
-	return mIO->Write(file,size);
+	return _io->write(file,size);
 }
-bool File::Seek(enum SeekOption option,int32_t offset)
+bool File::seek(enum SeekOption option,int32_t offset)
 {
-	return mIO->Seek((enum file::io::Base::Option)option,offset);
+	return _io->seek((enum file::io::Base::Option)option,offset);
 }
-std::string File::GetFileName()
+std::string File::getFileName()
 {
-	return mIO->GetFileName();
+	return _io->getFileName();
 }
-bool File::IsEmpty()
+bool File::isEmpty()
 {
-	return mIO->IsEmpty();
+	return _io->isEmpty();
 }
-void* File::GetFilePointer()
+void* File::getFilePointer()
 {
-	return mIO->GetFilePointer();
+	return _io->getFilePointer();
 }

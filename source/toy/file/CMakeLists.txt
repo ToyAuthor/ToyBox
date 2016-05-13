@@ -5,7 +5,6 @@ toy_StdReady()
 
 set(SOURCE
 	File.cpp
-	TextLoader.cpp
 	io/Standard.cpp
 	io/Zlib.cpp
 	io/Zip7.cpp

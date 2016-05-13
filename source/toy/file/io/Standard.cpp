@@ -5,66 +5,68 @@ using namespace toy;
 using namespace file;
 using namespace io;
 
-bool Standard::IsEmpty()
+bool Standard::isEmpty()
 {
-	if(mFile==0)
+	if ( _file==0 )
 		return 1;
 	else
 		return 0;
 }
 
-void Standard::Close()
+void Standard::close()
 {
-	if(mFile)
+	if ( _file )
 	{
-		fclose(mFile);
-		mFile=0;
-		mPath.clear();
+		fclose(_file);
+		_file = 0;
+		_path.clear();
 	}
 }
-bool Standard::OpenDir(std::string path)
+
+bool Standard::openDir(std::string path)
 {
-	mPath=path;
+	_path = path;
 	return 1;
 }
-bool Standard::Open(std::string filepath)
+
+bool Standard::open(std::string filepath)
 {
-	Close();
-	mFileName=filepath;
+	close();
+	_fileName = filepath;
 	std::string   path;
 
-	if(mPath.size()==0)
+	if ( _path.size()==0 )
 	{
-		path=mFileName;
+		path=_fileName;
 	}
 	else
 	{
-		path=mPath;
-		path+=mFileName;
+		path=_path;
+		path+=_fileName;
 	}
 
-	mFile=fopen(path.c_str(),"rb+");
-	if(mFile)
+	_file = fopen(path.c_str(),"rb+");
+	if ( _file )
 		return 1;
 	else
 		return 0;
 }
 
-bool Standard::Read(void *file,uint32_t size)
+bool Standard::read(void *file,uint32_t size)
 {
 	#if TOY_OPTION_CHECK
-	if(!file)
+	if ( ! file )
 	{
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return 0;
 	}
 	#endif
-	if(IsEmpty())
+	if ( isEmpty() )
 		return 0;
 
-	size_t	result=fread(file,1,size,mFile);	// "fread(file,size,1,mFile)" was wrong.
+	size_t	result=fread(file,1,size,_file);	// "fread(file,size,1,_file)" was wrong.
 
-	if(result!=size)
+	if ( result!=size )
 	{
 		// fread() has wrong
 		Oops(TOY_MARK);
@@ -74,33 +76,34 @@ bool Standard::Read(void *file,uint32_t size)
 	return 1;
 }
 
-bool Standard::Write(void *file,uint32_t size)
+bool Standard::write(void *file,uint32_t size)
 {
-	if(IsEmpty())return 0;
-	fwrite(file,(size_t)size,1,mFile);
+	if ( isEmpty() ) return 0;
+	fwrite(file,(size_t)size,1,_file);
 	return 1;
 }
 
-bool Standard::Seek(enum Option option,int32_t offset)
+bool Standard::seek(enum Option option,int32_t offset)
 {
-	if(IsEmpty())return 0;
+	if ( isEmpty() ) return 0;
 
 	switch (option)
 	{
-	case Base::SET:
-		fseek( mFile, offset, SEEK_SET );
-		break;
-	case Base::END:
-		fseek( mFile, offset, SEEK_END );
-		break;
-	case Base::CUR:
-	default:
-		fseek( mFile, offset, SEEK_CUR );
-		break;
+		case Base::SET:
+			fseek( _file, offset, SEEK_SET );
+			break;
+		case Base::END:
+			fseek( _file, offset, SEEK_END );
+			break;
+		case Base::CUR:
+		default:
+			fseek( _file, offset, SEEK_CUR );
+			break;
 	}
 	return 1;
 }
-void* Standard::GetFilePointer()
+
+void* Standard::getFilePointer()
 {
-	return (void*)mFile;
+	return (void*)_file;
 }

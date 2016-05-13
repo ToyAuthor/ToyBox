@@ -5,7 +5,6 @@
 
 using namespace toy;
 
-using math::exp1;
 
 Image::Image()
 {
@@ -14,10 +13,10 @@ Image::Image()
 
 Image::~Image()
 {
-	Clean();
+	clean();
 }
 
-void Image::Clean()
+void Image::clean()
 {
-	mData.Free();
+	_data.free();
 }

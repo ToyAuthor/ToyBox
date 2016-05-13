@@ -24,27 +24,27 @@ class Base
 		Base(){}
 		virtual ~Base(){}
 
-		virtual bool    OpenDir(std::string path)=0;                // Open up a directory or archive.
-		virtual bool    Open(std::string filepath)=0;
-		virtual bool    Read(void *file,uint32_t size)=0;           // As some as ::fread().
-		virtual bool    Write(void *file,uint32_t size)=0;
-		virtual void    Close()=0;
-		virtual bool    IsEmpty()=0;
+		virtual bool    openDir(std::string path)=0;                // Open up a directory or archive.
+		virtual bool    open(std::string filepath)=0;
+		virtual bool    read(void *file,uint32_t size)=0;           // As some as ::fread().
+		virtual bool    write(void *file,uint32_t size)=0;
+		virtual void    close()=0;
+		virtual bool    isEmpty()=0;
 
-		std::string GetFileName()
+		std::string getFileName()
 		{
-			if(IsEmpty())
+			if ( isEmpty() )
 				return std::string();
 			else
-				return mFileName;
+				return _fileName;
 		}
 
-		virtual bool    Seek(enum Option option,int32_t offset)=0;    // As some as ::fseek().
-		virtual void*   GetFilePointer()=0;// Bad design
+		virtual bool    seek(enum Option option,int32_t offset)=0;    // Some as ::fseek().
+		virtual void*   getFilePointer()=0;// Bad design
 
 	protected:
 
-		std::string          mFileName;      ///< Write down the file name.
+		std::string    _fileName;
 
 };
 

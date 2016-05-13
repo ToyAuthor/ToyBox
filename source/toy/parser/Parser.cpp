@@ -5,19 +5,10 @@
 #include <sstream>
 
 
-// Following warning will be output, if you don't define it.
-// warning: 'boost::system::generic_category' defined but not used
-#ifndef BOOST_SYSTEM_NO_DEPRECATED
-#define BOOST_SYSTEM_NO_DEPRECATED 1
-#endif
-
-#include "boost/filesystem.hpp"
-
-
 using namespace toy;
 
 
-void Parser::LoadText(std::string filename)
+void Parser::loadText(std::string filename)
 {
 	if ( !boost::filesystem::exists( filename ) )
 	{
@@ -26,46 +17,33 @@ void Parser::LoadText(std::string filename)
 		return;
 	}
 
-	mFile.close();
-	mFile.open(filename.c_str(),std::ifstream::in);
+	_file.close();
+	_file.open(filename.c_str(),std::ifstream::in);
 
-	mLineNumber=0;
-
-
-	//boost::filesystem::path   p1( filename.s() );
-	//std::cout << "p1=" << p1 << "\n" << std::endl;
-	//std::cout << "p1.name=" << p1.filename() << "\n" << std::endl;
+	_lineNumber=0;
 }
 
-/*
-bool GetWord(std::string &str)
+bool Parser::nextLine(std::string *str)
 {
-	while(getline(mFile,line))
+	if ( ! _file.good() )
 	{
-		cout << line << endl;
-		istringstream ss(line);
-		string word;
-
-		while(ss >> word)
-		{
-			cout << word << endl;
-		}
-
-		cout << endl;
+		toy::Oops(TOY_MARK);
+		return 0;
 	}
-}*/
 
-bool Parser::NextLine(std::string &str)
-{
-	mLineNumber++;
+	_lineNumber++;
 
-	if(std::getline(mFile,str))
-		return (bool)1;
+	if ( std::getline(_file,*str) )
+	{
+		return 1;
+	}
 	else
-		return (bool)0;  // return 0, if no next line.
+	{
+		return 0;  // return 0, if no next line.
+	}
 }
 
-int Parser::GetLineNumber()
+int Parser::getLineNumber()
 {
-	return mLineNumber;
+	return _lineNumber;
 }

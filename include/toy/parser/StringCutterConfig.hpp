@@ -54,7 +54,7 @@ class StringCutterConfig
 		StringCutterConfig();
 		~StringCutterConfig();
 
-		void    DefaultSetting();
+		void    useDefault();
 
 		List<char>    breakCharList;
 		List<CChar>   breakDoubleCharList;

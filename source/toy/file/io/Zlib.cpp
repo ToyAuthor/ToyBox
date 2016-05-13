@@ -5,31 +5,27 @@ using namespace file;
 using namespace io;
 
 
-
-Zlib::Zlib():mHandle(NULL),fFileOpened(0)
-{}
-
-bool Zlib::OpenDir(std::string path)
+bool Zlib::openDir(std::string path)
 {
-	mHandle = unzOpen(path.c_str());
+	_handle = unzOpen(path.c_str());
 
-	if( mHandle == NULL )
+	if( _handle == NULL )
 	{
 		Oops(TOY_MARK);
 		return 0;
 	}
 
-	if( unzGetGlobalInfo( mHandle, &mInfo ) != UNZ_OK )
+	if( unzGetGlobalInfo( _handle, &_info ) != UNZ_OK )
 	{
-		Oops(TOY_MARK);
-		Close();
+		toy::Oops(TOY_MARK);
+		close();
 		return 0;
 	}
 
 	return 1;
 }
 
-bool Zlib::Open(std::string filepath)
+bool Zlib::open(std::string filepath)
 {
 	const uint32_t  MAX_FILENAME = 512;
 	char            filename[ MAX_FILENAME ];
@@ -37,12 +33,12 @@ bool Zlib::Open(std::string filepath)
 	std::string     name;
 	unz_file_info   file_info;
 
-	for( uLong i = mInfo.number_entry ; i>0 ; i-- )
+	for( uLong i = _info.number_entry ; i>0 ; i-- )
 	{
-		if( unzGetCurrentFileInfo( mHandle, &file_info, filename, MAX_FILENAME, NULL, 0, NULL, 0 ) != UNZ_OK )
+		if( unzGetCurrentFileInfo( _handle, &file_info, filename, MAX_FILENAME, NULL, 0, NULL, 0 ) != UNZ_OK )
 		{
-			Oops(TOY_MARK);
-			Close();
+			toy::Oops(TOY_MARK);
+			close();
 			return 0;
 		}
 
@@ -50,23 +46,23 @@ bool Zlib::Open(std::string filepath)
 
 		if( name==looking_for )
 		{
-			if ( unzOpenCurrentFile( mHandle ) != UNZ_OK )
+			if ( unzOpenCurrentFile( _handle ) != UNZ_OK )
 			{
-				Oops(TOY_MARK);
-				Close();
+				toy::Oops(TOY_MARK);
+				close();
 				return 0;
 			}
 
-			fFileOpened=1;
+			_isFileOpened=1;
 
 			return 1;
 		}
 		else
 		{
-			if( i!=1 && unzGoToNextFile( mHandle ) != UNZ_OK )
+			if( i!=1 && unzGoToNextFile( _handle ) != UNZ_OK )
 			{
-				Oops(TOY_MARK);
-				Close();
+				toy::Oops(TOY_MARK);
+				close();
 				return 0;
 			}
 		}
@@ -76,57 +72,57 @@ bool Zlib::Open(std::string filepath)
 	return 0;
 }
 
-bool Zlib::Read(void *file, uint32_t size)
+bool Zlib::read(void *file, uint32_t size)
 {
 	int error = UNZ_OK;
 
-	error = unzReadCurrentFile( mHandle, file, size );
+	error = unzReadCurrentFile( _handle, file, size );
 
 	if ( error < 0 )
 	{
-		Oops(TOY_MARK);
-		Close();
+		toy::Oops(TOY_MARK);
+		close();
 		return 0;
 	}
 
 	return 1;
 }
 
-bool Zlib::Write(void *,uint32_t )
+bool Zlib::write(void *,uint32_t )
 {
 	// Not ready yet
 	Oops(TOY_MARK);
 	return 1;
 }
 
-bool Zlib::Seek(enum Base::Option ,int32_t )
+bool Zlib::seek(enum Base::Option ,int32_t )
 {
 	// Not ready yet
 	Oops(TOY_MARK);
 	return 1;
 }
 
-void Zlib::Close()
+void Zlib::close()
 {
-	if(mHandle)
+	if ( _handle )
 	{
-		if(fFileOpened)
+		if(_isFileOpened)
 		{
-			unzCloseCurrentFile( mHandle );
-			fFileOpened=0;
+			unzCloseCurrentFile( _handle );
+			_isFileOpened=0;
 		}
 
-		unzClose( mHandle );
-		mHandle = nullptr;
+		unzClose( _handle );
+		_handle = nullptr;
 	}
 }
 
-bool Zlib::IsEmpty()
+bool Zlib::isEmpty()
 {
 	return 1;
 }
 
-void* Zlib::GetFilePointer()
+void* Zlib::getFilePointer()
 {
 	// There is no way to do it.
 	Oops(TOY_MARK);
