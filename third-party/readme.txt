@@ -18,3 +18,4 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
     libpng-1.6.12       libpng License
     7zip-9.20           GNU LGPL
     p7zip-9.20.1        GNU LGPL
+    glew-1.11.0         BSD License

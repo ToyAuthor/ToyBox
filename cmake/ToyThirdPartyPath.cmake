@@ -50,4 +50,9 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_libname_7zip        "7zip" )
 	endif()
 
+
+	set(TOY_include_glew        "${TOY_ROOT_SOURCE_DIR}/third-party/glew/include" )
+	set(TOY_library_glew        "${TOY_ROOT_BINARY_DIR}/third-party/glew" )
+	set(TOY_libname_glew        "glew" )
+
 endmacro(toy_SetThirdPartyLibraryPath)
