@@ -7,7 +7,7 @@
 
 namespace toy{
 
-class Parser
+class TOY_API Parser
 {
 	public:
 

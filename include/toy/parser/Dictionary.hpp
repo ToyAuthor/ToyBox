@@ -8,7 +8,7 @@ namespace parser{
 
 class Translator;
 
-class Dictionary
+class TOY_API Dictionary
 {
 	friend class Translator;
 

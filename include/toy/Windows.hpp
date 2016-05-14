@@ -20,4 +20,4 @@
 		#pragma comment(lib,"kernel32.lib")
 	#endif
 
-#endif//TOY_WINDOWS
+#endif

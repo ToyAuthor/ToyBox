@@ -7,7 +7,7 @@
 namespace toy{
 namespace parser{
 
-class StringCutterConfig
+class TOY_API StringCutterConfig
 {
 	public:
 

@@ -1,8 +1,6 @@
 
 #pragma once
 
-#include <cwchar>
-#include <cwctype>
 #include "toy/CompilerConfig.hpp"
 
 

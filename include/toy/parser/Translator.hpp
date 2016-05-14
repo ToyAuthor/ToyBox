@@ -8,7 +8,7 @@ namespace parser{
 
 class Dictionary;
 
-class Translator
+class TOY_API Translator
 {
 	public:
 

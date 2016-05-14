@@ -16,7 +16,9 @@ macro(toy_ProcessOptions)
 	endif()
 
 	list(APPEND TOY_DEFAULT_INCLUDE_DIR ${TOY_include_boost})
+	list(APPEND TOY_DEFAULT_INCLUDE_DIR ${TOY_include_sfml})
 	list(APPEND TOY_DEFAULT_LINK_DIR    ${TOY_library_boost})
+	list(APPEND TOY_DEFAULT_LINK_DIR    ${TOY_library_sfml})
 
 	if(WIN32)
 		# Boost need this to build library on Windows 2000 or later releases.

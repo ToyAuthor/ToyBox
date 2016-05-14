@@ -8,7 +8,7 @@ namespace parser{
 
 
 // Take string apart by given rule.
-class StringCutter
+class TOY_API StringCutter
 {
 	public:
 
