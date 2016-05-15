@@ -26,7 +26,11 @@ void File::freeIO()
 }
 void File::changeMode(enum Mode mode)
 {
-	if ( _mode==mode ) return;
+	if ( _mode==mode )
+	{
+		Oops(TOY_MARK);
+		return;
+	}
 
 	freeIO();
 	_mode=mode;

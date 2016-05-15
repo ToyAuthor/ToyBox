@@ -60,7 +60,7 @@ class TOY_API File
 		void    freeIO();
 
 		file::io::Base*     _io = nullptr;
-		enum Mode           _mode = STD;
+		enum Mode           _mode = NONE;
 
 };
 
