@@ -57,4 +57,7 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_library_glew        "${TOY_ROOT_BINARY_DIR}/third-party/glew" )
 	set(TOY_libname_glew        "glew" )
 
+
+	set(TOY_include_glm         "${TOY_ROOT_SOURCE_DIR}/third-party/glm" )
+
 endmacro(toy_SetThirdPartyLibraryPath)

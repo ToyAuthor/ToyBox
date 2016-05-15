@@ -19,3 +19,4 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
     7zip-9.20           GNU LGPL
     p7zip-9.20.1        GNU LGPL
     glew-1.11.0         BSD License
+    glm-0.9.5.4         MIT License
