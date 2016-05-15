@@ -17,3 +17,9 @@
 #endif
 
 #include <SFML/OpenGL.hpp>
+
+#if defined(TOY_MAC)
+	#include <OpenGL/glu.h>
+#else
+	#include <GL/glu.h>
+#endif
