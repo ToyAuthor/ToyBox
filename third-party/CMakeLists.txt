@@ -24,3 +24,5 @@ if(UNIX)
 else()
 	add_subdirectory(7zip)
 endif()
+
+add_subdirectory(glew)
