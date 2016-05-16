@@ -33,6 +33,7 @@ endif()
 
 set(SOURCE
 	main.cpp
+	Render.cpp
 )
 
 
