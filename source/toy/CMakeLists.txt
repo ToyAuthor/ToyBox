@@ -8,13 +8,7 @@ if(TOY_ENABLE_SHARED_LIBS)
 	add_definitions(-DTOY_EXPORT)
 endif()
 
-
-set(SOURCE
-	Log.cpp
-	Image.cpp
-	Character.cpp
-)
-
+file(GLOB SOURCE *.cpp)
 
 set(LIB pthread)
 

@@ -41,8 +41,8 @@ class TOY_API File
 		bool    openDir(std::string path);           // Open a folder or archive.
 		bool    open(std::string filepath);
 		bool    read(void *file,uint32_t size);
-		bool    write(void *file,uint32_t size);
-		bool    seek(enum SeekOption option,int32_t offset);
+		bool    write(void *file,uint32_t size);     // Not finish yet.
+		bool    seek(enum SeekOption option,int32_t offset);// Not finish yet.
 
 //		void    close();// Do it later.
 
