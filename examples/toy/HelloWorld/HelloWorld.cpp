@@ -21,13 +21,9 @@ int main()
 	{
 		result = main2();
 	}
-	catch(toy::Exception &e)
-	{
-		toy::Log(e);
-	}
 	catch(std::exception &e)
 	{
-		toy::Log(e.what());
+		toy::Log(e);
 	}
 
 	return result;

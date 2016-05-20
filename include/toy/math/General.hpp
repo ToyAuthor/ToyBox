@@ -4,7 +4,6 @@
 #include <cmath>
 #include <cfloat>
 #include "toy/Environment.hpp"
-#include "toy/Exception.hpp"
 
 
 namespace toy{

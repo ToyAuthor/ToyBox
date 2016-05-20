@@ -55,9 +55,9 @@ void toy::Log(const wchar_t *fmt, ... )
 	va_end(argptr);
 }
 
-void toy::Log(toy::Exception except)
+void toy::Log(const std::exception &except)
 {
-	toy::Log("%s:%d\n",std::string(except.message).c_str(),except.line);
+	toy::Log("%s\n",except.what());
 }
 
 #undef STRING_SIZE
