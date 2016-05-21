@@ -322,7 +322,7 @@ int Zip7::read(void *file, uint32_t size)
 
 	data+=size;
 
-	_filePointer = static_cast<decltype(_filePointer)>data;
+	_filePointer = static_cast<decltype(_filePointer)>(data);
 
 	return size;
 }
