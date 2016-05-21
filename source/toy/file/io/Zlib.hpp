@@ -20,10 +20,11 @@ class Zlib : public Base
 
 		virtual bool    openDir(std::string path);
 		virtual bool    open(std::string filepath);
-		virtual bool    read(void *file,uint32_t size);
+		virtual int     read(void *file,uint32_t size);     // Not finish yet.
 		virtual bool    write(void *file,uint32_t size);
 		virtual bool    seek(enum Base::Option option,int32_t offset);
 		virtual void    close();
+		virtual bool    isEnd(){return 1;}     // Implement it later.
 		virtual bool    isEmpty();
 		virtual void*   getFilePointer();    // prohibit
 

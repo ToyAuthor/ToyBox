@@ -1,7 +1,7 @@
 
 #include "toy/File.hpp"
 #include "toy/Image.hpp"
-#include "toy/file/loader/Png.hpp"
+#include "toy/file/loader/Image.hpp"
 #include <SFML/Window.hpp>
 #include "Render.hpp"
 
@@ -14,7 +14,7 @@ static int LoadImage(std::string file,toy::Image *image)
 	{
 		toy::Log("Image file not find!\n");
 	}
-	else if ( ! toy::file::loader::Png::Load(&dev,image) )
+	else if ( ! toy::file::loader::Load(&dev,image) )
 	{
 		toy::Log("Image load failed!\n");
 	}

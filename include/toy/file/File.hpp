@@ -45,7 +45,7 @@ class TOY_API File
 		bool    seek(enum SeekOption option,int32_t offset);// Not finish yet.
 
 //		void    close();// Do it later.
-
+		bool    isEnd();
 		bool    isEmpty();
 
 		void    changeMode(enum Mode);

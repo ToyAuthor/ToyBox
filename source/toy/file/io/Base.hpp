@@ -26,8 +26,9 @@ class Base
 
 		virtual bool    openDir(std::string path)=0;                // Open up a directory or archive.
 		virtual bool    open(std::string filepath)=0;
-		virtual bool    read(void *file,uint32_t size)=0;           // As some as ::fread().
+		virtual int     read(void *file,uint32_t size)=0;           // As some as ::fread().
 		virtual bool    write(void *file,uint32_t size)=0;
+		virtual bool    isEnd()=0;
 		virtual void    close()=0;
 		virtual bool    isEmpty()=0;
 

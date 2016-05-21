@@ -11,6 +11,7 @@ set(SOURCE
 	loader/Tga.cpp
 	loader/Bmp.cpp
 	loader/Png.cpp
+	loader/Image.cpp
 )
 
 

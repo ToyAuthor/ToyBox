@@ -5,6 +5,16 @@ using namespace toy;
 using namespace file;
 using namespace io;
 
+bool Standard::isEnd()
+{
+	if ( feof(_file) )
+	{
+		return 1;
+	}
+
+	return 0;
+}
+
 bool Standard::isEmpty()
 {
 	if ( _file==0 )
@@ -52,7 +62,7 @@ bool Standard::open(std::string filepath)
 		return 0;
 }
 
-bool Standard::read(void *file,uint32_t size)
+int Standard::read(void *file,uint32_t size)
 {
 	#if TOY_OPTION_CHECK
 	if ( ! file )
@@ -66,14 +76,15 @@ bool Standard::read(void *file,uint32_t size)
 
 	size_t	result=fread(file,1,size,_file);	// "fread(file,size,1,_file)" was wrong.
 
-	if ( result!=size )
+	if ( result>size )
 	{
 		// fread() has wrong
-		Oops(TOY_MARK);
+		toy::Log("(%d,%d)\n",result,size);
+		toy::Oops(TOY_MARK);
 		return 0;
 	}
 
-	return 1;
+	return result;
 }
 
 bool Standard::write(void *file,uint32_t size)

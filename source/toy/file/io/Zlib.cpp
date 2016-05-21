@@ -72,20 +72,18 @@ bool Zlib::open(std::string filepath)
 	return 0;
 }
 
-bool Zlib::read(void *file, uint32_t size)
+int Zlib::read(void *file, uint32_t size)
 {
-	int error = UNZ_OK;
+	int   result = unzReadCurrentFile( _handle, file, size );
 
-	error = unzReadCurrentFile( _handle, file, size );
-
-	if ( error < 0 )
+	if ( result < 0 )
 	{
 		toy::Oops(TOY_MARK);
 		close();
 		return 0;
 	}
 
-	return 1;
+	return result;
 }
 
 bool Zlib::write(void *,uint32_t )

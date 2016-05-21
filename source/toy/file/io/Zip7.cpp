@@ -307,23 +307,24 @@ bool Zip7::open(std::string filepath)
 	return 0;
 }
 
-bool Zip7::read(void *file, uint32_t size)
+int Zip7::read(void *file, uint32_t size)
 {
 	if ( _fileSize<size )
 	{
-		toy::Oops(TOY_MARK);
-		return 0;
+		//toy::Oops(TOY_MARK);
+		memcpy(file,_filePointer,_fileSize);
+		return _fileSize;
 	}
 
-	Byte  *data=(Byte*)_filePointer;
+	auto   data = static_cast<Byte*>(_filePointer);
 
 	memcpy(file,_filePointer,size);
 
 	data+=size;
 
-	_filePointer=(void*)data;
+	_filePointer = static_cast<decltype(_filePointer)>data;
 
-	return 1;
+	return size;
 }
 
 bool Zip7::write(void *,uint32_t )

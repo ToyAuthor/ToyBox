@@ -86,6 +86,11 @@ std::string File::getFileName()
 	return _io->getFileName();
 }
 
+bool File::isEnd()
+{
+	return _io->isEnd();
+}
+
 bool File::isEmpty()
 {
 	return _io->isEmpty();
