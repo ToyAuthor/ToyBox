@@ -287,14 +287,14 @@ bool Zip7::open(std::string filepath)
 			if(res == SZ_OK)
 			{
 				_fileSize = outSizeProcessed;
-				_filePointer = (void*)((_outBuffer)+offset);
+				_fileBegin = (void*)((_outBuffer)+offset);
 				return 1;
 			}
 			else
 			{
-				Oops(TOY_MARK);
+				toy::Oops(TOY_MARK);
 				_fileSize = 0;
-				_filePointer = nullptr;
+				_fileBegin = nullptr;
 				return 0;
 			}
 		}
@@ -303,26 +303,24 @@ bool Zip7::open(std::string filepath)
 	toy::Oops(TOY_MARK);
 
 	_fileSize = 0;
-	_filePointer = nullptr;
+	_fileBegin = nullptr;
 	return 0;
 }
 
 int Zip7::read(void *file, uint32_t size)
 {
-	if ( _fileSize<size )
+	auto   data = static_cast<Byte*>(_fileBegin);
+
+	if ( _fileSize < size+_passSize )
 	{
+		// Maybe something bad happened.
 		//toy::Oops(TOY_MARK);
-		memcpy(file,_filePointer,_fileSize);
-		return _fileSize;
+		size = _fileSize-_passSize;
 	}
 
-	auto   data = static_cast<Byte*>(_filePointer);
+	memcpy(file,data+_passSize,size);
 
-	memcpy(file,_filePointer,size);
-
-	data+=size;
-
-	_filePointer = static_cast<decltype(_filePointer)>(data);
+	_passSize+=size;
 
 	return size;
 }
@@ -334,10 +332,81 @@ bool Zip7::write(void *,uint32_t )
 	return 1;
 }
 
-bool Zip7::seek(enum Base::Option ,int32_t )
+static int32_t SeekSET(int32_t offset,int32_t total)
 {
-	// Not ready yet
-	toy::Oops(TOY_MARK);
+	if ( offset > total )
+	{
+		// Too big.
+		toy::Oops(TOY_MARK);
+		offset = total;      // Move to the end of file.
+	}
+	else if ( offset<0 )
+	{
+		// It should always bigger than zero.
+		toy::Oops(TOY_MARK);
+		offset = 0;          // Move to the begin of file.
+	}
+
+	return offset;
+}
+
+static int32_t SeekEND(int32_t offset,int32_t total)
+{
+	if ( offset < total*-1 )
+	{
+		// Too big.
+		toy::Oops(TOY_MARK);
+		offset = total*-1;   // Move to the begin of file.
+	}
+	else if ( offset>0 )
+	{
+		// It should always bigger than zero.
+		toy::Oops(TOY_MARK);
+		offset = 0;          // Move to the end of file.
+	}
+
+	return total + offset;
+}
+
+static int32_t SeekCUR(int32_t offset,int32_t total,int32_t pass)
+{
+	if ( offset>0 )
+	{
+		if ( offset+pass>total )
+		{
+			offset = total - pass;  // Move to the end of file.
+		}
+	}
+	else if ( offset<0 )
+	{
+		if ( offset*-1>pass )
+		{
+			offset = pass*-1;       // Move to the begin of file.
+		}
+	}
+
+	return pass + offset;
+}
+
+bool Zip7::seek(enum Base::Option option,int32_t offset)
+{
+	if ( isEmpty() ) return 0;
+
+	switch (option)
+	{
+		case Base::SET:
+			_passSize = SeekSET(offset,_fileSize);
+			break;
+
+		case Base::END:
+			_passSize = SeekEND(offset,_fileSize);
+			break;
+		case Base::CUR:
+		default:
+			_passSize = SeekCUR(offset,_fileSize,_passSize);
+			break;
+	}
+
 	return 1;
 }
 
@@ -358,6 +427,16 @@ void Zip7::close()
 bool Zip7::isEmpty()
 {
 	return 1;
+}
+
+bool Zip7::isEnd()
+{
+	if ( _passSize == _fileSize )
+	{
+		return 1;
+	}
+
+	return 0;
 }
 
 void* Zip7::getFilePointer()

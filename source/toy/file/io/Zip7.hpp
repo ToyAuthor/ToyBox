@@ -28,11 +28,11 @@ class Zip7 : public Base
 
 		virtual bool    openDir(std::string path);
 		virtual bool    open(std::string filepath);
-		virtual int     read(void *file,uint32_t size);    // Not finish yet.
-		virtual bool    write(void *file,uint32_t size);
+		virtual int     read(void *file,uint32_t size);
+		virtual bool    write(void *file,uint32_t size);   // Not finish yet.
 		virtual bool    seek(enum Base::Option option,int32_t offset);
 		virtual void    close();
-		virtual bool    isEnd(){return 1;}     // Implement it later.
+		virtual bool    isEnd();
 		virtual bool    isEmpty();
 		virtual void*   getFilePointer();    // prohibit
 
@@ -46,8 +46,11 @@ class Zip7 : public Base
 		UInt16*         _temp = nullptr;
 		Byte*           _outBuffer = nullptr;
 
+		//-------------------------------------------
+
 		size_t          _fileSize = 0;
-		void*           _filePointer = nullptr;
+		size_t          _passSize = 0;
+		void*           _fileBegin = nullptr;
 };
 
 
