@@ -1,10 +1,17 @@
 
+# The complete list:"ToyBox/third-party/readme.txt"
 macro(toy_SetThirdPartyLibraryPath)
 
 	if(WIN32)
 		set(TOY_SDK_PATH        "D:/sdk" )
 	elseif(UNIX)
-		set(TOY_SDK_PATH        "~/sdk" )
+		set(TOY_SDK_PATH        "$ENV{HOME}/sdk" )
+	endif()
+
+	if(NOT EXISTS ${TOY_SDK_PATH})
+		# TOY_SDK_PATH is not necessity.
+		# You can just modify those path and ignore this error.
+		message(FATAL_ERROR "ToyBox:Are you sure you have third-party libraries?")
 	endif()
 
 
