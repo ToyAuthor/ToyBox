@@ -31,10 +31,21 @@ class Allocator01
 			free();
 		}
 
+		Allocator01(const Allocator01 &other)
+		{
+			copy_mykind(const_cast<Allocator01&>(other));
+		}
+
+		Allocator01 operator = (const Allocator01 &other)
+		{
+			copy_mykind(const_cast<Allocator01&>(other));
+			return *this;
+		}
+
 		bool copy(void *p,size_t s)
 		{
 			setSize(s);
-			memcpy(_data,p,s);
+			std::memcpy(_data,p,s);
 			return 1;
 		}
 
@@ -42,8 +53,8 @@ class Allocator01
 		{
 			if(_data)
 			{
-				::free(_data);
-				_data = 0;
+				std::free(_data);
+				_data = nullptr;
 				_size = 0;
 				_trueSize = 0;
 			}
@@ -58,13 +69,13 @@ class Allocator01
 			{
 				size_t		new_size=Exp1<size_t>(s);
 
-				if ( _data==0 )
+				if ( _data==nullptr )
 				{
-					_data = malloc(new_size);
+					_data = std::malloc(new_size);
 				}
 				else
 				{
-					_data = realloc(_data,new_size);
+					_data = std::realloc(_data,new_size);
 				}
 				_trueSize = new_size;
 			}
@@ -83,17 +94,17 @@ class Allocator01
 			{
 				if(_data==0)
 				{
-					_data = malloc(new_size);
+					_data = std::malloc(new_size);
 				}
 				else
 				{
-					_data = realloc(_data,new_size);
+					_data = std::realloc(_data,new_size);
 				}
 				_trueSize = new_size;
 			}
 			else if ( new_size<_trueSize )
 			{
-				_data = realloc(_data,new_size);
+				_data = std::realloc(_data,new_size);
 				_trueSize = new_size;
 			}
 
@@ -115,6 +126,15 @@ class Allocator01
 		void*   _data = nullptr;
 		size_t  _size = 0;
 		size_t  _trueSize = 0;
+
+		inline void copy_mykind(Allocator01 &other)
+		{
+			free();
+			_size     =other._size;
+			_trueSize =other._trueSize;
+			_data = std::malloc(_trueSize);
+			std::memcpy(_data,other._data,_size);
+		}
 };
 
 
