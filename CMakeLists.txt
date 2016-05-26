@@ -5,12 +5,13 @@ cmake_minimum_required(VERSION 2.8)
 set(TOY_ROOT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 set(TOY_ROOT_BINARY_DIR ${PROJECT_BINARY_DIR})
 
-set(TOY_RELEASE OFF)
+if(CMAKE_BUILD_TYPE MATCHES Release)
+	set(TOY_RELEASE ON)
+else()
+	set(TOY_RELEASE OFF)
+endif()
 
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TOY_ROOT_SOURCE_DIR}/cmake/")
-include(ToyTools)
-
+include("${TOY_ROOT_SOURCE_DIR}/cmake/ToyTools.cmake" REQUIRED)
 
 option(TOY_ENABLE_SHARED_LIBS   "Make shared library"       OFF)
 
