@@ -41,6 +41,7 @@ macro(toy_ProcessArguments _sourcesArgs _includeDirsArgs _libDirsArgs _linkLibsA
 	set(${_includeDirsArgs})
 	set(${_libDirsArgs})
 	set(${_linkLibsArgs})
+	set(${_outputDirsArgs})
 	set(${_linkFlagsArgs})
 	set(${_cFlagsArgs})
 	set(${_otherArgs})

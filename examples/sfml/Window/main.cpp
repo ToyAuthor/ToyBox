@@ -91,14 +91,11 @@ class Cube
 
 static std::shared_ptr<sf::RenderWindow> CreateWindowS()
 {
-	sf::ContextSettings      contextSettings;
-	contextSettings.depthBits = 24;
-
 	auto window = std::make_shared<sf::RenderWindow>(
-		sf::VideoMode(800, 600),
-		L"SFML 範例",
-		sf::Style::Default,
-		contextSettings);
+			sf::VideoMode(800, 600),
+			L"SFML 範例",
+			sf::Style::Default,
+			sf::ContextSettings(24) );
 
 	window->setVerticalSyncEnabled(true);
 

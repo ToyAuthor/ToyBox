@@ -1,7 +1,7 @@
 
-#include "toy/File.hpp"
-#include "toy/Image.hpp"
-#include "toy/file/loader/Image.hpp"
+#include <toy/Image.hpp>
+#include <toy/File.hpp>
+#include <toy/file/Loader.hpp>
 #include <SFML/Window.hpp>
 #include "Render.hpp"
 
@@ -70,16 +70,13 @@ static sf::String Utf8ToUtf32(std::string str)
 
 static std::shared_ptr<sf::Window> CreateWindowS( std::string titleA, uint32_t width, uint32_t height )
 {
-	sf::ContextSettings      contextSettings;
-	contextSettings.depthBits = 24;
-
 	sf::String    titleW = Utf8ToUtf32(titleA);
 
 	auto    window = std::make_shared<sf::Window>(
-		sf::VideoMode(width, height),
-		titleW.getData(),
-		sf::Style::Default,
-		contextSettings);
+			sf::VideoMode(width, height),
+			titleW.getData(),
+			sf::Style::Default,
+			sf::ContextSettings(24) );
 
 	return window;
 }

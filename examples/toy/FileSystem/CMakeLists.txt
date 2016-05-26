@@ -31,11 +31,7 @@ elseif(WIN32)
 	list(APPEND LIBS opengl32 glu32 gdi32)
 endif()
 
-set(SOURCE
-	main.cpp
-	Render.cpp
-)
-
+file(GLOB SOURCE *.cpp */*.cpp)
 
 toy_BuildExe(FileSystem
 	SOURCES     ${SOURCE}

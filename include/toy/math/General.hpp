@@ -43,6 +43,7 @@ Type Min(const Type a,const Type b,const Type c,const Type d)
 	return result;
 }
 
+// Find next power of 2.
 // Figure out a number base on 2 and bigger than t and most close t.
 template <typename Type>
 inline Type Exp1(const Type t)

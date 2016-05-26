@@ -4,10 +4,7 @@ toy_StdReady()
 
 add_definitions(-DGLEW_STATIC)
 
-set(SOURCE
-	shader/Code.cpp
-	shader/Program.cpp
-)
+file(GLOB SOURCE *.cpp */*.cpp)
 
 set(LIBS toy
 	${TOY_libname_sfml_system}

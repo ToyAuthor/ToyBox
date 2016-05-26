@@ -30,36 +30,34 @@ class TOY_API File
 
 		enum SeekOption
 		{
-			SET=0,      // Seek from the head of file.
+			SET=0,      // Seek from the beginning of file.
 			END,        // Seek from the end of file.
-			CUR,        // Seek from the pointer of file.
+			CUR,        // Seek from the current position of the file pointer.
 		};
 
 		File(enum Mode mode=STD);
 		~File();
 
-		bool    openDir(std::string path);           // Open a folder or archive.
+		bool    changeDirectory(std::string path);
 		bool    open(std::string filepath);
-		bool    read(void *file,uint32_t size);
-		bool    write(void *file,uint32_t size);     // Not finish yet.
-		bool    seek(enum SeekOption option,int32_t offset);// Not finish yet.
 
-//		void    close();// Do it later.
+		int     read(void *file,uint32_t size);
+		bool    write(void *file,uint32_t size);               // STD mode supported only.
+		bool    seek(enum SeekOption option,int32_t offset);   // Not support ZIP mode.
 		bool    isEnd();
-		bool    isEmpty();
 
+		bool    isEmpty();
 		void    changeMode(enum Mode);
-//		bool    readFrom(const tchar *file);    // A path or a archive.
-//		bool    readFrom(String file);
 
 		std::string   getFileName();
 		void*   getFilePointer();               // It's made for libpng. Bad design.
 
 	private:
 
+		void    close();
 		void    freeIO();
 
-		file::io::Base*     _io = nullptr;
+		file::io::Base*     _io = nullptr;      // Always keep a object when it alive.
 		enum Mode           _mode = NONE;
 
 };

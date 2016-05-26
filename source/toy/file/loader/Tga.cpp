@@ -84,6 +84,10 @@ static inline void RGB_to_RGBA(    uint8_t* data,   // The address of image.
 	}
 
 	// Handle the last pixel.
+	pp1[2] = pp2[2];
+	pp1[1] = pp2[1];
+	pp1[0] = pp2[0];
+
 	if(color && Compare2Pixel(pp1,color))
 		pp1[3] = 0x00;
 	else

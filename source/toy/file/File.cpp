@@ -27,6 +27,11 @@ void File::freeIO()
 	}
 }
 
+void File::close()
+{
+	_io->close();
+}
+
 void File::changeMode(enum Mode mode)
 {
 	if ( _mode==mode )
@@ -56,7 +61,7 @@ void File::changeMode(enum Mode mode)
 	}
 }
 
-bool File::openDir(std::string path)
+bool File::changeDirectory(std::string path)
 {
 	return _io->openDir(path);
 }
@@ -66,7 +71,7 @@ bool File::open(std::string filepath)
 	return _io->open(filepath);
 }
 
-bool File::read(void *file,uint32_t size)
+int File::read(void *file,uint32_t size)
 {
 	return _io->read(file,size);
 }

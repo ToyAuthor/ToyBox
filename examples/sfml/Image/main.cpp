@@ -7,14 +7,11 @@
 
 static std::shared_ptr<sf::Window> CreateWindowS()
 {
-	sf::ContextSettings      contextSettings;
-	contextSettings.depthBits = 24;
-
 	auto    window = std::make_shared<sf::Window>(
-		sf::VideoMode(800, 600),
-		L"ToyBox;玩具箱;おもちゃ箱;장난감 상자;खिलौनो का बक्सा",
-		sf::Style::Default,
-		contextSettings);
+			sf::VideoMode(800, 600),
+			L"ToyBox;玩具箱;おもちゃ箱;장난감 상자;खिलौनो का बक्सा",
+			sf::Style::Default,
+			sf::ContextSettings(24) );
 
 	return window;
 }

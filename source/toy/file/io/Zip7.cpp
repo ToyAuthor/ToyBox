@@ -313,8 +313,6 @@ int Zip7::read(void *file, uint32_t size)
 
 	if ( _fileSize < size+_passSize )
 	{
-		// Maybe something bad happened.
-		//toy::Oops(TOY_MARK);
 		size = _fileSize-_passSize;
 	}
 
@@ -344,7 +342,7 @@ static int32_t SeekSET(int32_t offset,int32_t total)
 	{
 		// It should always bigger than zero.
 		toy::Oops(TOY_MARK);
-		offset = 0;          // Move to the begin of file.
+		offset = 0;          // Move to the beginning of file.
 	}
 
 	return offset;
@@ -356,7 +354,7 @@ static int32_t SeekEND(int32_t offset,int32_t total)
 	{
 		// Too big.
 		toy::Oops(TOY_MARK);
-		offset = total*-1;   // Move to the begin of file.
+		offset = total*-1;   // Move to the beginning of file.
 	}
 	else if ( offset>0 )
 	{
@@ -381,7 +379,7 @@ static int32_t SeekCUR(int32_t offset,int32_t total,int32_t pass)
 	{
 		if ( offset*-1>pass )
 		{
-			offset = pass*-1;       // Move to the begin of file.
+			offset = pass*-1;       // Move to the beginning of file.
 		}
 	}
 

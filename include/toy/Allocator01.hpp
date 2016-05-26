@@ -130,8 +130,8 @@ class Allocator01
 		inline void copy_mykind(Allocator01 &other)
 		{
 			free();
-			_size     =other._size;
-			_trueSize =other._trueSize;
+			_size     = other._size;
+			_trueSize = other._trueSize;
 			_data = std::malloc(_trueSize);
 			std::memcpy(_data,other._data,_size);
 		}

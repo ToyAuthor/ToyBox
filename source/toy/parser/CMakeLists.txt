@@ -2,14 +2,7 @@ project(ToyParser)
 
 toy_StdReady()
 
-
-set(SOURCE
-	Parser.cpp
-	Translator.cpp
-	Dictionary.cpp
-	StringCutter.cpp
-	StringCutterConfig.cpp
-)
+file(GLOB SOURCE *.cpp */*.cpp)
 
 set(LIBS toy
 	boost_filesystem

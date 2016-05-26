@@ -2,18 +2,7 @@ project(ToyFile)
 
 toy_StdReady()
 
-
-set(SOURCE
-	File.cpp
-	io/Standard.cpp
-	io/Zlib.cpp
-	io/Zip7.cpp
-	loader/Tga.cpp
-	loader/Bmp.cpp
-	loader/Png.cpp
-	loader/Image.cpp
-)
-
+file(GLOB SOURCE *.cpp */*.cpp)
 
 set(LIBS toy
 	boost_filesystem
