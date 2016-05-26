@@ -5,7 +5,9 @@
 #include "toy/file/loader/Image.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "toy/file/loader/stb/stb_image.h"
+#include "toy/file/loader/stb/stb_image_write.h"
 
 
 namespace toy{
@@ -15,9 +17,7 @@ namespace file{
 static int ReadImage(void *user,char *data,int size)
 {
 	auto   dev = static_cast<File*>(user);
-	dev->read(data,size);
-
-	return size;
+	return dev->read(data,size);
 }
 
 static void SkipImage(void *user,int n)
@@ -37,28 +37,38 @@ static int EndOfFile(void *user)
 bool loader::Load(File *f,Image *map)
 {
 	auto   io = static_cast<void*>(f);
-	ImageOpener  image(map);
 
 	int32_t      width  = 0;
 	int32_t      height = 0;
-	int32_t      pixel = 0;
+	int32_t      pixel  = 0;
 
 	stbi_io_callbacks    callback;
 
-	callback.eof = EndOfFile;
 	callback.read = ReadImage;
 	callback.skip = SkipImage;
+	callback.eof  = EndOfFile;
+
+	stbi_set_flip_vertically_on_load(1);    //upside down
 
 	auto   data = stbi_load_from_callbacks( &callback, io, &width, &height, &pixel, STBI_rgb_alpha );
 
-	image.setHeight(height);
-	image.setWidth(width);
-	image.getAllocator()->setSize(width*height*pixel);
+	if ( pixel != 4 )
+	{
+		toy::Oops(TOY_MARK);
+		stbi_image_free(data);
+		return 0;
+	}
 
-	std::memcpy( image.getData(), data, width*height*pixel );
+	*map = image::Create(width,height,data);
 
 	stbi_image_free(data);
 
+	return 1;
+}
+
+bool loader::Save(std::string filename,Image *map)
+{
+	stbi_write_tga(filename.c_str(), map->getWidth(), map->getHeight(), 4, map->getData());
 	return 1;
 }
 

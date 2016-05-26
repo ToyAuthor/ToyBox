@@ -14,7 +14,7 @@ namespace file{
 namespace loader{
 
 TOY_API bool Load(File *f,Image *m);
-
+TOY_API bool Save(std::string filename,Image *map);
 
 }//namespace loader
 }//namespace file
