@@ -119,10 +119,3 @@ bool Zlib::isEmpty()
 {
 	return 1;
 }
-
-void* Zlib::getFilePointer()
-{
-	// There is no way to do it.
-	Oops(TOY_MARK);
-	return nullptr;
-}

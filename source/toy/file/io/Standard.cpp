@@ -112,8 +112,3 @@ bool Standard::seek(enum Option option,int32_t offset)
 	}
 	return 1;
 }
-
-void* Standard::getFilePointer()
-{
-	return (void*)_file;
-}

@@ -436,10 +436,3 @@ bool Zip7::isEnd()
 
 	return 0;
 }
-
-void* Zip7::getFilePointer()
-{
-	// There is no way to do it.
-	toy::Oops(TOY_MARK);
-	return nullptr;
-}

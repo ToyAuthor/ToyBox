@@ -24,7 +24,6 @@ class Standard : public Base
 		virtual void    close();
 		virtual bool    isEnd();
 		virtual bool    isEmpty();
-		virtual void*   getFilePointer();
 
 	private:
 

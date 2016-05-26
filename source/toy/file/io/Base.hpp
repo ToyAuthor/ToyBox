@@ -41,7 +41,6 @@ class Base
 		}
 
 		virtual bool    seek(enum Option option,int32_t offset)=0;    // Some as ::fseek().
-		virtual void*   getFilePointer()=0;// Bad design
 
 	protected:
 

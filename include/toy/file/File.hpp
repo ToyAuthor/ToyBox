@@ -50,7 +50,6 @@ class TOY_API File
 		void    changeMode(enum Mode);
 
 		std::string   getFileName();
-		void*   getFilePointer();               // It's made for libpng. Bad design.
 
 	private:
 

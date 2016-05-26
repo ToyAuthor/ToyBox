@@ -100,8 +100,3 @@ bool File::isEmpty()
 {
 	return _io->isEmpty();
 }
-
-void* File::getFilePointer()
-{
-	return _io->getFilePointer();
-}

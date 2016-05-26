@@ -26,7 +26,6 @@ class Zlib : public Base
 		virtual void    close();
 		virtual bool    isEnd(){return 1;}                               // Not finish yet.
 		virtual bool    isEmpty();
-		virtual void*   getFilePointer();    // prohibit
 
 	private:
 

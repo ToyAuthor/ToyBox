@@ -34,7 +34,6 @@ class Zip7 : public Base
 		virtual void    close();
 		virtual bool    isEnd();
 		virtual bool    isEmpty();
-		virtual void*   getFilePointer();    // prohibit
 
 	private:
 
