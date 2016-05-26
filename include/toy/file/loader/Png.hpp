@@ -10,17 +10,12 @@ class Image;
 
 namespace file{
 namespace loader{
+namespace png{
 
-class TOY_API Png
-{
-	public:
+TOY_API bool Load(File *f,Image *m);
+//TOY_API bool Save(std::string filename,Image *map);
 
-		Png(){}
-		~Png(){}
-
-	static bool    Load(File *f,Image *m);
-};
-
+}//namespace png
 }//namespace loader
 }//namespace file
 }//namespace toy
