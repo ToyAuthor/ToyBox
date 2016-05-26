@@ -19,8 +19,9 @@ class TOY_API Image
 		~Image();
 
 		void    clean();
+		void    upsideDown();
 
-		// Give you a memory about the image data. Return NULL if it's a empty object.
+		// Give you a memory address about the image data. Return nullptr if it's a empty object.
 		uint8_t* getData() const
 		{
 			return (uint8_t*)(_data.getData());
@@ -46,6 +47,7 @@ class TOY_API Image
 		Allocator01     _data;      // Saving a image data on memory.
 		int32_t         _height = 0;
 		int32_t         _width = 0;
+
 };
 
 // You can use it to modify the inside of Image.
@@ -59,6 +61,11 @@ class ImageOpener
 		}
 
 		~ImageOpener(){}
+
+		void clean()
+		{
+			_core->clean();
+		}
 
 		Allocator01* getAllocator()
 		{
@@ -104,5 +111,19 @@ class ImageOpener
 
 		Image   *_core;
 };
+
+namespace image{
+
+enum Pixel
+{
+	GREY = 1,
+	GREY_ALPHA,
+	RGB,
+	RGBA,
+};
+
+TOY_API toy::Image Create(const int32_t width,const int32_t height,uint8_t *data,enum Pixel option = RGBA);
+
+}//namespace image{
 
 }//namespace toy
