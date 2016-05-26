@@ -47,12 +47,11 @@ bool Standard::open(std::string filepath)
 
 	if ( _path.size()==0 )
 	{
-		path=_fileName;
+		path = _fileName;
 	}
 	else
 	{
-		path=_path;
-		path+=_fileName;
+		path = _path + "/" + _fileName;
 	}
 
 	_file = fopen(path.c_str(),"rb+");
