@@ -94,7 +94,7 @@ static inline void RGB_to_RGBA(    uint8_t* data,   // The address of image.
 		pp1[3] = 0xff;
 }
 
-bool loader::Tga::Load(File *pIO,Image *map)
+bool loader::tga::Load(File *pIO,Image *map)
 {
 	ImageOpener        image(map);
 	struct TGA_Head    header;
@@ -208,7 +208,7 @@ bool loader::Tga::Load(File *pIO,Image *map)
 	return 1;
 }
 
-bool loader::Tga::Save(File *pIO,Image *map)
+bool loader::tga::Save(File *pIO,Image *map)
 {
 	pIO->seek(File::SET,0);
 

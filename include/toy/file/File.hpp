@@ -24,8 +24,8 @@ class TOY_API File
 		{
 			NONE,
 			STD,        // Default mode. As same as <stdio.h>.
-			ZIP,        // As *.zip as folder.
-			ZIP7,       // 7zip
+			ZIP,        // Make zip archive using like a folder.
+			ZIP7,       // 7zip.
 		};
 
 		enum SeekOption

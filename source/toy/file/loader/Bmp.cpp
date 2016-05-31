@@ -148,7 +148,7 @@ static inline void LoadImage( File *pIO, ImageOpener *image )
 	pIO->read(image->getData(),size);
 }
 
-bool loader::Bmp::Load(File *pIO,Image *map)
+bool loader::bmp::Load(File *pIO,Image *map)
 {
 //	pIO->Seek(File::SET,0);   May be it will crash system. But it's much safe.
 
@@ -162,7 +162,7 @@ bool loader::Bmp::Load(File *pIO,Image *map)
 }
 
 // no good
-bool loader::Bmp::Save(File *pIO,Image *map)
+bool loader::bmp::Save(File *pIO,Image *map)
 {
 	struct BMP_Head     head;
 	struct BMP_Info     info;

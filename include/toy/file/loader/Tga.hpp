@@ -10,18 +10,12 @@ class Image;
 
 namespace file{
 namespace loader{
+namespace tga{
 
-class TOY_API Tga
-{
-	public:
+TOY_API bool Load(File *f,Image *m);    // Not support length encoding.
+TOY_API bool Save(File *f,Image *m);    // File mode STD only.
 
-		Tga(){}
-		~Tga(){}
-
-	static bool    Load(File *f,Image *m); ///< Loading TGA file. No Run Length Encoding.
-	static bool    Save(File *f,Image *m); ///< Saving TGA file. File mode STD only.
-};
-
+}//namespace tga
 }//namespace loader
 }//namespace file
 }//namespace toy

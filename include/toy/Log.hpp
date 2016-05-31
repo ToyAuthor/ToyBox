@@ -18,5 +18,4 @@ void TOY_API Log(const std::exception &);
 	inline void Oops(const char*,int){}
 #endif
 
-
-}//namespace toy
+}

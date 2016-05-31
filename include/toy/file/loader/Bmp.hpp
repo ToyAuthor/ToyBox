@@ -10,18 +10,12 @@ class Image;
 
 namespace file{
 namespace loader{
+namespace bmp{
 
-class TOY_API Bmp
-{
-	public:
+TOY_API bool Load(File *f,Image *m);
+TOY_API bool Save(File *f,Image *m);   // File mode STD only.
 
-		Bmp(){}
-		~Bmp(){}
-
-	static bool    Load(File *f,Image *m);
-	static bool    Save(File *f,Image *m);   // Saving BMP file. File mode STD only.
-};
-
+}//namespace bmp
 }//namespace loader
 }//namespace file
 }//namespace toy
