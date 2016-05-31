@@ -4,7 +4,7 @@
 #include "toy/Log.hpp"
 #include "toy/Windows.hpp"
 #include "toy/Character.hpp"
-
+#include "toy/Utf.hpp"
 
 #define STRING_SIZE 128
 
@@ -23,21 +23,22 @@ void toy::Log(const char *fmt, ... )
 		toy::Utf8ToWChar(bufferW,bufferA,std::strlen(bufferA));
 		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),bufferW,std::wcslen(bufferW),&ws,nullptr);
 	#else
-		printf(fmt,argptr);
+		char      buffer[STRING_SIZE];
+		std::vsnprintf(buffer,STRING_SIZE,fmt,argptr);
+		std::printf("%s",buffer);
 	#endif
 
 	va_end(argptr);
 }
 
-// Only work on Windows. Too bad.
 void toy::Log(const wchar_t *fmt, ... )
 {
 	va_list         argptr;
 	va_start(argptr, fmt);
 
-	#if defined(TOY_WINDOWS)
-		wchar_t      buffer[STRING_SIZE];
+	wchar_t      buffer[STRING_SIZE];
 
+	#if defined(TOY_WINDOWS)
 		#if defined(TOY_MSVC)
 			_vsnwprintf_s(buffer,STRING_SIZE,(int)STRING_SIZE-1,fmt,argptr);
 		#elif defined(TOY_MINGW)
@@ -49,7 +50,9 @@ void toy::Log(const wchar_t *fmt, ... )
 		DWORD			ws;
 		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),buffer,std::wcslen(buffer),&ws,nullptr);
 	#else
-		wprintf(fmt,argptr);    // No. It doesn't work on Linux.
+		//wprintf(fmt,argptr);    // No. It doesn't work on Linux.
+		std::vswprintf(buffer,STRING_SIZE,fmt,argptr);
+		std::printf("%s",toy::utf::WCharToUTF8(std::wstring(buffer)).c_str());
 	#endif
 
 	va_end(argptr);

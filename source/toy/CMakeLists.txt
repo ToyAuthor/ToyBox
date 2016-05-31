@@ -8,7 +8,10 @@ if(TOY_ENABLE_SHARED_LIBS)
 	add_definitions(-DTOY_EXPORT)
 endif()
 
-file(GLOB SOURCE *.cpp)
+file(GLOB SOURCE
+	*.cpp
+	utf/*.cpp
+)
 
 set(LIB pthread)
 
