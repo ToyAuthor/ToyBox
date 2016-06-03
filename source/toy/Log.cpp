@@ -1,32 +1,71 @@
 #include <cstdarg>
 #include <string>
 #include <cstring>
+#include <functional>
 #include "toy/Log.hpp"
 #include "toy/Windows.hpp"
-#include "toy/Character.hpp"
 #include "toy/Utf.hpp"
 
-#define STRING_SIZE 128
 
+
+//----------------PrintStr let you choose the way to print string----------------start
+
+namespace toy{
+namespace log{
+
+#if defined(TOY_WINDOWS)
+	static std::function<void(const char*)> PrintStr = [](const char *str)
+	{
+		auto      word = utf::UTF8ToWChar(std::string(str));
+		DWORD     ws;
+		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),word.c_str(),word.size(),&ws,nullptr);
+	};
+
+	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
+	{
+		DWORD     ws;
+		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),str,std::wcslen(str),&ws,nullptr);
+	};
+#else
+	static std::function<void(const char*)> PrintStr = [](const char *str)
+	{
+		printf("%s",str);
+	};
+
+	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
+	{
+		//wprintf(L"%ls",str);    // No. It doesn't works on Linux.
+		printf("%s",utf::WCharToUTF8(std::wstring(str)).c_str());
+	};
+#endif
+
+}//namespace log
+}//namespace toy
+
+void toy::log::SetDevice(std::function<void(const char*)> func)
+{
+	toy::log::PrintStr = std::move(func);
+}
+
+void toy::log::SetDevice(std::function<void(const wchar_t*)> func)
+{
+	toy::log::PrintStrW = std::move(func);
+}
+
+//----------------PrintStr let you choose the way to print string----------------end
+
+
+
+#define STRING_SIZE 128
 
 void toy::Log(const char *fmt, ... )
 {
 	va_list         argptr;
 	va_start(argptr, fmt);
 
-	#if defined(TOY_WINDOWS)
-		DWORD     ws;
-		char      bufferA[STRING_SIZE];
-		wchar_t   bufferW[STRING_SIZE];
-
-		vsnprintf(bufferA,STRING_SIZE,fmt,argptr);
-		toy::Utf8ToWChar(bufferW,bufferA,std::strlen(bufferA));
-		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),bufferW,std::wcslen(bufferW),&ws,nullptr);
-	#else
-		char      buffer[STRING_SIZE];
-		std::vsnprintf(buffer,STRING_SIZE,fmt,argptr);
-		std::printf("%s",buffer);
-	#endif
+	char      buffer[STRING_SIZE];
+	vsnprintf(buffer,STRING_SIZE,fmt,argptr);
+	toy::log::PrintStr(buffer);
 
 	va_end(argptr);
 }
@@ -38,22 +77,15 @@ void toy::Log(const wchar_t *fmt, ... )
 
 	wchar_t      buffer[STRING_SIZE];
 
-	#if defined(TOY_WINDOWS)
-		#if defined(TOY_MSVC)
-			_vsnwprintf_s(buffer,STRING_SIZE,(int)STRING_SIZE-1,fmt,argptr);
-		#elif defined(TOY_MINGW)
-			vsnwprintf(buffer,STRING_SIZE,fmt,argptr);
-		#else
-			vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.
-		#endif
-
-		DWORD			ws;
-		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),buffer,std::wcslen(buffer),&ws,nullptr);
+	#if defined(TOY_MSVC)
+		_vsnwprintf_s(buffer,STRING_SIZE,(int)STRING_SIZE-1,fmt,argptr);
+	#elif defined(TOY_MINGW)
+		vsnwprintf(buffer,STRING_SIZE,fmt,argptr);
 	#else
-		//wprintf(fmt,argptr);    // No. It doesn't work on Linux.
-		std::vswprintf(buffer,STRING_SIZE,fmt,argptr);
-		std::printf("%s",toy::utf::WCharToUTF8(std::wstring(buffer)).c_str());
+		vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.
 	#endif
+
+	toy::log::PrintStrW(buffer);
 
 	va_end(argptr);
 }
