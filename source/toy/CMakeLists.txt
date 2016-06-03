@@ -11,6 +11,7 @@ endif()
 file(GLOB SOURCE
 	*.cpp
 	utf/*.cpp
+	log/*.cpp
 )
 
 set(LIB pthread)
