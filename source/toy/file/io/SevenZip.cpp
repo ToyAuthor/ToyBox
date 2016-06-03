@@ -4,8 +4,7 @@
 
 #include <cstdlib>
 #include <cstring>
-#include "toy/file/io/Zip7.hpp"
-
+#include "toy/file/io/SevenZip.hpp"
 
 
 using namespace toy;
@@ -69,7 +68,7 @@ static int Buf_EnsureSize(CBuf *dest, size_t size)
 	return Buf_Create(dest, size, &g_Alloc);
 }
 
-#if defined(TOY_LINUX) || defined(TOY_MAC)
+#if defined(TOY_LINUX) || defined(TOY_MAC) || defined(TOY_ANDROID)
 static Byte kUtf8Limits[5] = { 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 
 static Bool Utf16_To_Utf8(Byte *dest, size_t *destLen, const UInt16 *src, size_t srcLen)
@@ -197,7 +196,7 @@ static int SzCheckName(const char *name1,UInt16 *name2)
 
 
 
-Zip7::Zip7()
+SevenZip::SevenZip()
 {
 	_allocImp.Alloc = SzAlloc;
 	_allocImp.Free = SzFree;
@@ -209,7 +208,7 @@ Zip7::Zip7()
 	SzArEx_Init(&(_db));
 }
 
-bool Zip7::openDir(std::string path)
+bool SevenZip::openDir(std::string path)
 {
 	if ( InFile_Open(&(_archiveStream.file),path.c_str()) )
 	{
@@ -240,7 +239,7 @@ bool Zip7::openDir(std::string path)
 	return 1;
 }
 
-bool Zip7::open(std::string filepath)
+bool SevenZip::open(std::string filepath)
 {
 	size_t	len;
 	size_t	tempSize = 0;
@@ -307,7 +306,7 @@ bool Zip7::open(std::string filepath)
 	return 0;
 }
 
-int Zip7::read(void *file, uint32_t size)
+int SevenZip::read(void *file, uint32_t size)
 {
 	auto   data = static_cast<Byte*>(_fileBegin);
 
@@ -323,7 +322,7 @@ int Zip7::read(void *file, uint32_t size)
 	return size;
 }
 
-bool Zip7::write(void *,uint32_t )
+bool SevenZip::write(void *,uint32_t )
 {
 	// Not ready yet
 	toy::Oops(TOY_MARK);
@@ -386,7 +385,7 @@ static int32_t SeekCUR(int32_t offset,int32_t total,int32_t pass)
 	return pass + offset;
 }
 
-bool Zip7::seek(enum Base::Option option,int32_t offset)
+bool SevenZip::seek(enum Base::Option option,int32_t offset)
 {
 	if ( isEmpty() ) return 0;
 
@@ -408,7 +407,7 @@ bool Zip7::seek(enum Base::Option option,int32_t offset)
 	return 1;
 }
 
-void Zip7::close()
+void SevenZip::close()
 {
 	IAlloc_Free(&(_allocImp), _outBuffer);
 
@@ -422,12 +421,12 @@ void Zip7::close()
 	File_Close(&(_archiveStream.file));
 }
 
-bool Zip7::isEmpty()
+bool SevenZip::isEmpty()
 {
 	return 1;
 }
 
-bool Zip7::isEnd()
+bool SevenZip::isEnd()
 {
 	if ( _passSize == _fileSize )
 	{

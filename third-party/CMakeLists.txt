@@ -8,8 +8,8 @@ else()
 	set(TOY_3RD_PARTY_LIB_TYPE STATIC)
 endif()
 
-add_subdirectory(lua)
 
+add_subdirectory(lua)
 add_subdirectory(boost)
 add_subdirectory(zlib)
 

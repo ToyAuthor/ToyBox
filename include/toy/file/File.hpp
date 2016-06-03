@@ -23,9 +23,9 @@ class TOY_API File
 		enum Mode
 		{
 			NONE,
-			STD,        // Default mode. As same as <stdio.h>.
-			ZIP,        // Make zip archive using like a folder.
-			ZIP7,       // 7zip.
+			STD,        // Default mode. toy::File is similar to std::fstream in this mode.
+			ZIP,
+			SEVEN_ZIP,
 		};
 
 		enum SeekOption
@@ -38,7 +38,7 @@ class TOY_API File
 		File(enum Mode mode=STD);
 		~File();
 
-		bool    changeDirectory(std::string path);
+		bool    changeDirectory(std::string path);             // Open a file folder or zip archive for search files.
 		bool    open(std::string filepath);
 
 		int     read(void *file,uint32_t size);

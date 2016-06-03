@@ -2,7 +2,7 @@
 #include "toy/file/io/Base.hpp"
 #include "toy/file/io/Standard.hpp"
 #include "toy/file/io/Zlib.hpp"
-#include "toy/file/io/Zip7.hpp"
+#include "toy/file/io/SevenZip.hpp"
 
 
 using namespace toy;
@@ -48,8 +48,8 @@ void File::changeMode(enum Mode mode)
 		case STD:
 			_io = static_cast<file::io::Base*>(new file::io::Standard);
 			break;
-		case ZIP7:
-			_io = static_cast<file::io::Base*>(new file::io::Zip7);
+		case SEVEN_ZIP:
+			_io = static_cast<file::io::Base*>(new file::io::SevenZip);
 			break;
 		case ZIP:
 			_io = static_cast<file::io::Base*>(new file::io::Zlib);

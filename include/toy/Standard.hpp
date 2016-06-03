@@ -4,11 +4,6 @@
 #include <cstdint>
 #include <functional>
 #include <map>
-#include <vector>
-#include <string>
-#include <memory>
-#include <cwchar>
-#include <cwctype>
 #include "toy/Boost.hpp"
 #include "toy/CompilerConfig.hpp"
 #include "toy/Log.hpp"

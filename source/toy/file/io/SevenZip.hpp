@@ -19,12 +19,12 @@ namespace file{
 namespace io{
 
 
-class Zip7 : public Base
+class SevenZip : public Base
 {
 	public:
 
-		Zip7();
-		virtual ~Zip7(){close();}
+		SevenZip();
+		virtual ~SevenZip(){close();}
 
 		virtual bool    openDir(std::string path);
 		virtual bool    open(std::string filepath);
