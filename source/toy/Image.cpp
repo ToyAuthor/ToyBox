@@ -29,9 +29,9 @@ static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 
 static void SwitchPixel(toy::ImageOpener *image,uint8_t *data,enum Pixel option)
 {
-	auto   target = static_cast<uint8_t*>(image->getData());
-	auto   width  = image->getWidth();
-	auto   height = image->getHeight();
+	auto   target = static_cast<uint8_t*>(image->data());
+	auto   width  = image->width();
+	auto   height = image->height();
 
 	switch ( option )
 	{
@@ -65,10 +65,10 @@ toy::Image Create(const int32_t width,const int32_t height,uint8_t *data,enum Pi
 	toy::Image        result;
 	toy::ImageOpener  image(&result);
 
-	image.setWidth(width);
-	image.setHeight(height);
+	image.width(width);
+	image.height(height);
 
-	image.getAllocator()->setSize(width * height * 4);
+	image.allocator()->size(width * height * 4);
 
 	SwitchPixel(&image,data,option);
 
@@ -94,7 +94,7 @@ Image::~Image()
 
 void Image::clean()
 {
-	_data.free();
+	_allocator.free();
 }
 
 template<typename T>
@@ -105,7 +105,7 @@ inline std::shared_ptr<T> MakeArray(int size)
 
 void Image::upsideDown()
 {
-	auto        data        = static_cast<uint8_t*>(_data.getData());
+	auto        data        = static_cast<uint8_t*>(_allocator.data());
 	const int   color_pixel = 4;
 	const int   oneline     = _width*color_pixel;
 	const auto  temp        = MakeArray<uint8_t>(oneline);

@@ -108,8 +108,8 @@ static inline void BGR_to_RGB( uint8_t* data,   // The address of image.
 
 static inline void BGR_to_RGBA(ImageOpener *image)
 {
-	uint32_t    size = image->getSize()*3;   // 1 pixel == 3 byte.
-	uint8_t*    data = image->getData();
+	uint32_t    size = image->size()*3;   // 1 pixel == 3 byte.
+	uint8_t*    data = image->data();
 
 	BGR_to_RGB(data,size);
 	RGB_to_RGBA(data,size,0);
@@ -139,13 +139,13 @@ static inline void LoadImage( File *pIO, ImageOpener *image )
 		Oops(TOY_MARK);
 	}
 
-	image->setHeight(height);
-	image->setWidth(width);
-	image->getAllocator()->setSize((size/3)*4);  // Allocate more memory. May be we need it later.
+	image->height(height);
+	image->width(width);
+	image->allocator()->size((size/3)*4);  // Allocate more memory. May be we need it later.
 
 	// I need to checkout memory enough over here.
 
-	pIO->read(image->getData(),size);
+	pIO->read(image->data(),size);
 }
 
 bool loader::bmp::Load(File *pIO,Image *map)
@@ -166,8 +166,8 @@ bool loader::bmp::Save(File *pIO,Image *map)
 {
 	struct BMP_Head     head;
 	struct BMP_Info     info;
-	int32_t             width = map->getWidth();
-	int32_t             height= map->getHeight();
+	int32_t             width = map->width();
+	int32_t             height= map->height();
 
 	pIO->seek(File::SET,0);
 

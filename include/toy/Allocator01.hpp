@@ -44,7 +44,7 @@ class Allocator01
 
 		bool copy(void *p,size_t s)
 		{
-			setSize(s);
+			size(s);
 			std::memcpy(_data,p,s);
 			return 1;
 		}
@@ -61,7 +61,7 @@ class Allocator01
 		}
 
 		// Allocate memory for user.
-		bool setSize(size_t s)
+		bool size(size_t s)
 		{
 			_size = s;
 
@@ -83,7 +83,7 @@ class Allocator01
 			return 1;
 		}
 
-		// Almost same as SetSize(). It can release the memory unused.
+		// Allocate memory for user, and release the memory unused.
 		bool fitSize(size_t s)
 		{
 			_size = s;
@@ -92,7 +92,7 @@ class Allocator01
 
 			if ( new_size>_trueSize )
 			{
-				if(_data==0)
+				if(_data==nullptr)
 				{
 					_data = std::malloc(new_size);
 				}
@@ -111,12 +111,12 @@ class Allocator01
 			return 1;
 		}
 
-		void* getData() const
+		void* data() const
 		{
 			return _data;
 		}
 
-		size_t getSize() const
+		size_t size() const
 		{
 			return _size;
 		}

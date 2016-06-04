@@ -68,7 +68,7 @@ bool loader::Load(File *f,Image *map)
 
 bool loader::Save(std::string filename,Image *map)
 {
-	stbi_write_tga(filename.c_str(), map->getWidth(), map->getHeight(), 4, map->getData());
+	stbi_write_tga(filename.c_str(), map->width(), map->height(), 4, map->data());
 	return 1;
 }
 
