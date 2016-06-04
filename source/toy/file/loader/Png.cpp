@@ -2,8 +2,6 @@
 #include "toy/file/loader/Png.hpp"
 #include "toy/file/loader/Image.hpp"
 
-//#define PNG_DEBUG 3
-//#include <png.h>
 
 
 namespace toy{

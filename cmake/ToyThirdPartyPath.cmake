@@ -46,11 +46,6 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_libname_zlib        "zlib" )
 
 
-	set(TOY_include_libpng      "${TOY_ROOT_SOURCE_DIR}/third-party/libpng" "${TOY_ROOT_BINARY_DIR}/third-party/libpng" )
-	set(TOY_library_libpng      "${TOY_ROOT_BINARY_DIR}/third-party/libpng" )
-	set(TOY_libname_libpng      "png" )
-
-
 	if(UNIX)
 	set(TOY_include_7zip        "${TOY_ROOT_SOURCE_DIR}/third-party/p7zip" )
 	set(TOY_library_7zip        "${TOY_ROOT_BINARY_DIR}/third-party/p7zip" )
