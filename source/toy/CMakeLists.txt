@@ -14,13 +14,14 @@ file(GLOB SOURCE
 	log/*.cpp
 )
 
-set(LIB pthread)
-
-if(APPLE)
-	list(APPEND LIB iconv)
-endif()
-
-if(UNIX)
+if(TOY_ANDROID)
+	set(LIB log android)
+	toy_BuildLib(toy
+		SOURCES     ${SOURCE}
+		LINKLIBS    ${LIB}
+	)
+elseif(UNIX)
+	set(LIB pthread)
 	toy_BuildLib(toy
 		SOURCES     ${SOURCE}
 		LINKLIBS    ${LIB}
@@ -35,4 +36,7 @@ endif()
 add_subdirectory(root)
 add_subdirectory(file)
 add_subdirectory(parser)
+
+if(NOT TOY_ANDROID)
 add_subdirectory(graph)
+endif()

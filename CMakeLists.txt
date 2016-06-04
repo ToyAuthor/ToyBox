@@ -1,3 +1,12 @@
+
+set(TOY_ANDROID OFF)
+
+if(TOY_ANDROID)
+	set(MY_TOOLCHAIN_API_LEVEL "android-15")
+	set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/android/android.toolchain.cmake")
+	set(CMAKE_BUILD_TYPE Debug)
+endif()
+
 project(ToyBox)
 cmake_minimum_required(VERSION 2.8)
 

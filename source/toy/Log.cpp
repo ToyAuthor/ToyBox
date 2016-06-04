@@ -6,6 +6,9 @@
 #include "toy/Windows.hpp"
 #include "toy/Utf.hpp"
 
+#ifdef TOY_ANDROID
+#include <android/log.h>
+#endif
 
 
 //----------------PrintStr let you choose the way to print string----------------start
@@ -25,6 +28,17 @@ namespace log{
 	{
 		DWORD     ws;
 		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),str,std::wcslen(str),&ws,nullptr);
+	};
+#elif defined(TOY_ANDROID)
+	static std::function<void(const char*)> PrintStr = [](const char *str)
+	{
+		__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%s", str);
+	};
+
+	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
+	{
+		__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%s", utf::WCharToUTF8(std::wstring(str)).c_str());
+	//	__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%ls", str);
 	};
 #else
 	static std::function<void(const char*)> PrintStr = [](const char *str)

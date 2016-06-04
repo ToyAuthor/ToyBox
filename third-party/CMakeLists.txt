@@ -25,4 +25,6 @@ else()
 	add_subdirectory(7zip)
 endif()
 
-add_subdirectory(glew)
+if(NOT TOY_ANDROID)
+	add_subdirectory(glew)
+endif()

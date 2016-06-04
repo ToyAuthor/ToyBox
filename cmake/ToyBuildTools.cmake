@@ -1,4 +1,8 @@
 
+if(TOY_ANDROID)
+	include("${PROJECT_SOURCE_DIR}/cmake/android/create_apk.cmake" REQUIRED)
+endif()
+
 macro(toy_StdReady)
 	if(APPLE)
 		add_definitions(-O2 -g -Wall -Wextra -Werror -Qunused-arguments -std=c++11)
@@ -116,7 +120,6 @@ macro(toy_BuildLib _name)
 
 endmacro(toy_BuildLib)
 
-
 macro(toy_BuildExe _name)
 
 	toy_ProcessArguments(_srcs _includeDirs _libDirs _linkLibs _outputDirs _linkFlags _cFlags _junk ${ARGN})
@@ -143,10 +146,27 @@ macro(toy_BuildExe _name)
 	endif()
 	set(EXECUTABLE_OUTPUT_PATH ${TOY_OUTPUT_PATH})
 
-	add_executable(${_name} ${_srcs})
+	if(TOY_ANDROID)
+		add_library(${_name} SHARED ${_srcs})
+	else()
+		add_executable(${_name} ${_srcs})
+	endif()
 
 	if(_linkLibs)
 		target_link_libraries(${_name} ${_linkLibs})
+	endif()
+
+	if(TOY_ANDROID)
+		set_target_properties(${_name} PROPERTIES COMPILE_DEFINITIONS "ANDROID")
+		create_apk(
+			${_name}
+			"toy.example.${_name}"
+			"${TOY_ROOT_BINARY_DIR}/apk"
+			"${TOY_ROOT_SOURCE_DIR}/libs"
+			"${TOY_ROOT_SOURCE_DIR}/android"
+			"${TOY_ROOT_SOURCE_DIR}/assets"
+			"${MY_TOOLCHAIN_API_LEVEL}"
+		)
 	endif()
 
 	if(MSVC)

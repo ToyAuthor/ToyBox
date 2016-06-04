@@ -2,7 +2,9 @@
 # The complete list:"ToyBox/third-party/readme.txt"
 macro(toy_SetThirdPartyLibraryPath)
 
-	if(WIN32)
+	if(TOY_ANDROID)
+		set(TOY_SDK_PATH        "$ENV{HOME}/sdk/ndk" )
+	elseif(WIN32)
 		set(TOY_SDK_PATH        "D:/sdk" )
 	elseif(UNIX)
 		set(TOY_SDK_PATH        "$ENV{HOME}/sdk" )

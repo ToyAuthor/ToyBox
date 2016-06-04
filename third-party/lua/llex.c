@@ -222,7 +222,11 @@ static void buffreplace (LexState *ls, char from, char to) {
 
 
 #if !defined(l_getlocaledecpoint)
-#define l_getlocaledecpoint()	(localeconv()->decimal_point[0])
+  #if defined(__ANDROID__)
+    #define l_getlocaledecpoint() '.'
+  #else
+    #define l_getlocaledecpoint()	(localeconv()->decimal_point[0])
+  #endif
 #endif
 
 
@@ -395,7 +399,7 @@ static int readdecesc (LexState *ls) {
     r = 10*r + ls->current - '0';
     save_and_next(ls);
   }
-  esccheck(ls, r <= UCHAR_MAX, "decimal escape too large");
+  esccheck(ls, (r<0)?1:( (unsigned int)r <= UCHAR_MAX), "decimal escape too large");
   luaZ_buffremove(ls->buff, i);  /* remove read digits from buffer */
   return r;
 }
@@ -599,4 +603,3 @@ int luaX_lookahead (LexState *ls) {
   ls->lookahead.token = llex(ls, &ls->lookahead.seminfo);
   return ls->lookahead.token;
 }
-
