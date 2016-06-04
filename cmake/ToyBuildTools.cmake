@@ -167,9 +167,7 @@ macro(toy_BuildExe _name)
 			"${TOY_ROOT_SOURCE_DIR}/assets"
 			"${MY_TOOLCHAIN_API_LEVEL}"
 		)
-	endif()
-
-	if(MSVC)
+	elseif(MSVC)
 		set_target_properties(${_name} PROPERTIES
 			RUNTIME_OUTPUT_DIRECTORY            ${TOY_OUTPUT_PATH}
 			RUNTIME_OUTPUT_DIRECTORY_DEBUG      ${TOY_OUTPUT_PATH}
