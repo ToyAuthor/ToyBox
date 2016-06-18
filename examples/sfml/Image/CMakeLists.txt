@@ -19,9 +19,9 @@ if(APPLE)
 	list(APPEND LIBS ${TOY_FW_OpenGL})
 #	list(APPEND LIBS "-framework OpenGL")
 elseif(UNIX)
-	list(APPEND LIBS GL GLU X11)
+	list(APPEND LIBS GL X11)
 elseif(WIN32)
-	list(APPEND LIBS opengl32 glu32 gdi32)
+	list(APPEND LIBS opengl32 gdi32)
 endif()
 
 

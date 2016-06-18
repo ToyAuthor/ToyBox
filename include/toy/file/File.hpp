@@ -38,7 +38,7 @@ class TOY_API File
 		File(enum Mode mode=STD);
 		~File();
 
-		bool    changeDirectory(std::string path);             // Open a file folder or zip archive for search files.
+		bool    openDir(std::string path);                     // Open a file folder for search files.
 		bool    open(std::string filepath);
 
 		int     read(void *file,uint32_t size);
@@ -49,7 +49,7 @@ class TOY_API File
 		bool    isEmpty();
 		void    changeMode(enum Mode);
 
-		std::string   getFileName();
+		auto    getFileName()->std::string;
 
 	private:
 

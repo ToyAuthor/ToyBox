@@ -36,7 +36,5 @@ endif()
 add_subdirectory(root)
 add_subdirectory(file)
 add_subdirectory(parser)
-
-if(NOT TOY_ANDROID)
+add_subdirectory(scene)
 add_subdirectory(graph)
-endif()

@@ -6,9 +6,14 @@
 #include "Render.hpp"
 
 
-static int LoadImage(std::string file,toy::Image *image)
+static int LoadImage( std::string   folder,
+                      std::string   file,
+                      toy::Image    *image,
+                      enum toy::File::Mode mode = toy::File::STD)
 {
-	toy::File       dev;
+	toy::File       dev(mode);
+
+	dev.openDir(folder);
 
 	if ( ! dev.open(file) )
 	{
@@ -18,7 +23,7 @@ static int LoadImage(std::string file,toy::Image *image)
 	{
 		toy::Log("Image load failed!\n");
 	}
-	else if ( image->getData()==nullptr )
+	else if ( image->data()==nullptr )
 	{
 		toy::Log("Image load nothing!\n");
 	}
@@ -85,9 +90,11 @@ int main()
 {
 	std::string   path(TOY_RESOURCE_PATH);
 
-	toy::Image     image;
+	toy::Image    image;
 
-	if ( ! LoadImage(path+"/002.png",&image) )
+	if ( ! LoadImage(path,"002.png",&image) )
+	//if ( ! LoadImage(path+"/resource.7z", "002.png",&image,toy::File::SEVEN_ZIP) )
+	//if ( ! LoadImage(path+"/resource.zip","002.png",&image,toy::File::ZIP) )
 	{
 		return EXIT_FAILURE;
 	}

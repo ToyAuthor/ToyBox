@@ -46,6 +46,11 @@ if(HAVE_OFF64_T)
 	add_definitions(-D_LARGEFILE64_SOURCE=1)
 endif()
 
+# Android NDK doesn't have fopen64.
+if(TOY_ANDROID)
+	add_definitions(-DIOAPI_NO_64)
+endif()
+
 set(CMAKE_REQUIRED_DEFINITIONS) # clear variable
 
 #

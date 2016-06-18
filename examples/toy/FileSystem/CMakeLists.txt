@@ -15,20 +15,26 @@ add_definitions(-DTOY_RESOURCE_PATH="${TOY_RESOURCE_PATH}")
 set(LIBS
 	toy
 	toy_file
+	toy_scene
 	${TOY_libname_sfml_system}
 	${TOY_libname_sfml_window}
 	${TOY_libname_freetype}
-	${TOY_libname_glew}
 )
+
+if(NOT TOY_ANDROID)
+	list(APPEND LIBS ${TOY_libname_glew})
+endif()
 
 if(APPLE)
 	find_library(TOY_FW_OpenGL OpenGL)
 	list(APPEND LIBS ${TOY_FW_OpenGL})
 #	list(APPEND LIBS "-framework OpenGL")
+elseif(TOY_ANDROID)
+	list(APPEND LIBS GLESv2 GLESv1_CM EGL)
 elseif(UNIX)
-	list(APPEND LIBS GL GLU X11)
+	list(APPEND LIBS GL X11)
 elseif(WIN32)
-	list(APPEND LIBS opengl32 glu32 gdi32)
+	list(APPEND LIBS opengl32 gdi32)
 endif()
 
 file(GLOB SOURCE *.cpp */*.cpp)

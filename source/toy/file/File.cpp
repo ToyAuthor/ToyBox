@@ -36,7 +36,7 @@ void File::changeMode(enum Mode mode)
 {
 	if ( _mode==mode )
 	{
-		Oops(TOY_MARK);
+		toy::Oops(TOY_MARK);
 		return;
 	}
 
@@ -61,7 +61,7 @@ void File::changeMode(enum Mode mode)
 	}
 }
 
-bool File::changeDirectory(std::string path)
+bool File::openDir(std::string path)
 {
 	return _io->openDir(path);
 }

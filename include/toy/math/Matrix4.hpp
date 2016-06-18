@@ -2,6 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/math/Vector3.hpp"
 #include "toy/math/Vector4.hpp"
 
 
@@ -73,7 +74,7 @@ public:
 		data[i+7]=v.z;
 	}
 
-	Matrix4<Type>& operator =(const Matrix4<Type>& model)
+	Matrix4<Type> operator =(const Matrix4<Type>& model)
 	{
 		mMatrix=model.mMatrix;
 		return *this;

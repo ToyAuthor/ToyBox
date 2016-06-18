@@ -20,9 +20,9 @@ if(APPLE)
 	find_library(TOY_FW_OpenGL OpenGL)
 	list(APPEND LIBS ${TOY_FW_OpenGL})
 elseif(UNIX)
-	list(APPEND LIBS GL GLU X11)
+	list(APPEND LIBS GL X11)
 elseif(WIN32)
-	list(APPEND LIBS opengl32 glu32 gdi32)
+	list(APPEND LIBS opengl32 gdi32)
 endif()
 
 
