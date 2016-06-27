@@ -20,15 +20,15 @@ class TOY_API File
 {
 	public:
 
-		enum Mode
+		enum Mode:int
 		{
 			NONE,
-			STD,        // Default mode. toy::File is similar to std::fstream in this mode.
+			STD,
 			ZIP,
 			SEVEN_ZIP,
 		};
 
-		enum SeekOption
+		enum SeekOption:int
 		{
 			SET=0,      // Seek from the beginning of file.
 			END,        // Seek from the end of file.
@@ -39,16 +39,13 @@ class TOY_API File
 		~File();
 
 		bool    openDir(std::string path);                     // Open a file folder for search files.
-		bool    open(std::string filepath);
-
+		bool    open(std::string file);
 		int     read(void *file,uint32_t size);
 		bool    write(void *file,uint32_t size);               // STD mode supported only.
 		bool    seek(enum SeekOption option,int32_t offset);   // Not support ZIP mode.
 		bool    isEnd();
-
 		bool    isEmpty();
 		void    changeMode(enum Mode);
-
 		auto    getFileName()->std::string;
 
 	private:
@@ -57,7 +54,7 @@ class TOY_API File
 		void    freeIO();
 
 		file::io::Base*     _io = nullptr;      // Always keep a object when it alive.
-		enum Mode           _mode = NONE;
+		enum Mode           _mode = NONE;       // Default mode is STD.
 
 };
 

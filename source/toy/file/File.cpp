@@ -57,7 +57,7 @@ void File::changeMode(enum Mode mode)
 		case NONE:
 		default:
 			// NONE is not a option.
-			Oops(TOY_MARK);
+			toy::Oops(TOY_MARK);
 	}
 }
 

@@ -419,6 +419,8 @@ void SevenZip::close()
 		_temp=NULL;
 	}
 	File_Close(&(_archiveStream.file));
+
+	_passSize = 0;
 }
 
 bool SevenZip::isEmpty()

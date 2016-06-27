@@ -10,21 +10,21 @@ include_directories( ${PROJECT_SOURCE_DIR}/include )
 set( LIBRARY_OUTPUT_PATH	${PROJECT_BINARY_DIR} )
 set( EXECUTABLE_OUTPUT_PATH	${PROJECT_BINARY_DIR} )
 
+# There is no glu on android.
+add_definitions(-DGLEW_NO_GLU)
+
+if(NOT TOY_ENABLE_3RD_PARTY_SHARED_LIB)
+	add_definitions(-DGLEW_STATIC)
+endif()
 
 if(WIN32)
 	set( LIBS opengl32 )
 	add_definitions( -DWIN32_MEAN_AND_LEAN -DVC_EXTRALEAN -DGLEW_BUILD -D_CRT_SECURE_NO_WARNINGS )
-
-	if(MSVC)
-		add_definitions(-DGLEW_STATIC)
-	else()
-		if(NOT TOY_ENABLE_3RD_PARTY_SHARED_LIB)
-			add_definitions(-DGLEW_STATIC)
-		endif()
-	endif()
-endif()
-
-if(UNIX)
+elseif(APPLE)
+	find_library(TOY_FW_OpenGL OpenGL)
+	find_library(TOY_FW_AGL AGL)
+	list(APPEND LIBS ${TOY_FW_OpenGL} ${TOY_FW_AGL})
+elseif(UNIX)
 	set( LIBS GL )
 	list( APPEND LIBS X11 dl Xext )
 endif()

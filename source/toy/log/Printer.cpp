@@ -37,6 +37,17 @@ const Printer& Printer:: operator << (std::wstring str) const
 	toy::Log(L"%ls",str.c_str());
 	return *this;
 }
+const Printer& Printer:: operator << (std::string *str) const
+{
+	toy::Log("%s",str->c_str());
+	return *this;
+}
+
+const Printer& Printer:: operator << (std::wstring *str) const
+{
+	toy::Log(L"%ls",str->c_str());
+	return *this;
+}
 
 const Printer& Printer:: operator << (const Printer& (*func)(const Printer&)) const
 {

@@ -6,9 +6,19 @@ set(VERSION "5.3.0")
 
 toy_StdReadyC()
 
+if(TOY_ENABLE_3RD_PARTY_SHARED_LIB)
+	if(WIN32)
+		add_definitions(-DLUA_BUILD_AS_DLL)
+	endif()
+endif()
+
 if(UNIX)
-	# I'm not sure it's good or not.
-	add_definitions(-fPIC -DLUA_USE_POSIX)
+	if(TOY_ENABLE_3RD_PARTY_SHARED_LIB)
+		#add_definitions(-fPIC -DLUA_USE_LINUX)
+		add_definitions(-fPIC -DLUA_USE_POSIX -DLUA_USE_DLOPEN)
+	else()
+		add_definitions(-fPIC -DLUA_USE_POSIX)
+	endif()
 endif()
 
 file(GLOB SOURCE *.c)
@@ -19,6 +29,10 @@ set_source_files_properties(${SOURCE} PROPERTIES LANGUAGE C)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 add_library(lua ${TOY_3RD_PARTY_LIB_TYPE} ${SOURCE})
 
+if(UNIX AND TOY_ENABLE_3RD_PARTY_SHARED_LIB)
+	# Link them if you want to create C extension module.
+	target_link_libraries(lua dl m)
+endif()
 
 if(MSVC)
 

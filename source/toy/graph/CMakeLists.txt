@@ -9,8 +9,11 @@ file(GLOB SOURCE *.cpp */*.cpp)
 set(LIBS toy
 	${TOY_libname_sfml_system}
 	${TOY_libname_sfml_window}
-	${TOY_libname_glew}
 )
+
+if(NOT TOY_ANDROID)
+	list(APPEND LIBS ${TOY_libname_glew})
+endif()
 
 toy_BuildLib(toy_graph
 	INCLUDEDIRS ${TOY_include_glew}

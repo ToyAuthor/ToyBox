@@ -18,7 +18,7 @@ void Parser::loadText(std::string filename)
 	}
 
 	_file.close();
-	_file.open(filename.c_str(),std::ifstream::in);
+	_file.open(filename,std::ifstream::in);
 
 	_lineNumber=0;
 }
