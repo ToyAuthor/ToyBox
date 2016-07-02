@@ -90,7 +90,9 @@ macro(toy_BuildLib _name)
 	else()
 		set(TOY_OUTPUT_PATH ${TOY_ROOT_BINARY_DIR}/lib)
 	endif()
-	set(LIBRARY_OUTPUT_PATH ${TOY_OUTPUT_PATH})
+
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TOY_OUTPUT_PATH})
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${TOY_OUTPUT_PATH})
 
 	link_directories(${TOY_DEFAULT_LINK_DIR})
 
@@ -144,9 +146,13 @@ macro(toy_BuildExe _name)
 	else()
 		set(TOY_OUTPUT_PATH ${TOY_ROOT_BINARY_DIR}/bin)
 	endif()
-	set(EXECUTABLE_OUTPUT_PATH ${TOY_OUTPUT_PATH})
+
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TOY_OUTPUT_PATH})
 
 	if(TOY_ANDROID)
+		set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TOY_ROOT_BINARY_DIR}/apk/libs/${ANDROID_NDK_ABI_NAME})
+		set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${TOY_ROOT_BINARY_DIR}/apk/libs/${ANDROID_NDK_ABI_NAME})
+		list(APPEND _srcs "$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c")
 		add_library(${_name} SHARED ${_srcs})
 	else()
 		add_executable(${_name} ${_srcs})
