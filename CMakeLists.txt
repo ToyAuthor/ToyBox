@@ -2,7 +2,9 @@
 set(TOY_ANDROID OFF)
 
 if(TOY_ANDROID)
-	set(MY_TOOLCHAIN_API_LEVEL "android-15")
+	set(ANDROID_APK_API_LEVEL 15)
+	#set(ANDROID_STL "c++_shared")
+	#set(ANDROID_ABI "armeabi-v7a with NEON")
 	set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/android/android.toolchain.cmake")
 	set(CMAKE_BUILD_TYPE Debug)
 endif()
