@@ -4,7 +4,7 @@ project(ToyLua)
 
 set(VERSION "5.3.0")
 
-toy_StdReadyC()
+toy_StdReady()
 
 if(TOY_ENABLE_3RD_PARTY_SHARED_LIB)
 	if(WIN32)
