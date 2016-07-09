@@ -8,4 +8,9 @@
 #define BOOST_SYSTEM_NO_DEPRECATED 1
 #endif
 
+// Disable auto link.
+#ifndef BOOST_ALL_NO_LIB
+#define BOOST_ALL_NO_LIB
+#endif
+
 #include "boost/filesystem.hpp"

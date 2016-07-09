@@ -27,6 +27,7 @@ else()
 	set(BOOST_LIBRARY_TYPE STATIC)
 endif()
 
-
+# Disable auto link.
+add_definitions(-DBOOST_ALL_NO_LIB)
 
 add_subdirectory(libs)
