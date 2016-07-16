@@ -1,7 +1,10 @@
 #include "toy/log/Printer.hpp"
 #include "toy/Log.hpp"
 
+
 namespace toy{
+
+log::Printer Logger;
 
 const log::Printer& NextLine(const log::Printer& m)
 {
@@ -37,6 +40,7 @@ const Printer& Printer:: operator << (std::wstring str) const
 	toy::Log(L"%ls",str.c_str());
 	return *this;
 }
+
 const Printer& Printer:: operator << (std::string *str) const
 {
 	toy::Log("%s",str->c_str());
