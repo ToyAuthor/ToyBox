@@ -5,19 +5,12 @@ endif()
 
 macro(toy_StdReady)
 	if(NOT MSVC)
-		add_definitions(-O2 -g -Werror -Wall)
-
-		if(NOT TOY_ANDROID)
-			# android_native_app_glue.c can't pass extra level.
-			add_definitions(-Wextra)
-		endif()
+		add_definitions(-O2 -g -Werror -Wall -Wextra)
 
 		set(CMAKE_CXX_FLAGS "-std=c++11")
 
 		if(APPLE)
 			add_definitions(-Qunused-arguments)
-		elseif(TOY_ANDROID)
-			include_directories($ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue)
 		elseif(UNIX)
 			include_directories(/usr/include)
 
@@ -40,8 +33,9 @@ macro(toy_ProcessArguments _sourcesArgs _includeDirsArgs _libDirsArgs _linkLibsA
 	set(${_cFlagsArgs})
 	set(${_otherArgs})
 	set(_currentDest ${_otherArgs})
+
 	foreach(_arg ${ARGN})
-		if(_arg STREQUAL "SOURCES")
+		if    (_arg STREQUAL "SOURCES")
 			set(_currentDest ${_sourcesArgs})
 		elseif(_arg STREQUAL "INCLUDEDIRS")
 			set(_currentDest ${_includeDirsArgs})
@@ -142,7 +136,6 @@ macro(toy_BuildExe _name)
 	if(TOY_ANDROID)
 		set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TOY_ROOT_BINARY_DIR}/apk/libs/${ANDROID_NDK_ABI_NAME})
 		set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${TOY_ROOT_BINARY_DIR}/apk/libs/${ANDROID_NDK_ABI_NAME})
-		list(APPEND _srcs "$ENV{ANDROID_NDK_HOME}/sources/android/native_app_glue/android_native_app_glue.c")
 		add_library(${_name} SHARED ${_srcs})
 	else()
 		add_executable(${_name} ${_srcs})
