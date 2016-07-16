@@ -18,7 +18,7 @@ class TOY_API StringCutter
 		~StringCutter();
 
 		void    loadString(std::string &str);
-		bool    nextWord(std::string &str);
+		bool    nextWord(std::string *str);
 
 		void    pushConfig(ConfigPtr);
 		void    popConfig(int number=1);

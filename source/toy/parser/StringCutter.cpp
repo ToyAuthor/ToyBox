@@ -16,12 +16,13 @@ StringCutter::~StringCutter()
 
 void StringCutter::loadString(std::string &str)
 {
-	_string=str;
+	_string = str;
 	_index=0;
 }
 
-bool StringCutter::nextWord(std::string &str)
+bool StringCutter::nextWord(std::string *_str)
 {
+	auto&   str = *_str;
 	auto    latest_stack = _configStack.back();
 
 	auto&   desireWord      = latest_stack->desireWord;
