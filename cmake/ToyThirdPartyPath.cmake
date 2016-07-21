@@ -1,9 +1,11 @@
 
-# The complete list:"ToyBox/third-party/readme.txt"
+# The complete list of third-party libraries:"ToyBox/third-party/readme.txt"
 macro(toy_SetThirdPartyLibraryPath)
 
 	if(TOY_ANDROID)
-		set(TOY_SDK_PATH        "$ENV{HOME}/sdk/ndk" )
+		set(TOY_SDK_PATH        "$ENV{HOME}/sdk_ndk" )
+	elseif(MSVC)
+		set(TOY_SDK_PATH        "D:/sdk_vc" )
 	elseif(WIN32)
 		set(TOY_SDK_PATH        "D:/sdk" )
 	elseif(UNIX)
@@ -23,12 +25,12 @@ macro(toy_SetThirdPartyLibraryPath)
 
 	set(TOY_include_sfml        "${TOY_SDK_PATH}/SFML/include" )
 	set(TOY_library_sfml        "${TOY_SDK_PATH}/SFML/lib" )
-	set(TOY_libname_sfml_main       "sfml-main" )
-	set(TOY_libname_sfml_system     "sfml-system" )
-	set(TOY_libname_sfml_window     "sfml-window" )
-	set(TOY_libname_sfml_graphics   "sfml-graphics" )
-	set(TOY_libname_sfml_audio      "sfml-audio" )
-	set(TOY_libname_sfml_network    "sfml-network" )
+	set(TOY_libname_sfml_main   "sfml-main" )
+	set(TOY_libname_sfml_system "sfml-system" )
+	set(TOY_libname_sfml_window "sfml-window" )
+	set(TOY_libname_sfml_graph  "sfml-graphics" )
+	set(TOY_libname_sfml_audio  "sfml-audio" )
+	set(TOY_libname_sfml_network"sfml-network" )
 
 
 	set(TOY_include_freetype    "${TOY_SDK_PATH}/freetype" )

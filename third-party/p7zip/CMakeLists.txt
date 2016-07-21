@@ -61,4 +61,4 @@ include_directories( ${PROJECT_SOURCE_DIR}/C )
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
-add_library(p7zip STATIC ${SOURCE})
+add_library(p7zip ${TOY_3RD_PARTY_LIB_TYPE} ${SOURCE})
