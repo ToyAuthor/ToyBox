@@ -79,6 +79,7 @@ void toy::Log(const char *fmt, ... )
 
 	char      buffer[STRING_SIZE];
 	vsnprintf(buffer,STRING_SIZE,fmt,argptr);
+	buffer[STRING_SIZE-1] = '\0';
 	toy::log::PrintStr(buffer);
 
 	va_end(argptr);
@@ -99,6 +100,7 @@ void toy::Log(const wchar_t *fmt, ... )
 		vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.
 	#endif
 
+	buffer[STRING_SIZE-1] = L'\0';
 	toy::log::PrintStrW(buffer);
 
 	va_end(argptr);
