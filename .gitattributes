@@ -1,0 +1,4 @@
+*.c linguist-vendored=true
+*.h linguist-vendored=true
+*.cmake linguist-vendored=true
+third-party/* linguist-vendored=true
