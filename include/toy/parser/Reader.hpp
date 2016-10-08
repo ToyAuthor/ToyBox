@@ -13,10 +13,10 @@ class TOY_API Reader
 	public:
 
 		Reader(){}
-		Reader(std::string filename){loadText(filename);}
+		Reader(std::string filename){open(filename);}
 		~Reader(){}
 
-		bool    loadText(std::string filename);
+		bool    open(std::string filename);
 		bool    nextLine(std::string *str);
 		int     getLineNumber();
 

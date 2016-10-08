@@ -9,20 +9,20 @@ using namespace toy;
 using namespace parser;
 
 
-bool Reader::loadText(std::string filename)
+bool Reader::open(std::string filename)
 {
 	if ( !boost::filesystem::exists( filename ) )
 	{
 		// Can't find my file!
 		toy::Oops(TOY_MARK);
-		return 0;
+		return false;
 	}
 
 	_file.close();
 	_file.open(filename,std::ifstream::in);
 
-	_lineNumber=0;
-	return 1;
+	_lineNumber = false;
+	return true;
 }
 
 bool Reader::nextLine(std::string *str)
@@ -33,6 +33,7 @@ bool Reader::nextLine(std::string *str)
 		return 0;
 	}
 
+//	if ( std::getline(_file,*str,'\n') )
 	if ( std::getline(_file,*str) )
 	{
 		_lineNumber++;
