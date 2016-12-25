@@ -1,13 +1,13 @@
 /**
-@file   luapp.hpp
-@brief  Using lua in C++ style.
-@author ToyAuthor
-*/
+ * @file   luapp.hpp
+ * @brief  Using lua in C++ style.
+ * @author Yan Xin Wu
+ *
+ * https://toyauthor.github.io/luapp
+ * https://github.com/ToyAuthor/luapp
+ * https://bitbucket.org/ToyAuthor/luapp
+ */
 
-
-#ifndef _LUAPP_HPP_
-#define _LUAPP_HPP_
 
 #include "luapp/State.hpp"
-
-#endif//_LUAPP_HPP_
+#include "luapp/Auxiliary.hpp"

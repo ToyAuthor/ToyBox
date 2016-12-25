@@ -1,28 +1,40 @@
 # luapp
-It's a simple tool for lua.  
-To help you using lua in C++ style.
+It's a useful tool for lua. To help you use lua in C++ style and work better with object-oriented programming.
 
 ### Features
 - [x] Header file only.
-- [x] To register the class from C++ into lua.
-- [x] To register the global function or member function from C++ into lua.
-- [x] Read/Add global variable of lua script from C++.
-- [x] Call global function of lua script from C++.
-- [x] Create lua module support.
-- [ ] Let lua script embedded in C++.
-- [ ] Design a C++ container to simulate lua table.
+- [x] To register C++ class into lua.
+- [x] C++ and lua could call each other's function.
+- [x] Read/Write/Add/Remove lua global variable at C++ side.
+- [x] Lua could send any variable to C++, and C++ could send then back.
+- [x] Support to create C extension module.
+- [x] Design a C++ container to simulate lua table.
+- [x] Design a class whose instances can hold instances of any type supported by luapp.
+- [x] Let lua script embedded in C++.
+- [x] Be able to search lua script by custom rule.
+- [ ] Support to call lua function that has multiple return value.
 
-### Version
-1.1.0
+### Requirements
+- CMake 2.8+
+- Lua 5.3+
+- C++03+
+- Visual Studio 2010+
+
+### Information
+Item        | Description
+------------|----------
+**Author**  | Yan Xin Wu
+**License** | MIT
+**Version** | 2.0.0 (using Semantic Versioning 2.0.0)
 
 ### Example
 
 ```lua
 -- ClassIntoLua.lua
 
-object = MyClass()
+object = NewObject()
 
-num = object:Count(3,4)
+num = object:count(3,4)
 
 print("3 + 4 = " .. num)
 ```
@@ -30,26 +42,20 @@ print("3 + 4 = " .. num)
 ```c++
 // main.cpp
 
-#include "luapp.hpp"
+#include <luapp.hpp>
 
 class MyClass
 {
 public:
 
-	MyClass()
-	{
-		printf("do MyClass::MyClass()\n");
-	}
+	MyClass(){}
 
-	~MyClass()
-	{
-		printf("do MyClass::~MyClass()\n");
-	}
+	~MyClass(){}
 
-	lua::Int Count( lua::Int num01,
+	lua::Int count( lua::Int num01,
 	                lua::Int num02)
 	{
-		return num01+num02;
+		return num01 + num02;
 	}
 };
 
@@ -57,13 +63,11 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.Init();
+	lua.bindMethod("count",&MyClass::count);
 
-	lua.RegisterMemberFunction("Count",&MyClass::Count);
+	lua.bindClassEx<MyClass>("NewObject");
 
-	lua.RegisterClassEx<MyClass>("MyClass");
-
-	lua.DoScript("ClassIntoLua.lua");
+	lua.run("ClassIntoLua.lua");
 
 	return 0;
 }

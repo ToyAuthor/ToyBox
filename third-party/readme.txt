@@ -14,8 +14,8 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
     boost-1.60.0        Boost Software License
     glew-1.11.0         BSD License
     glm-0.9.5.4         MIT License
-    lua-5.3.0           MIT License
-    luapp-1.1.1         MIT License
+    lua-5.3.3           MIT License
+    luapp-2.0.0         MIT License
     p7zip-9.20.1        GNU LGPL
     stb                 Public Domain
     zlib-1.2.8          zlib License
