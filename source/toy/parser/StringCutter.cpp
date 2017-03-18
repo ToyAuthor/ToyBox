@@ -11,13 +11,38 @@ StringCutter::StringCutter()
 
 StringCutter::~StringCutter()
 {
-	;
+	this->drop();
+}
+
+void StringCutter::drop()
+{
+	if ( _configStack.size()>0 )
+	{
+		_configStack.pop_back();
+
+		if ( _configStack.size()>0 )
+		{
+			toy::Oops(TOY_MARK);
+			this->popConfig(static_cast<int>(_configStack.size())-1);
+			_configStack.pop_back();
+		}
+	}
 }
 
 void StringCutter::loadString(std::string &str)
 {
 	_string = str;
 	_index=0;
+}
+
+void StringCutter::pushFront(std::string str)
+{
+	if ( static_cast<decltype(_index)>(str.size())>_index )
+	{
+		toy::Oops(TOY_MARK);
+	}
+
+	_index -= str.size();
 }
 
 bool StringCutter::nextWord(std::string *_str)
@@ -29,6 +54,7 @@ bool StringCutter::nextWord(std::string *_str)
 	auto&   ignore          = latest_stack->ignoreCharList.array;
 	auto&   breakChar       = latest_stack->breakCharList.array;
 	auto&   breakDoubleChar = latest_stack->breakDoubleCharList.array;
+	auto&   breakTripleChar = latest_stack->breakTripleCharList.array;
 
 	auto&   i = _index;
 
@@ -37,7 +63,7 @@ bool StringCutter::nextWord(std::string *_str)
 		return static_cast<decltype(_index)>(_string.size());
 	};
 
-	if ( i==get_size() )
+	if ( i>=get_size() )
 	{
 		return 0;
 	}
@@ -49,7 +75,7 @@ bool StringCutter::nextWord(std::string *_str)
 	{
 		for(;;i++)
 		{
-			if ( i==get_size() )
+			if ( i>=get_size() )
 			{
 				return 0;
 			}
@@ -73,11 +99,9 @@ bool StringCutter::nextWord(std::string *_str)
 		}
 	}
 
-	int     keep_loop = 1;
-
-	for ( ; keep_loop ; i++ )
+	for (int keep_loop = 1 ; keep_loop ; i++ )
 	{
-		if ( i==get_size() )
+		if ( i>=get_size() )
 		{
 			return 0;
 		}
@@ -95,6 +119,23 @@ bool StringCutter::nextWord(std::string *_str)
 	}
 
 	i--;
+
+	if ( i+2 < get_size() )
+	{
+		for ( int j = breakTripleChar.size()-1 ; j>=0 ; j-- )
+		{
+			if ( _string[i]  ==breakTripleChar[j].t[0] &&
+			     _string[i+1]==breakTripleChar[j].t[1] &&
+				 _string[i+2]==breakTripleChar[j].t[2] )
+			{
+				str.push_back(breakTripleChar[j].t[0]);
+				str.push_back(breakTripleChar[j].t[1]);
+				str.push_back(breakTripleChar[j].t[2]);
+				i+=3;
+				return 1;
+			}
+		}
+	}
 
 	if ( i+1 < get_size() )
 	{
@@ -126,7 +167,7 @@ bool StringCutter::nextWord(std::string *_str)
 
 	for (;; i++ )
 	{
-		if ( i==get_size() )
+		if ( i>=get_size() )
 		{
 			return 1;
 		}
@@ -161,6 +202,26 @@ bool StringCutter::nextWord(std::string *_str)
 			}
 		}
 
+		for ( int j=breakTripleChar.size()-1 ; j>=0 ; j-- )
+		{
+			if ( _string[i] == breakTripleChar[j].t[0] )
+			{
+				if ( i+1 < get_size() )
+				{
+					if ( _string[i+1] == breakTripleChar[j].t[1] )
+					{
+						if ( i+2 < get_size() )
+						{
+							if ( _string[i+2] == breakTripleChar[j].t[2] )
+							{
+								return 1;
+							}
+						}
+					}
+				}
+			}
+		}
+
 		str.push_back(_string[i]);
 	}
 
@@ -186,4 +247,14 @@ void StringCutter::popConfig(int num)
 	{
 		_configStack.pop_back();
 	}
+}
+
+auto StringCutter::getConfig()->ConfigPtr
+{
+	if ( _configStack.empty() )
+	{
+		return nullptr;
+	}
+
+	return _configStack.back();
 }

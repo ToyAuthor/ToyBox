@@ -23,6 +23,7 @@ class TOY_API Translator
 		void    publishUnknown(std::string key);
 		void    pushDictionary(DictionaryPtr);
 		void    popDictionary(int number=1);
+		void    drop();
 
 		DictionaryPtr getDictionary();
 

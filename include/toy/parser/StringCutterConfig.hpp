@@ -26,6 +26,23 @@ class TOY_API StringCutterConfig
 			char  t[2];
 		};
 
+		struct TChar
+		{
+			TChar(char c1,char c2,char c3)
+			{
+				t[0]=c1;
+				t[1]=c2;
+				t[2]=c3;
+			}
+			TChar()
+			{
+				t[0]='b';
+				t[1]='t';
+				t[2]='a';
+			}
+			char  t[3];
+		};
+
 		template<typename T>
 		class List
 		{
@@ -46,6 +63,11 @@ class TOY_API StringCutterConfig
 					array.pop_back();
 				}
 
+				void clear()
+				{
+					array.clear();
+				}
+
 			private:
 
 				std::vector<T>    array;
@@ -55,12 +77,23 @@ class TOY_API StringCutterConfig
 		~StringCutterConfig();
 
 		void    useDefault();
+		void    useDefaultIgnore();
+		void    useDefaultBreak01();
+		void    useDefaultBreak02();
+		void    useDefaultBreak03();
 
 		List<char>    breakCharList;
 		List<CChar>   breakDoubleCharList;
+		List<TChar>   breakTripleCharList;
 		List<char>    ignoreCharList;
 		std::string   desireWord;
 };
+
+inline std::shared_ptr<toy::parser::StringCutterConfig> NewCutterConfig()
+{
+	return std::make_shared<toy::parser::StringCutterConfig>();
+}
+
 
 }//namespace parser
 }//namespace toy

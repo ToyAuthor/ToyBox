@@ -1,6 +1,19 @@
+/**
+ * @file      Environment.hpp
+ * @brief     A header file to detect the environment information.
+ * @author    ToyAuthor
+ * @copyright Public Domain
+ * <pre>
+ * https://github.com/ToyAuthor/ToyBox
+ * https://bitbucket.org/ToyAuthor/toybox
+ * </pre>
+ */
+
 
 #pragma once
 
+#ifndef _TOY_ENVIRONMENT_HPP_
+#define _TOY_ENVIRONMENT_HPP_
 
 
 //------------------------------Operating system------------------------------start
@@ -50,6 +63,10 @@
 	#define TOY_LINUX
 
 	#if defined(__i386__)
+		#define TOY_LIN32
+	#elif defined(__aarch64__)
+		#define TOY_LIN64
+	#elif defined(__arm__)
 		#define TOY_LIN32
 	#else
 		#define TOY_LIN64
@@ -126,11 +143,25 @@
 
 #if defined(TOY_MSVC)
 
-	#if (_MSC_VER == 1900)
+	#if (_MSC_VER == 2000)
+		#define TOY_VC_2017
+	#elif (_MSC_VER == 1900)
 		#define TOY_VC_2015
-	#elif (_MSC_VER == 2000)
-		#define TOY_VC_2016
-	#elif (_MSC_VER <  1900)
+	#elif (_MSC_VER == 1800)
+		#define TOY_VC_2013
+	#elif (_MSC_VER == 1700)
+		#define TOY_VC_2012
+	#elif (_MSC_VER == 1600)
+		#define TOY_VC_2010
+	#elif (_MSC_VER == 1500)
+		#define TOY_VC_2008
+	#elif (_MSC_VER == 1400)
+		#define TOY_VC_2005
+	#elif (_MSC_VER == 1310)
+		#define TOY_VC_2003
+	#elif (_MSC_VER == 1200)
+		#define TOY_VC_6
+	#elif (_MSC_VER <  1200)
 		#error "Too old"
 	#else
 		#error "Can't detect the version of Visual Studio"
@@ -139,3 +170,5 @@
 #endif
 
 //------------------Visual Studio------------------end
+
+#endif//_TOY_ENVIRONMENT_HPP_

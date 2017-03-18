@@ -9,6 +9,12 @@ cmake_minimum_required(VERSION 2.8)
 set(TOY_ROOT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 set(TOY_ROOT_BINARY_DIR ${PROJECT_BINARY_DIR})
 
+
+if(NOT CMAKE_BUILD_TYPE)
+	#set(CMAKE_BUILD_TYPE "Release")
+	set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
 if(CMAKE_BUILD_TYPE MATCHES Release)
 	set(TOY_RELEASE ON)
 else()

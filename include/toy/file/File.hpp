@@ -26,6 +26,7 @@ class TOY_API File
 			STD,
 			ZIP,
 			SEVEN_ZIP,
+			ANDROID_MGR,
 		};
 
 		enum SeekOption:int

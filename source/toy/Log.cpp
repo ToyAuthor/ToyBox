@@ -11,7 +11,7 @@
 #endif
 
 
-//----------------PrintStr let you choose the way to print string----------------start
+//----------------PrintStr let you decide how to print string----------------start
 
 namespace toy{
 namespace log{
@@ -66,7 +66,7 @@ void toy::log::SetDevice(std::function<void(const wchar_t*)> func)
 	toy::log::PrintStrW = std::move(func);
 }
 
-//----------------PrintStr let you choose the way to print string----------------end
+//----------------PrintStr let you decide how to print string----------------end
 
 
 

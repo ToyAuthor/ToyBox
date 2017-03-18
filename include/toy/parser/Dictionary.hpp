@@ -19,6 +19,7 @@ class TOY_API Dictionary
 
 		std::function<void(void)>            callbackNextLine = [](){};
 		std::function<void(std::string)>     callbackUnknown = [](std::string){};
+		std::function<void(std::string)>     callbackKnown = [](std::string){};
 
 		void setKeyValue(std::string key,std::function<void(void)> value);
 
@@ -27,6 +28,11 @@ class TOY_API Dictionary
 		bool isExist(std::string key);
 		std::map<std::string,std::function<void(void)> >     _tree;
 };
+
+inline std::shared_ptr<toy::parser::Dictionary> NewDictionary()
+{
+	return std::make_shared<toy::parser::Dictionary>();
+}
 
 
 }//namespace parser

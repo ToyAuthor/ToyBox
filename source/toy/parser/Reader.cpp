@@ -33,8 +33,8 @@ bool Reader::nextLine(std::string *str)
 		return 0;
 	}
 
-//	if ( std::getline(_file,*str,'\n') )
-	if ( std::getline(_file,*str) )
+//	if ( std::getline(_file,*str) )
+	if ( std::getline(_file,*str,'\n') )
 	{
 		_lineNumber++;
 		return 1;

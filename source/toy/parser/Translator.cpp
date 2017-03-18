@@ -12,7 +12,22 @@ Translator::Translator()
 
 Translator::~Translator()
 {
-	;
+	this->drop();
+}
+
+void Translator::drop()
+{
+	if ( _data.size()>0 )
+	{
+		_data.pop_back();
+
+		if ( _data.size()>0 )
+		{
+			toy::Oops(TOY_MARK);
+			popDictionary(static_cast<int>(_data.size())-1);
+			_data.pop_back();
+		}
+	}
 }
 
 bool Translator::isExist(std::string key)
@@ -22,6 +37,8 @@ bool Translator::isExist(std::string key)
 
 void Translator::transle(std::string key)
 {
+	auto  ptr = _data.back();
+	ptr->callbackKnown(key);
 	_data.back()->_tree[key]();
 }
 
@@ -59,5 +76,10 @@ void Translator::popDictionary(int num)
 
 Translator::DictionaryPtr Translator::getDictionary()
 {
+	if ( _data.empty() )
+	{
+		return nullptr;
+	}
+
 	return _data.back();
 }

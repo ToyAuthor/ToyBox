@@ -7,7 +7,7 @@ namespace toy{
 namespace parser{
 
 
-// Take string apart by given rule.
+// Take string apart by given rule. You can call it analyzer.
 class TOY_API StringCutter
 {
 	public:
@@ -22,6 +22,9 @@ class TOY_API StringCutter
 
 		void    pushConfig(ConfigPtr);
 		void    popConfig(int number=1);
+		auto    getConfig()->ConfigPtr;
+		void    pushFront(std::string str);
+		void    drop();
 
 	private:
 
