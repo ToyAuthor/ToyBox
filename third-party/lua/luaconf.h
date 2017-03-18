@@ -41,7 +41,9 @@
 ** Define it if you want Lua to avoid the use of a few C99 features
 ** or Windows-specific features on Windows.
 */
-/* #define LUA_USE_C89 */
+#if defined(__ANDROID__)
+  #define LUA_USE_C89
+#endif
 
 
 /*
@@ -606,7 +608,7 @@
 
 
 /*
-@@ lua_number2strx converts a float to an hexadecimal numeric string. 
+@@ lua_number2strx converts a float to an hexadecimal numeric string.
 ** In C99, 'sprintf' (with format specifiers '%a'/'%A') does that.
 ** Otherwise, you can leave 'lua_number2strx' undefined and Lua will
 ** provide its own implementation.
@@ -654,7 +656,12 @@
 ** macro must include header 'locale.h'.)
 */
 #if !defined(lua_getlocaledecpoint)
-#define lua_getlocaledecpoint()		(localeconv()->decimal_point[0])
+//#define lua_getlocaledecpoint()		(localeconv()->decimal_point[0])
+  #if defined(__ANDROID__)
+    #define lua_getlocaledecpoint() '.'
+  #else
+    #define lua_getlocaledecpoint()     (localeconv()->decimal_point[0])
+  #endif
 #endif
 
 /* }================================================================== */
@@ -764,4 +771,3 @@
 
 
 #endif
-

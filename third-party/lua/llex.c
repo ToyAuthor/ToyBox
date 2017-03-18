@@ -357,7 +357,8 @@ static int readdecesc (LexState *ls) {
     r = 10*r + ls->current - '0';
     save_and_next(ls);
   }
-  esccheck(ls, r <= UCHAR_MAX, "decimal escape too large");
+  //esccheck(ls, r <= UCHAR_MAX, "decimal escape too large");
+  esccheck(ls, (r<0)?1:( (unsigned int)r <= UCHAR_MAX), "decimal escape too large");
   luaZ_buffremove(ls->buff, i);  /* remove read digits from buffer */
   return r;
 }
