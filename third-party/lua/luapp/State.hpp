@@ -164,11 +164,31 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructorEx(_lua,class_name));
 			}
 			else
 			{
 				adapter::Adapter<C,N>::registerClassEx(_lua,class_name);
+			}
+		}
+
+		template<typename C>
+		void bindClass1ArgEx(lua::Str class_name)
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			if ( _moduleMode )
+			{
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,class_name));
+			}
+			else
+			{
+				adapter::Adapter<C,N>::registerClass1ArgEx(_lua,class_name);
 			}
 		}
 
