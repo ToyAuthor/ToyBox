@@ -59,7 +59,6 @@ else()
 	add_library(7zip ${TOY_3RD_PARTY_LIB_TYPE} ${SOURCE})
 endif()
 
-
 if(MSVC)
 	set_target_properties( 7zip PROPERTIES
 	LIBRARY_OUTPUT_DIRECTORY            ${PROJECT_BINARY_DIR}
@@ -72,4 +71,12 @@ if(MSVC)
 	ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${PROJECT_BINARY_DIR}
 	ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${PROJECT_BINARY_DIR}
 	)
+else()
+	if(WIN32)
+		if( ${TOY_3RD_PARTY_LIB_TYPE} STREQUAL STATIC)
+			set_target_properties(7zip PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
+		else()
+			set_target_properties(7zip PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+		endif()
+	endif()
 endif()

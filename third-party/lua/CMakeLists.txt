@@ -9,6 +9,9 @@ toy_StdReady()
 if(TOY_ENABLE_3RD_PARTY_SHARED_LIB)
 	if(WIN32)
 		add_definitions(-DLUA_BUILD_AS_DLL)
+		if(MSVC)
+			add_definitions(-DLUA_LIB)
+		endif()
 	endif()
 endif()
 
@@ -24,7 +27,6 @@ endif()
 file(GLOB SOURCE *.c)
 
 set_source_files_properties(${SOURCE} PROPERTIES LANGUAGE C)
-
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 add_library(lua ${TOY_3RD_PARTY_LIB_TYPE} ${SOURCE})
@@ -52,4 +54,12 @@ if(MSVC)
 			ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${PROJECT_BINARY_DIR}
 			ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${PROJECT_BINARY_DIR}
 			)
+else()
+	if(WIN32)
+		if( ${TOY_3RD_PARTY_LIB_TYPE} STREQUAL STATIC)
+			set_target_properties(lua PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
+		else()
+			set_target_properties(lua PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+		endif()
+	endif()
 endif()

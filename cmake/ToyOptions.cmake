@@ -22,7 +22,7 @@ macro(toy_ProcessOptions)
 
 	if(WIN32)
 		# Boost need this to build library on Windows 2000 or later releases.
-		add_definitions(-D_WIN32_WINNT=0x0501)
+		add_definitions(-D_WIN32_WINNT=0x0601)
 	endif()
 
 endmacro(toy_ProcessOptions)

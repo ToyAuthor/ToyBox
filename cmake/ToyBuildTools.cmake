@@ -7,7 +7,7 @@ macro(toy_StdReady)
 	if(NOT MSVC)
 		add_definitions(-O2 -g -Werror -Wall -Wextra)
 
-		set(CMAKE_CXX_FLAGS "-std=c++11")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 		if(APPLE)
 			add_definitions(-Qunused-arguments)
@@ -96,13 +96,21 @@ macro(toy_BuildLib _name)
 			LIBRARY_OUTPUT_DIRECTORY            ${TOY_OUTPUT_PATH}
 			LIBRARY_OUTPUT_DIRECTORY_DEBUG      ${TOY_OUTPUT_PATH}
 			LIBRARY_OUTPUT_DIRECTORY_RELEASE    ${TOY_OUTPUT_PATH}
-			RUNTIME_OUTPUT_DIRECTORY            ${TOY_OUTPUT_PATH}
-			RUNTIME_OUTPUT_DIRECTORY_DEBUG      ${TOY_OUTPUT_PATH}
-			RUNTIME_OUTPUT_DIRECTORY_RELEASE    ${TOY_OUTPUT_PATH}
+			RUNTIME_OUTPUT_DIRECTORY            ${TOY_ROOT_BINARY_DIR}/bin
+			RUNTIME_OUTPUT_DIRECTORY_DEBUG      ${TOY_ROOT_BINARY_DIR}/bin
+			RUNTIME_OUTPUT_DIRECTORY_RELEASE    ${TOY_ROOT_BINARY_DIR}/bin
 			ARCHIVE_OUTPUT_DIRECTORY            ${TOY_OUTPUT_PATH}
 			ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${TOY_OUTPUT_PATH}
 			ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${TOY_OUTPUT_PATH}
 		)
+	else()
+		if(WIN32)
+			if( ${TOY_LIB_TYPE} STREQUAL STATIC)
+				set_target_properties(${_name} PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
+			else()
+				set_target_properties(${_name} PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+			endif()
+		endif()
 	endif()
 
 endmacro(toy_BuildLib)
@@ -165,6 +173,14 @@ macro(toy_BuildExe _name)
 			ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${TOY_OUTPUT_PATH}
 			ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${TOY_OUTPUT_PATH}
 		)
+	else()
+		if(WIN32)
+			if( ${TOY_LIB_TYPE} STREQUAL STATIC)
+				set_target_properties(${_name} PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
+			else()
+				set_target_properties(${_name} PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+			endif()
+		endif()
 	endif()
 
 endmacro(toy_BuildExe)

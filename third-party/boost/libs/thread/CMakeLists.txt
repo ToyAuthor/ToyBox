@@ -65,4 +65,12 @@ if(MSVC)
 		ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
 		ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
 	)
+else()
+	if(WIN32)
+		if( ${BOOST_LIBRARY_TYPE} STREQUAL STATIC)
+			set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
+		else()
+			set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+		endif()
+	endif()
 endif()

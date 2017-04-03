@@ -21,8 +21,15 @@ set(SOURCE
 
 if(WIN32)
 
+	# _WIN32_WINNT 0x0602 Windows 8
+	# _WIN32_WINNT 0x0601 Windows 7
+	# _WIN32_WINNT 0x0600 Windows Server 2008
+	# _WIN32_WINNT 0x0600 Windows Vista
+	# _WIN32_WINNT 0x0502 Windows Server 2003
+	# _WIN32_WINNT 0x0501 Windows XP
+	# _WIN32_WINNT 0x0500 Windows 2000
 	add_definitions(-DBOOST_USE_WINDOWS_H)
-	add_definitions(-D_WIN32_WINNT=0x0500)
+	add_definitions(-D_WIN32_WINNT=0x0601)
 
 endif()
 
@@ -48,4 +55,12 @@ if(MSVC)
 		ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${BOOST_LIBRARY_OUTPUT_PATH}
 		ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${BOOST_LIBRARY_OUTPUT_PATH}
 	)
+else()
+	if(WIN32)
+		if( ${BOOST_LIBRARY_TYPE} STREQUAL STATIC)
+			set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-static-libgcc -static-libstdc++")
+		else()
+			set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+		endif()
+	endif()
 endif()
