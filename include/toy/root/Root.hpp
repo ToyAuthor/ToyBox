@@ -1,13 +1,13 @@
 
 #pragma once
 
-#include "toy/Standard.hpp"
-
+#include <string>
+#include "toy/root/Export.hpp"
 
 namespace toy{
 
 
-class TOY_API Root
+class TOY_API_ROOT Root
 {
 	public:
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/parser/Export.hpp"
 
 namespace toy{
 namespace parser{
@@ -8,7 +9,7 @@ namespace parser{
 
 class Translator;
 
-class TOY_API Dictionary
+class TOY_API_PARSER Dictionary
 {
 	friend class Translator;
 

@@ -2,13 +2,14 @@
 #pragma once
 
 #include "toy/parser/StringCutterConfig.hpp"
+#include "toy/parser/Export.hpp"
 
 namespace toy{
 namespace parser{
 
 
 // Take string apart by given rule. You can call it analyzer.
-class TOY_API StringCutter
+class TOY_API_PARSER StringCutter
 {
 	public:
 

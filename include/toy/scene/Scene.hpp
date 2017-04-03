@@ -2,6 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/scene/Export.hpp"
 #include "toy/File.hpp"
 
 
@@ -9,7 +10,7 @@
 namespace toy{
 namespace scene{
 
-class TOY_API Scene
+class TOY_API_SCENE Scene
 {
 	public:
 

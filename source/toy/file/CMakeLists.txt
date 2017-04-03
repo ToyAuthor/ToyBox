@@ -22,6 +22,10 @@ set(LIB_DIR
 )
 
 
+if(TOY_ENABLE_SHARED_LIBS)
+	add_definitions(-DTOY_EXPORT_FILE)
+endif()
+
 toy_BuildLib(toy_file
 	INCLUDEDIRS ${INC_DIR}
 	SOURCES     ${SOURCE}

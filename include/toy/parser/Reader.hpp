@@ -3,12 +3,12 @@
 
 #include <fstream>
 #include "toy/Standard.hpp"
-
+#include "toy/parser/Export.hpp"
 
 namespace toy{
 namespace parser{
 
-class TOY_API Reader
+class TOY_API_PARSER Reader
 {
 	public:
 

@@ -2,13 +2,14 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/parser/Export.hpp"
 
 namespace toy{
 namespace parser{
 
 class Dictionary;
 
-class TOY_API Translator
+class TOY_API_PARSER Translator
 {
 	public:
 

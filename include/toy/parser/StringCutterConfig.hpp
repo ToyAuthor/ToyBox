@@ -2,12 +2,12 @@
 #pragma once
 
 #include "toy/Standard.hpp"
-
+#include "toy/parser/Export.hpp"
 
 namespace toy{
 namespace parser{
 
-class TOY_API StringCutterConfig
+class TOY_API_PARSER StringCutterConfig
 {
 	public:
 

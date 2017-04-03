@@ -2,6 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/file/Export.hpp"
 
 namespace toy
 {
@@ -16,7 +17,7 @@ namespace toy
 
 namespace toy{
 
-class TOY_API File
+class TOY_API_FILE File
 {
 	public:
 

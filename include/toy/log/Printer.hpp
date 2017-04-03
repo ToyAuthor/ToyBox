@@ -30,5 +30,5 @@ class TOY_API Printer
 
 namespace toy{
 TOY_API const log::Printer& NextLine(const log::Printer& m);
-extern TOY_API log::Printer Logger;
+TOY_API extern log::Printer Logger;
 }

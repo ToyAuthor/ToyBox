@@ -2,6 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/scene/Export.hpp"
 #include "toy/math/Vector3.hpp"
 #include "toy/math/Matrix4.hpp"
 
@@ -9,7 +10,7 @@ namespace toy{
 namespace scene{
 
 
-class TOY_API CameraConfig
+class TOY_API_SCENE CameraConfig
 {
 	public:
 

@@ -4,11 +4,10 @@
 #include <fstream>
 #include "toy/Standard.hpp"
 
-
 namespace toy{
 namespace parser{
 
-class TOY_API Writer
+class Writer
 {
 	public:
 
