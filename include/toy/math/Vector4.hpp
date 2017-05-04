@@ -22,17 +22,12 @@ class Vector4
 			Type    data[4];
 		};
 
-		inline Vector4()
+		Vector4()
 		{
 			x=y=z=w=(Type)0;
 		}
 
-		inline Vector4(Vector4<Type> &v)
-		{
-			*this=v;
-		}
-
-		inline Vector4(Type xx,Type yy,Type zz,Type ww)
+		Vector4(Type xx,Type yy,Type zz,Type ww)
 		{
 			x=xx;
 			y=yy;
@@ -42,7 +37,7 @@ class Vector4
 
 		~Vector4(){}
 
-		inline void	Set(Type xx,Type yy,Type zz,Type ww)
+		void set(Type xx,Type yy,Type zz,Type ww)
 		{
 			x=xx;
 			y=yy;
@@ -50,28 +45,23 @@ class Vector4
 			w=ww;
 		}
 
-		inline Type	Length(void)
+		Type length(void)
 		{
 			Type    result;
 			result = math::Sqrt<Type>(x*x+y*y+z*z+w*w);
 			return  result;
 		}
 
-		inline void	Normalize(void)
+		void normalize(void)
 		{
 			Type    len;
-			len=Length();
+			len = length();
 			x/=len;
 			y/=len;
 			z/=len;
 			w/=len;
 		}
 
-		Vector4<Type> operator =(const Vector4<Type>& v)
-		{
-			Copy(const_cast<Vector4<Type>&>(v));
-			return *this;
-		}
 		Vector4<Type> operator +=(Vector4<Type>& v)
 		{
 			x+=v.x;
@@ -80,6 +70,7 @@ class Vector4
 			w+=v.w;
 			return *this;
 		}
+
 		Vector4<Type> operator -=(Vector4<Type>& v)
 		{
 			x-=v.x;
@@ -89,15 +80,30 @@ class Vector4
 			return *this;
 		}
 
+	//----------------Maybe not necessary----------------start
+
+		Vector4(const Vector4<Type>& v)
+		{
+			copy_mykind(const_cast<Vector4<Type>&>(v));
+		}
+
+		Vector4<Type> operator =(const Vector4<Type>& v)
+		{
+			copy_mykind(const_cast<Vector4<Type>&>(v));
+			return *this;
+		}
+
 	protected:
 
-		inline void Copy(Vector4<Type>& v)
+		inline void copy_mykind(Vector4<Type>& v)
 		{
 			x=v.x;
 			y=v.y;
 			z=v.z;
 			w=v.w;
 		}
+
+	//----------------Maybe not necessary----------------end
 };
 
 }//namespace math

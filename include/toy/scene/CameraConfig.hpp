@@ -23,18 +23,17 @@ class TOY_API_SCENE CameraConfig
 
 		~CameraConfig(){}
 
-		void    ortho(float w, float h, float near, float far);
-		void    perspect(float fovy, float aspect, float near, float far);
+		void ortho(float w, float h, float near, float far);
+		void perspect(float fovy, float aspect, float near, float far);
 
-		inline math::Matrix4<float> projection(){return _projection;}
-		inline math::Matrix4<float> modelview(){return _modelview;}
-		inline void projection(math::Matrix4<float> m){_projection=std::move(m);}
-		inline void modelview(math::Matrix4<float> m){_modelview=std::move(m);}
-
+		auto projection()->math::Matrix4<float>&;
+		void projection(   math::Matrix4<float> m);
+		auto modelview() ->math::Matrix4<float>&;
+		void modelview(    math::Matrix4<float> m);
 
 		void    lookat( math::Vector3<float> eye,       // Location of camera.
 		                math::Vector3<float> focus,     // Camera look at where.
-		                math::Vector3<float> up         // The direction of top of camera. Usually use (0,1,0).
+		                math::Vector3<float> up         // The direction of the top of camera. Usually use (0,1,0).
 		                );
 
 		CameraConfig& operator =(const CameraConfig& model)

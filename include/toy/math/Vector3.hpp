@@ -24,12 +24,6 @@ class Vector3
 
 		Vector3(){}
 
-		Vector3(const Vector3<Type> &v)
-		{
-			copy_mykind(v);
-			//*this=v;
-		}
-
 		Vector3(Type xx,Type yy,Type zz)
 		{
 			x=xx;
@@ -39,23 +33,23 @@ class Vector3
 
 		~Vector3(){}
 
-		inline void Set(Type xx,Type yy,Type zz)
+		void set(Type xx,Type yy,Type zz)
 		{
 			x=xx;
 			y=yy;
 			z=zz;
 		}
 
-		inline Type Length(void)
+		Type length(void)
 		{
 			Type    result;
 			result = math::Sqrt<Type>(x*x+y*y+z*z);
 			return  result;
 		}
 
-		inline void Normalize(void)
+		void normalize(void)
 		{
-			Type    len=Length();
+			Type    len = length();
 			x/=len;
 			y/=len;
 			z/=len;
@@ -70,17 +64,24 @@ class Vector3
 			return  result;
 		}
 
-		Vector3<Type> operator =(const Vector3<Type> &v)
-		{
-			copy_mykind(v);
-			return  *this;
-		}
-
-		inline void Invert(void)
+		void invert(void)
 		{
 			x=-x;
 			y=-y;
 			z=-z;
+		}
+
+	//----------------Maybe not necessary----------------start
+
+		Vector3(const Vector3<Type> &v)
+		{
+			copy_mykind(v);
+		}
+
+		Vector3<Type> operator =(const Vector3<Type> &v)
+		{
+			copy_mykind(v);
+			return *this;
 		}
 
 	protected:
@@ -91,6 +92,8 @@ class Vector3
 			y=v.y;
 			z=v.z;
 		}
+
+	//----------------Maybe not necessary----------------end
 };
 
 

@@ -50,19 +50,38 @@ void CameraConfig::lookat(  Vector3<float> eye,
                             Vector3<float> focus,
                             Vector3<float> up)
 {
-	Vector3<float>	zaxis(eye - focus);zaxis.Normalize();
+	Vector3<float>	zaxis(eye - focus);zaxis.normalize();
 	Vector3<float>	xaxis(Vector3Cross<float>(Normalize3<float>(up), zaxis));
 	Vector3<float>	yaxis(Vector3Cross<float>(zaxis, xaxis));
 
 	memset(_modelview.data,0,64);
 
-	_modelview.SetColumn(1, xaxis);
-	_modelview.SetColumn(2, yaxis);
-	_modelview.SetColumn(3, zaxis);
-
+	_modelview.setColumn(1, xaxis);
+	_modelview.setColumn(2, yaxis);
+	_modelview.setColumn(3, zaxis);
 
 	_modelview.m41 = -Vector3Dot<float>(xaxis, eye);
 	_modelview.m42 = -Vector3Dot<float>(yaxis, eye);
 	_modelview.m43 = -Vector3Dot<float>(zaxis, eye);
 	_modelview.m44=1.0f;
+}
+
+auto CameraConfig::projection()->math::Matrix4<float>&
+{
+	return _projection;
+}
+
+auto CameraConfig::modelview()->math::Matrix4<float>&
+{
+	return _modelview;
+}
+
+void CameraConfig::projection(math::Matrix4<float> m)
+{
+	_projection = std::move(m);
+}
+
+void CameraConfig::modelview(math::Matrix4<float> m)
+{
+	_modelview = std::move(m);
 }

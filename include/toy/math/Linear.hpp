@@ -26,7 +26,7 @@ inline Vector3<Type> Normalize3(Vector3<Type> t)
 	Vector3<Type>    result;
 
 	result=t;
-	result.Normalize();
+	result.normalize();
 
 	return result;
 }
@@ -54,7 +54,7 @@ inline Vector3<Type> Vector3Cross(Vector3<Type> a,Vector3<Type> b)
 {
 	Vector3<Type>    result;
 
-	result.Set( a.y*b.z-a.z*b.y,
+	result.set( a.y*b.z-a.z*b.y,
 	            a.z*b.x-a.x*b.z,
 	            a.x*b.y-a.y*b.x );
 

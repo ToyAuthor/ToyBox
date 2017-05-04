@@ -25,17 +25,12 @@ class Vector2
 			Type    data[2];
 		};
 
-		inline Vector2()
+		Vector2()
 		{
 			x=y=(Type)0;
 		}
 
-		inline Vector2(const Vector2<Type> &v)
-		{
-			Copy(const_cast<Vector2<Type>&>(v));
-		}
-
-		inline Vector2(Type _x,Type _y)
+		Vector2(Type _x,Type _y)
 		{
 			x=_x;
 			y=_y;
@@ -43,31 +38,25 @@ class Vector2
 
 		~Vector2(){}
 
-		inline void	Set(Type _x,Type _y)
+		void set(Type _x,Type _y)
 		{
 			x=_x;
 			y=_y;
 		}
 
-		inline Type	Length(void)
+		Type length(void)
 		{
 			Type    result;
 			result = math::Sqrt<Type>(x*x+y*y);
 			return  result;
 		}
 
-		inline void	Normalize(void)
+		void normalize(void)
 		{
 			Type    len;
-			len=Length();
+			len = length();
 			x/=len;
 			y/=len;
-		}
-
-		Vector2<Type> operator =(const Vector2<Type>& v)
-		{
-			Copy(const_cast<Vector2<Type>&>(v));
-			return *this;
 		}
 
 		Vector2<Type> operator +=(Vector2<Type>& v)
@@ -84,13 +73,28 @@ class Vector2
 			return *this;
 		}
 
+	//----------------Maybe not necessary----------------start
+
+		Vector2(const Vector2<Type> &v)
+		{
+			copy_mykind(const_cast<Vector2<Type>&>(v));
+		}
+
+		Vector2<Type> operator =(const Vector2<Type>& v)
+		{
+			copy_mykind(const_cast<Vector2<Type>&>(v));
+			return *this;
+		}
+
 	protected:
 
-		inline void Copy(Vector2<Type>& v)
+		inline void copy_mykind(Vector2<Type>& v)
 		{
 			x=v.x;
 			y=v.y;
 		}
+
+	//----------------Maybe not necessary----------------end
 };
 
 

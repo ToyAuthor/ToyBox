@@ -33,50 +33,50 @@ public:
 			Type    m41,m42,m43,m44;
 		};
 
-		struct Matrix       mMatrix;
+		struct Matrix       matrix;
 	};
 
 	Matrix4(){}
 
 	Matrix4(const Matrix4<Type>& model)
 	{
-		mMatrix=model.mMatrix;
+		matrix = model.matrix;
 	}
 
 	~Matrix4(){}
 
-	void	Identity(void)
+	void	identity(void)
 	{
 		m12=m13=m14=m21=m23=m24=m31=m32=m34=m41=m42=m43=(Type)0;
 		m11=m22=m33=m44=(Type)1;
 	}
 
-	void	SetColumn(int32_t i,Vector4<Type> & v)
+	void	setColumn(int32_t i,Vector4<Type> & v)
 	{
 		#ifdef TOY_OPTION_CHECK
 		if(i<1||4<i)toy::Oops(TOY_MARK);
 		#endif
 
-		data[i-1]=v.x;
-		data[i+3]=v.y;
-		data[i+7]=v.z;
-		data[i+11]=v.w;
+		data[i-1]  = v.x;
+		data[i+3]  = v.y;
+		data[i+7]  = v.z;
+		data[i+11] = v.w;
 	}
 
-	void	SetColumn(int32_t i,Vector3<Type> & v)
+	void	setColumn(int32_t i,Vector3<Type> & v)
 	{
 		#ifdef TOY_OPTION_CHECK
 		if(i<1||4<i)toy::Oops(TOY_MARK);
 		#endif
 
-		data[i-1]=v.x;
-		data[i+3]=v.y;
-		data[i+7]=v.z;
+		data[i-1] = v.x;
+		data[i+3] = v.y;
+		data[i+7] = v.z;
 	}
 
 	Matrix4<Type> operator =(const Matrix4<Type>& model)
 	{
-		mMatrix=model.mMatrix;
+		matrix = model.matrix;
 		return *this;
 	}
 

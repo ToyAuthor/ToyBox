@@ -96,7 +96,7 @@ inline Type Exp3(const Type t)
 template <typename Type>
 inline Type Cot(const Type t)
 {
-	return static_cast<Type>(::tan(1.57079632679489661923 - t));
+	return static_cast<Type>(std::tan(1.57079632679489661923 - t));
 }
 
 template <typename Type>
