@@ -28,7 +28,7 @@
 
 
 #ifndef _UNICODE
-#define _UNICODE    // "UNICODE" is defined at "ToyBox/source/toy/Windows.hpp"
+#define _UNICODE    // "UNICODE" is defined at "ToyBox/include/toy/Windows.hpp"
 #endif
 
 
@@ -36,7 +36,7 @@
 
 #if defined(TOY_WINDOWS) && TOY_OPTION_DYNAMIC_LIBRARY
 
-	// TOY_EXPORT defined at "ToyBox/source/toy/CMakeLists.txt"
+	// TOY_EXPORT defined at "ToyBox/source/CMakeLists.txt"
 	#ifdef TOY_EXPORT
 		#define TOY_API __declspec(dllexport)
 	#else
