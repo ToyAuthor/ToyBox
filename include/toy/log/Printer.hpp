@@ -2,7 +2,6 @@
 #pragma once
 
 #include <string>
-//#include <memory>
 #include "toy/CompilerConfig.hpp"
 
 namespace toy{
@@ -16,19 +15,24 @@ class TOY_API Printer
 		~Printer(){}
 
 		const Printer& operator << (const int) const;
+		const Printer& operator << (const long int) const;
+		const Printer& operator << (const long long) const;
+		const Printer& operator << (const unsigned int) const;
+		const Printer& operator << (const unsigned long int) const;
+		const Printer& operator << (const unsigned long long) const;
 		const Printer& operator << (const float) const;
-		const Printer& operator << (std::string::size_type) const;
-		const Printer& operator << (std::string str) const;
-		const Printer& operator << (std::wstring str) const;
-		const Printer& operator << (std::string *str) const;
-		const Printer& operator << (std::wstring *str) const;
-	//	const Printer& operator << (std::shared_ptr<std::string> str) const;
+		const Printer& operator << (const double) const;
+		const Printer& operator << (const unsigned char *str) const;
+		const Printer& operator << (const std::string str) const;
+		const Printer& operator << (const std::wstring str) const;
+		const Printer& operator << (const std::string *str) const;
+		const Printer& operator << (const std::wstring *str) const;
 		const Printer& operator << (const Printer& (*func)(const Printer&)) const;
 };
 
 }}
 
 namespace toy{
-TOY_API const log::Printer& NextLine(const log::Printer& m);
+TOY_API extern const log::Printer& NextLine(const log::Printer& m);
 TOY_API extern log::Printer Logger;
 }
