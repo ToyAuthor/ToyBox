@@ -10,16 +10,20 @@ include_directories( ${PROJECT_SOURCE_DIR}/include )
 set( LIBRARY_OUTPUT_PATH	${PROJECT_BINARY_DIR} )
 set( EXECUTABLE_OUTPUT_PATH	${PROJECT_BINARY_DIR} )
 
-# There is no glu on android.
+# There is no glu on android. By the way, android doesn't need glew anyway.
 add_definitions(-DGLEW_NO_GLU)
 
-if(NOT TOY_ENABLE_3RD_PARTY_SHARED_LIB)
+if(TOY_ENABLE_3RD_PARTY_SHARED_LIB)
+	if(WIN32)
+		add_definitions(-DGLEW_BUILD)
+	endif()
+else()
 	add_definitions(-DGLEW_STATIC)
 endif()
 
 if(WIN32)
 	set( LIBS opengl32 )
-	add_definitions( -DWIN32_MEAN_AND_LEAN -DVC_EXTRALEAN -DGLEW_BUILD -D_CRT_SECURE_NO_WARNINGS )
+	add_definitions( -DWIN32_MEAN_AND_LEAN -DVC_EXTRALEAN -D_CRT_SECURE_NO_WARNINGS )
 elseif(APPLE)
 	find_library(TOY_FW_OpenGL OpenGL)
 	find_library(TOY_FW_AGL AGL)
@@ -30,11 +34,7 @@ elseif(UNIX)
 endif()
 
 
-if(MSVC)
-	add_library( glew STATIC ${PROJECT_SOURCE_DIR}/src/glew.c )
-else()
-	add_library( glew ${TOY_3RD_PARTY_LIB_TYPE} ${PROJECT_SOURCE_DIR}/src/glew.c )
-endif()
+add_library( glew ${TOY_3RD_PARTY_LIB_TYPE} ${PROJECT_SOURCE_DIR}/src/glew.c )
 
 
 target_link_libraries( glew ${LIBS} )
