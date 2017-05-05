@@ -60,10 +60,9 @@ static void SwitchPixel(toy::ImageOpener *image,uint8_t *data,enum Pixel option)
 	}
 }
 
-toy::Image Create(const int32_t width,const int32_t height,uint8_t *data,enum Pixel option)
+bool Create(toy::Image *output,const int32_t width,const int32_t height,uint8_t *data,enum Pixel option)
 {
-	toy::Image        result;
-	toy::ImageOpener  image(&result);
+	toy::ImageOpener  image(output);
 
 	image.width(width);
 	image.height(height);
@@ -71,6 +70,14 @@ toy::Image Create(const int32_t width,const int32_t height,uint8_t *data,enum Pi
 	image.allocator()->size(width * height * 4);
 
 	SwitchPixel(&image,data,option);
+
+	return true;
+}
+
+toy::Image Create(const int32_t width,const int32_t height,uint8_t *data,enum Pixel option)
+{
+	toy::Image        result;
+	Create(&result,width,height,data,option);
 
 	return result;
 }

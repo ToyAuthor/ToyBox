@@ -123,7 +123,8 @@ enum Pixel
 	RGBA,
 };
 
-TOY_API toy::Image Create(const int32_t width,const int32_t height,uint8_t *data,enum Pixel option = RGBA);
+TOY_API extern bool       Create(toy::Image *output,const int32_t width,const int32_t height,uint8_t *data,enum Pixel option = RGBA);
+TOY_API extern toy::Image Create(                   const int32_t width,const int32_t height,uint8_t *data,enum Pixel option = RGBA);
 
 }//namespace image{
 
