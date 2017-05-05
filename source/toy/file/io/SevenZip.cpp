@@ -306,7 +306,7 @@ bool SevenZip::open(std::string filepath)
 	return 0;
 }
 
-int SevenZip::read(void *file, uint32_t size)
+uint32_t SevenZip::read(void *file, uint32_t size)
 {
 	auto   data = static_cast<Byte*>(_fileBegin);
 

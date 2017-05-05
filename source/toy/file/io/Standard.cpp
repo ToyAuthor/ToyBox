@@ -61,7 +61,7 @@ bool Standard::open(std::string filepath)
 		return 0;
 }
 
-int Standard::read(void *file,uint32_t size)
+uint32_t Standard::read(void *file,uint32_t size)
 {
 	#if TOY_OPTION_CHECK
 	if ( ! file )
@@ -73,7 +73,7 @@ int Standard::read(void *file,uint32_t size)
 	if ( isEmpty() )
 		return 0;
 
-	size_t	result=fread(file,1,size,_file);	// "fread(file,size,1,_file)" was wrong.
+	size_t	result = fread(file,1,size,_file);	// "fread(file,size,1,_file)" was wrong.
 
 	if ( result>size )
 	{

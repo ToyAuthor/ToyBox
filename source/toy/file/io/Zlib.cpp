@@ -72,7 +72,7 @@ bool Zlib::open(std::string filepath)
 	return 0;
 }
 
-int Zlib::read(void *file, uint32_t size)
+uint32_t Zlib::read(void *file, uint32_t size)
 {
 	int   result = unzReadCurrentFile( _handle, file, size );
 

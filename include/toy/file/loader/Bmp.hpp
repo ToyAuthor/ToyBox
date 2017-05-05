@@ -2,6 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/file/Export.hpp"
 
 namespace toy{
 
@@ -12,8 +13,8 @@ namespace file{
 namespace loader{
 namespace bmp{
 
-TOY_API bool Load(File *f,Image *m);
-TOY_API bool Save(File *f,Image *m);   // File mode STD only.
+TOY_API_FILE bool Load(File *f,Image *m);
+TOY_API_FILE bool Save(File *f,Image *m);   // File mode STD only.
 
 }//namespace bmp
 }//namespace loader

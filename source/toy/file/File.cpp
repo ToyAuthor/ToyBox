@@ -71,7 +71,7 @@ bool File::open(std::string filepath)
 	return _io->open(filepath);
 }
 
-int File::read(void *file,uint32_t size)
+uint32_t File::read(void *file,uint32_t size)
 {
 	return _io->read(file,size);
 }

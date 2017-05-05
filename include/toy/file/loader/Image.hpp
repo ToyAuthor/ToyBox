@@ -2,7 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
-
+#include "toy/file/Export.hpp"
 
 
 namespace toy{
@@ -13,8 +13,8 @@ class Image;
 namespace file{
 namespace loader{
 
-TOY_API bool Load(File *f,Image *m);
-TOY_API bool Save(std::string filename,Image *map);
+TOY_API_FILE bool Load(File *f,Image *m);
+TOY_API_FILE bool Save(std::string filename,Image *map);
 
 }//namespace loader
 }//namespace file

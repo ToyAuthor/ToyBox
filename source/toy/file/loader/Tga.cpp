@@ -107,18 +107,18 @@ bool loader::tga::Load(File *pIO,Image *map)
 	uint32_t    height=(uint32_t)header.height;
 
 /*
-	toy::Log(_T("struct TGA_Head\n"));
-	toy::Log(_T("{\n"));
-	toy::Log(_T("    idlength       :%d\n"), header.idlength);
-	toy::Log(_T("    colourmaptype  :%d\n"), header.colourmaptype);
-	toy::Log(_T("    datatypecode   :%d\n"), header.datatypecode);
-	toy::Log(_T("    x_origin       :%d\n"), header.x_origin);
-	toy::Log(_T("    y_origin       :%d\n"), header.y_origin);
-	toy::Log(_T("    width          :%d\n"), header.width);
-	toy::Log(_T("    height         :%d\n"), header.height);
-	toy::Log(_T("    bitsperpixel   :%d\n"), header.bitsperpixel);
-	toy::Log(_T("    imagedescriptor:%d\n"), header.imagedescriptor);
-	toy::Log(_T("};\n"));
+	toy::Log("struct TGA_Head\n");
+	toy::Log("{\n"));
+	toy::Log("    idlength       :%d\n", header.idlength);
+	toy::Log("    colourmaptype  :%d\n", header.colourmaptype);
+	toy::Log("    datatypecode   :%d\n", header.datatypecode);
+	toy::Log("    x_origin       :%d\n", header.x_origin);
+	toy::Log("    y_origin       :%d\n", header.y_origin);
+	toy::Log("    width          :%d\n", header.width);
+	toy::Log("    height         :%d\n", header.height);
+	toy::Log("    bitsperpixel   :%d\n", header.bitsperpixel);
+	toy::Log("    imagedescriptor:%d\n", header.imagedescriptor);
+	toy::Log("};\n");
 */
 
 	if(header.idlength!=0)       return 0;

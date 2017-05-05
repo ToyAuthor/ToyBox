@@ -42,7 +42,7 @@ class TOY_API_FILE File
 
 		bool    openDir(std::string path);                     // Open a directory/archive for search files.
 		bool    open(std::string file);
-		int     read(void *file,uint32_t size);
+		auto    read(void *file,uint32_t size)->uint32_t;      // Return how much data really output.
 		bool    write(void *file,uint32_t size);               // STD mode supported only.
 		bool    seek(enum SeekOption option,int32_t offset);   // Not support ZIP mode.
 		bool    isEnd();

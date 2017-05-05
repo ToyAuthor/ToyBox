@@ -1,5 +1,4 @@
-﻿#include <cstdlib>
-#include "toy/Image.hpp"
+﻿#include "toy/Image.hpp"
 #include "toy/file/loader/Bmp.hpp"
 #include "toy/file/File.hpp"
 

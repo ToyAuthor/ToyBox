@@ -1,5 +1,3 @@
-#include <cstdlib>
-#include <cstring>
 #include "toy/Image.hpp"
 #include "toy/file/File.hpp"
 #include "toy/file/loader/Image.hpp"
@@ -16,25 +14,26 @@ namespace file{
 
 static int ReadImage(void *user,char *data,int size)
 {
-	auto   dev = static_cast<File*>(user);
+	auto   dev = static_cast<toy::File*>(user);
+
 	return dev->read(data,size);
 }
 
 static void SkipImage(void *user,int n)
 {
-	auto   dev = static_cast<File*>(user);
+	auto   dev = static_cast<toy::File*>(user);
 
-	dev->seek(File::CUR,n);
+	dev->seek(toy::File::CUR,n);
 }
 
 static int EndOfFile(void *user)
 {
-	auto   dev = static_cast<File*>(user);
+	auto   dev = static_cast<toy::File*>(user);
 
 	return dev->isEnd();
 }
 
-bool loader::Load(File *f,Image *map)
+bool loader::Load(toy::File *f,Image *map)
 {
 	auto   io = static_cast<void*>(f);
 
@@ -56,14 +55,19 @@ bool loader::Load(File *f,Image *map)
 	{
 		toy::Oops(TOY_MARK);
 		stbi_image_free(data);
-		return 0;
+		return false;
 	}
 
-	*map = image::Create(width,height,data);
+	if ( ! image::Create(map,width,height,data) )
+	{
+		toy::Oops(TOY_MARK);
+		stbi_image_free(data);
+		return false;
+	}
 
 	stbi_image_free(data);
 
-	return 1;
+	return true;
 }
 
 bool loader::Save(std::string filename,Image *map)
