@@ -5,7 +5,11 @@ endif()
 
 macro(toy_StdReady)
 	if(NOT MSVC)
-		add_definitions(-O2 -g -Werror -Wall -Wextra)
+		if( TOY_RELEASE )
+			add_definitions(-O2 -s -Werror -Wall -Wextra)
+		else()
+			add_definitions(-O2 -g -Werror -Wall -Wextra)
+		endif()
 
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
