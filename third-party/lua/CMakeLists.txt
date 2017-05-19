@@ -6,13 +6,8 @@ set(VERSION "5.3.0")
 
 toy_StdReady()
 
-if(TOY_ENABLE_3RD_PARTY_SHARED_LIB)
-	if(WIN32)
-		add_definitions(-DLUA_BUILD_AS_DLL)
-		if(MSVC)
-			add_definitions(-DLUA_LIB)
-		endif()
-	endif()
+if(TOY_ENABLE_3RD_PARTY_SHARED_LIB AND WIN32)
+	add_definitions(-DLUA_BUILD_AS_DLL)
 endif()
 
 if(UNIX)
