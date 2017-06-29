@@ -20,7 +20,7 @@ class Standard : public Base
 		virtual bool    open(std::string filepath);
 		virtual auto    read(void *file,uint32_t size)->uint32_t;
 		virtual bool    write(void *file,uint32_t size);
-		virtual bool    seek(enum Base::Option option,int32_t offset);
+		virtual bool    seek(int option,int32_t offset);
 		virtual void    close();
 		virtual bool    isEnd();
 		virtual bool    isEmpty();

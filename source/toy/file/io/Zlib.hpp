@@ -22,7 +22,7 @@ class Zlib : public Base
 		virtual bool    open(std::string filepath);
 		virtual auto    read(void *file,uint32_t size)->uint32_t;        // Not finish yet.
 		virtual bool    write(void *file,uint32_t size);                 // Not finish yet.
-		virtual bool    seek(enum Base::Option option,int32_t offset);   // Not finish yet.
+		virtual bool    seek(int option,int32_t offset);                 // Not finish yet.
 		virtual void    close();
 		virtual bool    isEnd(){return 1;}                               // Not finish yet.
 		virtual bool    isEmpty();

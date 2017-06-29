@@ -385,21 +385,23 @@ static int32_t SeekCUR(int32_t offset,int32_t total,int32_t pass)
 	return pass + offset;
 }
 
-bool SevenZip::seek(enum Base::Option option,int32_t offset)
+bool SevenZip::seek(int option,int32_t offset)
 {
 	if ( isEmpty() ) return 0;
 
 	switch (option)
 	{
-		case Base::SET:
+		case SEEK_SET:
 			_passSize = SeekSET(offset,_fileSize);
 			break;
-
-		case Base::END:
+		case SEEK_END:
 			_passSize = SeekEND(offset,_fileSize);
 			break;
-		case Base::CUR:
+		case SEEK_CUR:
+			_passSize = SeekCUR(offset,_fileSize,_passSize);
+			break;
 		default:
+			toy::Oops(TOY_MARK);
 			_passSize = SeekCUR(offset,_fileSize,_passSize);
 			break;
 	}

@@ -81,9 +81,21 @@ bool File::write(void *file,uint32_t size)
 	return _io->write(file,size);
 }
 
-bool File::seek(enum SeekOption option,int32_t offset)
+bool File::seek(int option,int32_t offset)
 {
-	return _io->seek((enum file::io::Base::Option)option,offset);
+	#if TOY_OPTION_CHECK
+		switch (option)
+		{
+			case SEEK_SET:
+			case SEEK_END:
+			case SEEK_CUR:
+				break;
+			default:
+				toy::Oops(TOY_MARK);
+		}
+	#endif
+
+	return _io->seek(option,offset);
 }
 
 std::string File::getFileName()

@@ -13,13 +13,6 @@ class Base
 {
 	public:
 
-		enum Option
-		{
-			SET=0,
-			END,
-			CUR,
-		};
-
 		Base(){}
 		virtual ~Base(){}
 
@@ -39,7 +32,7 @@ class Base
 				return _fileName;
 		}
 
-		virtual bool    seek(enum Option option,int32_t offset)=0;
+		virtual bool    seek(int option,int32_t offset)=0;
 
 	protected:
 

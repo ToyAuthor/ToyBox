@@ -93,7 +93,7 @@ bool Zlib::write(void *,uint32_t )
 	return 1;
 }
 
-bool Zlib::seek(enum Base::Option ,int32_t )
+bool Zlib::seek(int ,int32_t )
 {
 	// Not ready yet
 	Oops(TOY_MARK);

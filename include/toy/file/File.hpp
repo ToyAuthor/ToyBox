@@ -30,13 +30,6 @@ class TOY_API_FILE File
 			ANDROID_MGR,
 		};
 
-		enum SeekOption:int
-		{
-			SET=0,      // Seek from the beginning of file.
-			END,        // Seek from the end of file.
-			CUR,        // Seek from the current position of the file pointer.
-		};
-
 		File(enum Mode mode=STD);
 		~File();
 
@@ -44,11 +37,20 @@ class TOY_API_FILE File
 		bool    open(std::string file);
 		auto    read(void *file,uint32_t size)->uint32_t;      // Return how much data really output.
 		bool    write(void *file,uint32_t size);               // STD mode supported only.
-		bool    seek(enum SeekOption option,int32_t offset);   // Not support ZIP mode.
 		bool    isEnd();
 		bool    isEmpty();
 		void    changeMode(enum Mode);
 		auto    getFileName()->std::string;
+
+		/*
+		 * Not support ZIP mode.
+		 *
+		 * option:
+		 *     SEEK_SET - Seek from the beginning of file.
+		 *     SEEK_CUR - Seek from the current position of the file pointer.
+		 *     SEEK_END - Seek from the end of file.
+		 */
+		bool    seek(int option,int32_t offset);
 
 	private:
 

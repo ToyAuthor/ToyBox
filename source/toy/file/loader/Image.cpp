@@ -23,7 +23,7 @@ static void SkipImage(void *user,int n)
 {
 	auto   dev = static_cast<toy::File*>(user);
 
-	dev->seek(toy::File::CUR,n);
+	dev->seek(SEEK_CUR,n);
 }
 
 static int EndOfFile(void *user)
@@ -78,3 +78,6 @@ bool loader::Save(std::string filename,Image *map)
 
 }//namespace file
 }//namespace toy
+
+#undef STB_IMAGE_IMPLEMENTATION
+#undef STB_IMAGE_WRITE_IMPLEMENTATION

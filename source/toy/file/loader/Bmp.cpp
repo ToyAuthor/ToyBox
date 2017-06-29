@@ -168,7 +168,7 @@ bool loader::bmp::Save(File *pIO,Image *map)
 	int32_t             width = map->width();
 	int32_t             height= map->height();
 
-	pIO->seek(File::SET,0);
+	pIO->seek(SEEK_SET,0);
 
 	info.biSize = sizeof(struct BMP_Head);
 	info.biWidth = width;

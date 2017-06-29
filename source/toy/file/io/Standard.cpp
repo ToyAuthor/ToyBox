@@ -55,10 +55,15 @@ bool Standard::open(std::string filepath)
 	}
 
 	_file = fopen(path.c_str(),"rb+");
+
 	if ( _file )
 		return 1;
 	else
+	{
+		toy::Logger<<path<<" not found"<<toy::NextLine;
+		toy::Oops(TOY_MARK);
 		return 0;
+	}
 }
 
 uint32_t Standard::read(void *file,uint32_t size)
@@ -93,22 +98,11 @@ bool Standard::write(void *file,uint32_t size)
 	return 1;
 }
 
-bool Standard::seek(enum Option option,int32_t offset)
+bool Standard::seek(int option,int32_t offset)
 {
 	if ( isEmpty() ) return 0;
 
-	switch (option)
-	{
-		case Base::SET:
-			fseek( _file, offset, SEEK_SET );
-			break;
-		case Base::END:
-			fseek( _file, offset, SEEK_END );
-			break;
-		case Base::CUR:
-		default:
-			fseek( _file, offset, SEEK_CUR );
-			break;
-	}
+	fseek( _file, offset, option );
+
 	return 1;
 }

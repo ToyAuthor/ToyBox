@@ -99,7 +99,7 @@ bool loader::tga::Load(File *pIO,Image *map)
 	ImageOpener        image(map);
 	struct TGA_Head    header;
 
-	pIO->seek(File::SET,0);
+	pIO->seek(SEEK_SET,0);
 
 	pIO->read(&header, sizeof(struct TGA_Head));
 
@@ -210,7 +210,7 @@ bool loader::tga::Load(File *pIO,Image *map)
 
 bool loader::tga::Save(File *pIO,Image *map)
 {
-	pIO->seek(File::SET,0);
+	pIO->seek(SEEK_SET,0);
 
 	uint32_t    width =map->width();
 	uint32_t    height=map->height();
