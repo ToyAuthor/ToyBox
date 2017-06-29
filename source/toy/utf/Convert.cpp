@@ -23,7 +23,7 @@ inline void StripTrailing(T *str)
 	str->resize(i);
 }
 
-std::basic_string<wchar_t> UTF8ToWChar(std::string str)
+std::basic_string<wchar_t> UTF8ToWChar(const std::string str)
 {
 	std::basic_string<wchar_t>   result(str.size(),'\0');
 
@@ -45,7 +45,7 @@ std::basic_string<wchar_t> UTF8ToWChar(std::string str)
 	return result;
 }
 
-std::string WCharToUTF8(std::basic_string<wchar_t> str)
+std::string WCharToUTF8(const std::basic_string<wchar_t> str)
 {
 	std::string    result(str.size()*4,'\0');
 
@@ -67,7 +67,7 @@ std::string WCharToUTF8(std::basic_string<wchar_t> str)
 	return result;
 }
 
-std::basic_string<uint16_t> UTF8ToUTF16(std::string str)
+std::basic_string<uint16_t> UTF8ToUTF16(const std::string str)
 {
 	std::basic_string<uint16_t>   result(str.size(),'\0');
 
@@ -83,7 +83,7 @@ std::basic_string<uint16_t> UTF8ToUTF16(std::string str)
 	return result;
 }
 
-std::string UTF16ToUTF8(std::basic_string<uint16_t> str)
+std::string UTF16ToUTF8(const std::basic_string<uint16_t> str)
 {
 	std::string    result(str.size()*4,'\0');
 
@@ -99,7 +99,7 @@ std::string UTF16ToUTF8(std::basic_string<uint16_t> str)
 	return result;
 }
 
-std::basic_string<uint32_t> UTF8ToUTF32(std::string str)
+std::basic_string<uint32_t> UTF8ToUTF32(const std::string str)
 {
 	std::basic_string<uint32_t>   result(str.size(),'\0');
 
@@ -115,7 +115,7 @@ std::basic_string<uint32_t> UTF8ToUTF32(std::string str)
 	return result;
 }
 
-std::string UTF32ToUTF8(std::basic_string<uint32_t> str)
+std::string UTF32ToUTF8(const std::basic_string<uint32_t> str)
 {
 	std::string    result(str.size()*4,'\0');
 
@@ -131,7 +131,7 @@ std::string UTF32ToUTF8(std::basic_string<uint32_t> str)
 	return result;
 }
 
-std::basic_string<uint32_t> UTF16ToUTF32(std::basic_string<uint16_t> str)
+std::basic_string<uint32_t> UTF16ToUTF32(const std::basic_string<uint16_t> str)
 {
 	std::basic_string<uint32_t>    result(str.size(),'\0');
 
@@ -147,7 +147,7 @@ std::basic_string<uint32_t> UTF16ToUTF32(std::basic_string<uint16_t> str)
 	return result;
 }
 
-std::basic_string<uint16_t> UTF32ToUTF16(std::basic_string<uint32_t> str)
+std::basic_string<uint16_t> UTF32ToUTF16(const std::basic_string<uint32_t> str)
 {
 	std::basic_string<uint16_t>    result(str.size()*2,'\0');
 
