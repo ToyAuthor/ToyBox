@@ -11,7 +11,11 @@ macro(toy_StdReady)
 			add_definitions(-O2 -g -Werror -Wall -Wextra)
 		endif()
 
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+		if(WIN32)
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+		else()
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+		endif()
 
 		if(APPLE)
 			add_definitions(-Qunused-arguments)
