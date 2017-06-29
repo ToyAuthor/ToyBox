@@ -28,6 +28,15 @@ set(TOY_RESOURCE_PATH       ${TOY_ROOT_SOURCE_DIR}/resource)
 set(TOY_DEFAULT_INCLUDE_DIR ${TOY_ROOT_SOURCE_DIR}/include ${TOY_ROOT_SOURCE_DIR}/source)
 set(TOY_DEFAULT_LINK_DIR    ${TOY_ROOT_BINARY_DIR}/lib)
 
+# To suppress some warning like this:
+#     MACOSX_RPATH is not specified for the following targets:
+#     This warning is for project developers.  Use -Wno-dev to suppress it.
+if(APPLE)
+	if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
+		set(CMAKE_MACOSX_RPATH ON)
+	endif()
+endif()
+
 include("${TOY_ROOT_SOURCE_DIR}/cmake/ToyTools.cmake" REQUIRED)
 toy_IncludeTools()
 
