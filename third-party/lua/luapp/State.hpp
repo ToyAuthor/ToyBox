@@ -93,7 +93,6 @@ class State
 				else
 				{
 					_lua = std::make_shared<HandleClass>();
-					//this->init();
 				}
 
 				wrapper::Wrapper<N>::_lua = this->_lua;
@@ -173,6 +172,20 @@ class State
 		}
 
 		template<typename C>
+		lua::CFunction bindClassEx()
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			lua::Str  name = lua::CreateUserType<C>();
+			return adapter::Adapter<C,N>::getConstructorEx(_lua,name);
+		}
+
+		template<typename C,typename A1>
 		void bindClass1ArgEx(lua::Str class_name)
 		{
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
@@ -184,17 +197,31 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,class_name,(A1*)0));
 			}
 			else
 			{
-				adapter::Adapter<C,N>::registerClass1ArgEx(_lua,class_name);
+				adapter::Adapter<C,N>::registerClass1ArgEx(_lua,class_name,(A1*)0);
 			}
+		}
+
+		template<typename C,typename A1>
+		lua::CFunction bindClass1ArgEx()
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			lua::Str  name = lua::CreateUserType<C>();
+			return adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,name,(A1*)0);
 		}
 
 		/**
 		 * Let lua script could use given member function.
-		 * Don't use it without bindClass() or bindClassEx().
+		 * Don't use it without bindClass/bindClassEx/bindClass(n)ArgEx.
 		 */
 		template<typename F>
 		void bindMethod(lua::Str name,F fn)
@@ -210,6 +237,13 @@ class State
 
 			struct adapter::Adapter<C,N>::Pack     myF( name,adapter::GetProxy(fn));
 			adapter::Adapter<C,N>::pushPack(myF);
+		}
+
+		template<typename C>
+		void bindFunc(lua::Str name,lua::CFunction func)
+		{
+			struct adapter::Adapter<C,N>::NFunc     myF( name, func );
+			adapter::Adapter<C,N>::pushNFunc(myF);
 		}
 
 		/// Convert the standard lua C function to lua global function.
@@ -625,7 +659,6 @@ class State
 
 		void build_module()
 		{
-			_funcReg.refresh();
 			lua::NewModule(_lua,_funcReg);
 		}
 

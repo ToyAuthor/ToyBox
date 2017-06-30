@@ -2,6 +2,7 @@
 #pragma once
 
 #include "luapp/State.hpp"
+#include "luapp/PullArgs.hpp"
 
 namespace lua{
 
@@ -15,6 +16,15 @@ void CopyVar(T &target,const lua::Var &data)
 	else
 	{
 		lua::Log<<"error:wrong type! lua::CopyVar() at Auxiliary.hpp"<<lua::End;
+	}
+}
+
+template<typename T>
+void TryCopyVar(T &target,const lua::Var &data)
+{
+	if ( lua::VarType<T>(data) )
+	{
+		target = lua::VarCast<T>(data);
 	}
 }
 
