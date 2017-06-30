@@ -170,7 +170,7 @@ macro(toy_BuildExe _name)
 			"${TOY_ROOT_BINARY_DIR}/apk"
 			"${TOY_ROOT_SOURCE_DIR}/libs"
 			"${TOY_ROOT_SOURCE_DIR}/android"
-			"${TOY_ROOT_SOURCE_DIR}/resource"
+			"${TOY_ROOT_SOURCE_DIR}/resource/android"
 		)
 	elseif(MSVC)
 		set_target_properties(${_name} PROPERTIES

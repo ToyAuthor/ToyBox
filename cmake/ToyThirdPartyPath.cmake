@@ -15,9 +15,10 @@ macro(toy_SetThirdPartyLibraryPath)
 	if(NOT EXISTS ${TOY_SDK_PATH})
 		# TOY_SDK_PATH is not necessity.
 		# You can just modify the following paths and ignore this error.
-		message(FATAL_ERROR "ToyBox:Are you sure you have third-party libraries?")
+		message(FATAL_ERROR "ToyBox:Are you sure you have all the third-party libraries?")
 	endif()
 
+	#---------------------------------------------------------------------------
 
 	set(TOY_include_boost       "${TOY_SDK_PATH}/boost" )
 	set(TOY_library_boost       "${TOY_ROOT_BINARY_DIR}/third-party/boost" )

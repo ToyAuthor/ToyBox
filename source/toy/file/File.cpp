@@ -3,6 +3,7 @@
 #include "toy/file/io/Standard.hpp"
 #include "toy/file/io/Zlib.hpp"
 #include "toy/file/io/SevenZip.hpp"
+#include "toy/file/io/Android.hpp"
 
 
 using namespace toy;
@@ -43,6 +44,14 @@ void File::changeMode(enum Mode mode)
 	freeIO();
 	_mode = mode;
 
+	#ifndef TOY_ANDROID
+	if ( mode==ANDROID_MGR )
+	{
+		toy::Oops(TOY_MARK);
+		return;
+	}
+	#endif
+
 	switch (mode)
 	{
 		case STD:
@@ -53,6 +62,9 @@ void File::changeMode(enum Mode mode)
 			break;
 		case ZIP:
 			_io = static_cast<file::io::Base*>(new file::io::Zlib);
+			break;
+		case ANDROID_MGR:
+			_io = static_cast<file::io::Base*>(new file::io::Android);
 			break;
 		case NONE:
 		default:

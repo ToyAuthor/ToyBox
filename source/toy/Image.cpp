@@ -105,7 +105,7 @@ void Image::clean()
 }
 
 template<typename T>
-inline std::shared_ptr<T> MakeArray(int size)
+inline static std::shared_ptr<T> MakeArray(int size)
 {
 	return std::shared_ptr<T>( new T[size], []( T *p ){ delete [] p; } );
 }

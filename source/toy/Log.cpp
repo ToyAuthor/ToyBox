@@ -30,11 +30,13 @@ namespace log{
 		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),str,std::wcslen(str),&ws,nullptr);
 	};
 #elif defined(TOY_ANDROID)
+	// adb logcat toybox:D *:S
 	static std::function<void(const char*)> PrintStr = [](const char *str)
 	{
 		__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%s", str);
 	};
 
+	// It still print nothing.
 	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
 	{
 		__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%s", utf::WCharToUTF8(std::wstring(str)).c_str());
@@ -43,13 +45,13 @@ namespace log{
 #else
 	static std::function<void(const char*)> PrintStr = [](const char *str)
 	{
-		printf("%s",str);
+		std::printf("%s",str);
 	};
 
 	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
 	{
 		//wprintf(L"%ls",str);    // No. It doesn't works on Linux.
-		printf("%s",utf::WCharToUTF8(std::wstring(str)).c_str());
+		std::printf("%s",utf::WCharToUTF8(std::wstring(str)).c_str());
 	};
 #endif
 
@@ -78,7 +80,11 @@ void toy::Log(const char *fmt, ... )
 	va_start(argptr, fmt);
 
 	char      buffer[STRING_SIZE];
-	vsnprintf(buffer,STRING_SIZE,fmt,argptr);
+	#if defined(TOY_ANDROID)
+		vsnprintf(buffer,STRING_SIZE,fmt,argptr);
+	#else
+		std::vsnprintf(buffer,STRING_SIZE,fmt,argptr);
+	#endif
 	buffer[STRING_SIZE-1] = '\0';
 	toy::log::PrintStr(buffer);
 
@@ -94,10 +100,10 @@ void toy::Log(const wchar_t *fmt, ... )
 
 	#if defined(TOY_MSVC)
 		_vsnwprintf_s(buffer,STRING_SIZE,(int)STRING_SIZE-1,fmt,argptr);
-	#elif defined(TOY_MINGW)
+	#elif defined(TOY_ANDROID) || defined(TOY_MINGW)
 		vsnwprintf(buffer,STRING_SIZE,fmt,argptr);
 	#else
-		vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.
+		std::vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.
 	#endif
 
 	buffer[STRING_SIZE-1] = L'\0';

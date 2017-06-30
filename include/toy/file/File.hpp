@@ -33,7 +33,7 @@ class TOY_API_FILE File
 		File(enum Mode mode=STD);
 		~File();
 
-		bool    openDir(std::string path);                     // Open a directory/archive for search files.
+		bool    openDir(std::string path);                     // Open a directory/archive for searching files.
 		bool    open(std::string file);
 		auto    read(void *file,uint32_t size)->uint32_t;      // Return how much data really output.
 		bool    write(void *file,uint32_t size);               // STD mode supported only.
