@@ -45,3 +45,7 @@ add_subdirectory(source)
 add_subdirectory(source/toy)
 add_subdirectory(examples)
 add_subdirectory(tools)
+
+if(TOY_ENABLE_SHARED_LIBS)
+	add_subdirectory(modules)
+endif()

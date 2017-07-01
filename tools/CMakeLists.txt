@@ -6,5 +6,7 @@ endif()
 
 # They are OK on Android. Just ignore them.
 if(NOT TOY_ANDROID)
-add_subdirectory(Player)
+if(TOY_ENABLE_SHARED_LIBS)
+	add_subdirectory(Player)
+endif()
 endif()
