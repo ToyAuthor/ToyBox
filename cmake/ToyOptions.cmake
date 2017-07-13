@@ -1,6 +1,12 @@
 
 macro(toy_ProcessOptions)
 
+	if(CMAKE_BUILD_TYPE MATCHES Release)
+		set(TOY_RELEASE ON)
+	else()
+		set(TOY_RELEASE OFF)
+	endif()
+
 	if(TOY_RELEASE)
 		add_definitions(-DTOY_OPTION_RELEASE=1)
 	else()
@@ -32,6 +38,15 @@ macro(toy_ProcessOptions)
 		# _WIN32_WINNT 0x0400 Windows 95
 		# Boost need this to build library on Windows 2000 or later releases.
 		add_definitions(-D_WIN32_WINNT=0x0501)
+	endif()
+
+	# To suppress some warning like this:
+	#     MACOSX_RPATH is not specified for the following targets:
+	#     This warning is for project developers.  Use -Wno-dev to suppress it.
+	if(APPLE)
+		if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
+			set(CMAKE_MACOSX_RPATH ON)
+		endif()
 	endif()
 
 endmacro(toy_ProcessOptions)
