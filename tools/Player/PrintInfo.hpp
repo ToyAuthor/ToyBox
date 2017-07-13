@@ -1,7 +1,9 @@
 ﻿
 #pragma once
 
-#include <toy/Root.hpp>
+#include <sstream>
+#include <toy/Environment.hpp>
+#include <toy/Version.hpp>
 #include "SystemArgs.hpp"
 
 using toy::Logger;
@@ -72,6 +74,26 @@ inline void PrintHelp(const SystemArgs &arg)
 	PrintHelp_English();
 }
 
+inline std::string PrintVersion_GetVersion()
+{
+	std::stringstream   stream;
+
+	stream << toy::GetMajorVersion() << "." << toy::GetMinorVersion() << "." << toy::GetPatchVersion();
+
+	// std::stringstream could not take space?
+	//stream << "a b";
+	//print(stream)   -> a
+
+	std::string  str;
+	stream >> str;
+
+	#if !TOY_OPTION_RELEASE
+	str += ".x debug mode";
+	#endif
+
+	return str;
+}
+
 inline void PrintVersion_English()
 {
 	/*
@@ -79,17 +101,17 @@ inline void PrintVersion_English()
 	 * And the symbol "%ls" only work for wide character.
 	 * So toy::Logger is the only one choice.
 	 */
-	Logger<<"ToyBox version "<<toy::Root::GetVersion()<<toy::NextLine;
+	Logger<<"ToyBox version "<<PrintVersion_GetVersion()<<toy::NextLine;
 }
 
 inline void PrintVersion_TraditionalChinese()
 {
-	Logger<<"ToyBox 當前版本為 "<<toy::Root::GetVersion()<<toy::NextLine;
+	Logger<<"ToyBox 當前版本為 "<<PrintVersion_GetVersion()<<toy::NextLine;
 }
 
 inline void PrintVersion_SimplifiedChinese()
 {
-	Logger<<"ToyBox 当前版本为 "<<toy::Root::GetVersion()<<toy::NextLine;
+	Logger<<"ToyBox 当前版本为 "<<PrintVersion_GetVersion()<<toy::NextLine;
 }
 
 inline void PrintVersion(const SystemArgs &arg)
@@ -217,6 +239,53 @@ inline void PrintCopyright(const SystemArgs &arg)
 	PrintCopyright_English();
 }
 
+inline std::string PrintInformation_GetPlatform()
+{
+	#if   defined(TOY_ANDROID)
+		std::string os = "Android";
+	#elif defined(TOY_LINUX)
+		std::string os = "Linux";
+	#elif defined(TOY_MAC)
+		std::string os = "Mac OS";
+	#elif defined(TOY_WINDOWS)
+		std::string os = "Windows";
+	#elif defined(TOY_UNKNOWN_PLATFORM)
+		std::string os = "Unknown platform";
+	#else
+		#error "Big error"
+	#endif
+
+	#if   defined(TOY_32_BIT)
+		std::string bit = "32bit";
+	#elif defined(TOY_64_BIT)
+		std::string bit = "64bit";
+	#else
+		#error "Big error"
+	#endif
+
+	#if   defined(TOY_NDK)
+		std::string com = "Android NDK";
+	#elif defined(TOY_MINGW)
+		std::string com = "MinGW";
+	#elif defined(TOY_LLVM)
+		std::string com = "LLVM";
+	#elif defined(TOY_GCC)
+		std::string com = "GCC";
+	#elif defined(TOY_VC_2017)
+		std::string com = "Visual C++ 2017";
+	#elif defined(TOY_VC_2015)
+		std::string com = "Visual C++ 2015";
+	#elif defined(TOY_MSVC)
+		std::string com = "Visual C++(Undetection)";
+	#elif defined(TOY_UNKNOWN_COMPILER)
+		std::string com = "Unknown compiler";
+	#else
+		#error "Big error"
+	#endif
+
+	return os + " " + bit + " " + com;
+}
+
 inline void PrintInformation_English()
 {
 	toy::Log("Information:\n");
@@ -224,8 +293,8 @@ inline void PrintInformation_English()
 	toy::Log("    License   Public Domain\n");
 	toy::Log("    Website   https://github.com/ToyAuthor/ToyBoxPlayer\n");
 
-	Logger<<"    Version   "<<toy::Root::GetVersion()<<toy::NextLine;
-	Logger<<"    Platform  "<<toy::Root::GetPlatform()<<toy::NextLine;
+	Logger<<"    Version   "<<PrintVersion_GetVersion()<<toy::NextLine;
+	Logger<<"    Platform  "<<PrintInformation_GetPlatform()<<toy::NextLine;
 }
 
 inline void PrintInformation_TraditionalChinese()
@@ -235,8 +304,8 @@ inline void PrintInformation_TraditionalChinese()
 	toy::Log("    授權條款  Public Domain\n");
 	toy::Log("    網站      https://github.com/ToyAuthor/ToyBoxPlayer\n");
 
-	Logger<<"    版本號    "<<toy::Root::GetVersion()<<toy::NextLine;
-	Logger<<"    運行平台  "<<toy::Root::GetPlatform()<<toy::NextLine;
+	Logger<<"    版本號    "<<PrintVersion_GetVersion()<<toy::NextLine;
+	Logger<<"    運行平台  "<<PrintInformation_GetPlatform()<<toy::NextLine;
 }
 
 inline void PrintInformation_SimplifiedChinese()
@@ -246,8 +315,8 @@ inline void PrintInformation_SimplifiedChinese()
 	toy::Log("    许可协议  Public Domain\n");
 	toy::Log("    网站      https://github.com/ToyAuthor/ToyBoxPlayer\n");
 
-	Logger<<"    版本号    "<<toy::Root::GetVersion()<<toy::NextLine;
-	Logger<<"    运行平台  "<<toy::Root::GetPlatform()<<toy::NextLine;
+	Logger<<"    版本号    "<<PrintVersion_GetVersion()<<toy::NextLine;
+	Logger<<"    运行平台  "<<PrintInformation_GetPlatform()<<toy::NextLine;
 }
 
 inline void PrintInformation(const SystemArgs &arg)

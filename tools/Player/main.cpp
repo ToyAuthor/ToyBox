@@ -100,7 +100,7 @@ static int PrintManual(const SystemArgs &arg)
 
 		if ( str=="--comment"   || str=="-co")
 		{
-			Logger<<toy::Root::GetComment()<<toy::NextLine;
+			Logger<<"It's not ready yet!"<<toy::NextLine;
 			return 1;
 		}
 

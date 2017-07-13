@@ -5,6 +5,7 @@
 #include <functional>
 #include <map>
 #include <queue>
+#include "toy/Version.hpp"
 #include "toy/Boost.hpp"
 #include "toy/CompilerConfig.hpp"
 #include "toy/Mark.hpp"
