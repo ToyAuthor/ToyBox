@@ -1,5 +1,6 @@
 
 #include <luapp.hpp>
+#include <toy/Version.hpp>
 #include <toy/Log.hpp>
 #include <toy/Utf.hpp>
 
@@ -36,6 +37,19 @@ static int ToyBoxLoggerWithNewLine(lua::NativeState L)
 	return 1;
 }
 
+static int ToyBoxLoggerVersion(lua::NativeState L)
+{
+	lua::Table  ver;
+
+	ver["major"] = toy::GetMajorVersion();
+	ver["minor"] = toy::GetMinorVersion();
+	ver["patch"] = toy::GetPatchVersion();
+
+	lua::PushVarToLua( L, ver );
+
+	return 1;
+}
+
 #if defined(_WIN32)
 	#define MY_DLL_API __declspec(dllexport)
 #else
@@ -49,6 +63,7 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua::NativeState L)
 	lua.setFunc( "printf", ToyBoxLogger );
 	lua.setFunc( "print",  ToyBoxLoggerWithNewLine );
 	lua.setFunc( "isUTF8", ToyBoxIsUTF8 );
+	lua.setFunc( "version",ToyBoxLoggerVersion );
 
 	return 1;
 }
