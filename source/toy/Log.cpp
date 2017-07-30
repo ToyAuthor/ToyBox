@@ -100,7 +100,9 @@ void toy::Log(const wchar_t *fmt, ... )
 
 	#if defined(TOY_MSVC)
 		_vsnwprintf_s(buffer,STRING_SIZE,(int)STRING_SIZE-1,fmt,argptr);
-	#elif defined(TOY_ANDROID) || defined(TOY_MINGW)
+	#elif defined(TOY_ANDROID)// || defined(TOY_MINGW)
+		vswprintf(buffer,STRING_SIZE,fmt,argptr);
+	#elif defined(TOY_MINGW)
 		vsnwprintf(buffer,STRING_SIZE,fmt,argptr);
 	#else
 		std::vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.

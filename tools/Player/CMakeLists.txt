@@ -23,7 +23,7 @@ if(TOY_ENABLE_SHARED_LIBS AND WIN32)
 	add_definitions(-DLUA_BUILD_AS_DLL)
 endif()
 
-toy_BuildExe(ToyBoxPlayer
+toy_BuildExe(player
 	SOURCES     ${SOURCE}
 	LINKLIBS    ${LIBS}
 )

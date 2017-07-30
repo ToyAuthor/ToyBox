@@ -291,7 +291,7 @@ inline void PrintInformation_English()
 	toy::Log("Information:\n");
 	toy::Log("    Author    ToyAuthor\n");
 	toy::Log("    License   Public Domain\n");
-	toy::Log("    Website   https://github.com/ToyAuthor/ToyBoxPlayer\n");
+	toy::Log("    Website   https://toyauthor.github.io/ToyBoxDoc\n");
 
 	Logger<<"    Version   "<<PrintVersion_GetVersion()<<toy::NextLine;
 	Logger<<"    Platform  "<<PrintInformation_GetPlatform()<<toy::NextLine;
@@ -302,7 +302,7 @@ inline void PrintInformation_TraditionalChinese()
 	toy::Log("程式資訊:\n");
 	toy::Log("    作者      ToyAuthor\n");
 	toy::Log("    授權條款  Public Domain\n");
-	toy::Log("    網站      https://github.com/ToyAuthor/ToyBoxPlayer\n");
+	toy::Log("    網站      https://toyauthor.github.io/ToyBoxDoc\n");
 
 	Logger<<"    版本號    "<<PrintVersion_GetVersion()<<toy::NextLine;
 	Logger<<"    運行平台  "<<PrintInformation_GetPlatform()<<toy::NextLine;
@@ -313,7 +313,7 @@ inline void PrintInformation_SimplifiedChinese()
 	toy::Log("软件资讯:\n");
 	toy::Log("    作者      ToyAuthor\n");
 	toy::Log("    许可协议  Public Domain\n");
-	toy::Log("    网站      https://github.com/ToyAuthor/ToyBoxPlayer\n");
+	toy::Log("    网站      https://toyauthor.github.io/ToyBoxDoc\n");
 
 	Logger<<"    版本号    "<<PrintVersion_GetVersion()<<toy::NextLine;
 	Logger<<"    运行平台  "<<PrintInformation_GetPlatform()<<toy::NextLine;
