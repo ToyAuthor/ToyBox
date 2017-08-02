@@ -9,9 +9,7 @@ int main2()
 	std::string    utf8 = "おもちゃ箱;";
 	std::wstring   wide = toy::utf::UTF8ToWChar(utf8);
 
-	toy::log::Printer   log;
-
-	log<<"ToyBox;玩具箱;"<<wide<<"장난감 상자;खिलौनो का बक्सा"<<toy::NextLine;
+	toy::Logger<<"ToyBox;玩具箱;"<<wide<<"장난감 상자;खिलौनो का बक्सा"<<toy::NextLine;
 
 	return EXIT_SUCCESS;
 }

@@ -22,7 +22,7 @@ class TOY_API Image
 		void    clean();
 		void    upsideDown();
 
-		// Give you a memory address about the image data. Return nullptr if it's a empty object.
+		// Give you a memory address of the image data. Return nullptr if it's a empty object.
 		uint8_t* data() const
 		{
 			return (uint8_t*)(_allocator.data());

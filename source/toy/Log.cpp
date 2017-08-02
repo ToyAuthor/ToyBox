@@ -105,7 +105,7 @@ void toy::Log(const wchar_t *fmt, ... )
 	#elif defined(TOY_MINGW)
 		vsnwprintf(buffer,STRING_SIZE,fmt,argptr);
 	#else
-		std::vswprintf(buffer,STRING_SIZE,fmt,argptr);   // Just in case.
+		std::vswprintf(buffer,STRING_SIZE,fmt,argptr);
 	#endif
 
 	buffer[STRING_SIZE-1] = L'\0';
