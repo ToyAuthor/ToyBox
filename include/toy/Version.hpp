@@ -10,12 +10,12 @@ inline int GetMajorVersion()
 
 inline int GetMinorVersion()
 {
-	return 0;
+	return 1;
 }
 
 inline int GetPatchVersion()
 {
-	return 1;
+	return 0;
 }
 
 }
