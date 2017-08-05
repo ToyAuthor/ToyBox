@@ -1,3 +1,7 @@
+#ifdef _MSC_VER
+#include <iterator>    // For std::back_inserter
+#endif
+
 #include <SFML/Window.hpp>
 #include "ToySimpleWindow.hpp"
 #include "HandleSystemEvent.hpp"
