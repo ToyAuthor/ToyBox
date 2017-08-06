@@ -4,4 +4,6 @@ if(TOY_RELEASE)
 else()
 	add_subdirectory(Logger)
 endif()
+
+add_subdirectory(Env)
 add_subdirectory(Window)

@@ -17,7 +17,7 @@ end
 
 --------------------------------------------------------------------------------
 
--- Set a path for searching your image file ... etc.
+-- Set a path for searching your image file, font file, etc.
 search_path = Toy_ResourcePathForDemo
 
 -- Set the main script of your project.

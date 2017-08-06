@@ -51,7 +51,7 @@ class Reader
 			T               _file;
 			uint32_t        _strHead = TOY_TEXT_FILE_READER_BUFFER_SIZE;
 			char            _buffer[TOY_TEXT_FILE_READER_BUFFER_SIZE] = {0};
-			bool            _cr = false;
+			bool            _cr = false;      // It does nothing if the file doesn't had new line character "\r\n".
 		#endif
 };
 
@@ -184,12 +184,18 @@ static bool _OutputStringLine(toy::io::Stream *file,uint32_t *head,char *buffer,
 		buffer[locat] = '\0';   // It's mean no more data after here.
 		*head = 0;
 
+		/*
+		 * If this happened ...
+		 *
+		 * *********[\r]
+		 * [\n]*********
+		 */
 		if ( *cr==true )
 		{
 			*cr = false;
 			if ( buffer[0]=='\n' )
 			{
-				*head = 1;
+				*head = 1;  // Ignore '\n'.
 			}
 		}
 	}
