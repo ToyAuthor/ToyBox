@@ -11,3 +11,4 @@
 #include "toy/Mark.hpp"
 #include "toy/Log.hpp"
 #include "toy/Utf.hpp"
+#include "toy/Text.hpp"
