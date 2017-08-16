@@ -3,6 +3,7 @@
 #include <toy/Version.hpp>
 #include <toy/Log.hpp>
 #include <toy/Utf.hpp>
+#include <toy/io/Writer.hpp>
 
 static int ToyBoxIsUTF8(lua::NativeState L)
 {
@@ -50,6 +51,40 @@ static int ToyBoxLoggerVersion(lua::NativeState L)
 	return 1;
 }
 
+static int ToyBoxLoggerCleanOutputLog(lua::NativeState)
+{
+	toy::log::BackDefaultDevice();
+
+	return 1;
+}
+
+static int ToyBoxLoggerSetOutputLog(lua::NativeState L)
+{
+	lua::Str   str;
+
+	lua::CheckVarFromLua(L,&str,-1);
+
+	lua::Pop(L,1);
+
+	auto   dev = std::make_shared<toy::io::Writer<toy::io::Stream>>();
+
+	dev->open(str);
+
+	std::function<void(const char*)> func = [dev](const char* msg)
+	{
+		dev->printf(msg);
+	};
+
+	std::function<void(const wchar_t*)> funcw = [dev](const wchar_t* msg)
+	{
+		dev->printf(toy::utf::WCharToUTF8(msg));
+	};
+
+	toy::log::PushDevice(func,funcw);
+
+	return 1;
+}
+
 #if defined(_WIN32)
 	#define MY_DLL_API __declspec(dllexport)
 #else
@@ -63,6 +98,8 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua::NativeState L)
 	lua.setFunc( "printf", ToyBoxLogger );
 	lua.setFunc( "print",  ToyBoxLoggerWithNewLine );
 	lua.setFunc( "isUTF8", ToyBoxIsUTF8 );
+	lua.setFunc( "asFile", ToyBoxLoggerSetOutputLog );
+	lua.setFunc( "reset",  ToyBoxLoggerCleanOutputLog );
 	lua.setFunc( "version",ToyBoxLoggerVersion );
 
 	return 1;

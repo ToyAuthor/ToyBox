@@ -3,6 +3,7 @@
 #include <toy/Version.hpp>
 #include <toy/Log.hpp>
 #include <toy/Utf.hpp>
+#include <toy/io/Writer.hpp>
 
 static int ToyBoxIsUTF8(lua_State* L)
 {
@@ -74,6 +75,45 @@ static int ToyBoxLoggerVersion(lua_State* L)
 	return 1;
 }
 
+static int ToyBoxLoggerSetOutputLog(lua_State* L)
+{
+	std::string    str;
+
+	if ( lua_type(L, -1)==LUA_TSTRING )
+	{
+		str = lua_tostring(L,-1);
+	}
+	else
+	{
+		toy::Logger << "warning:toy.logger can't take non-string variable as file name!" << toy::NextLine;
+	}
+
+	lua_pop(L,1);
+
+	auto   dev = std::make_shared<toy::io::Writer<toy::io::Stream>>();
+	dev->open(str);
+
+	std::function<void(const char*)> func = [dev](const char* msg)
+	{
+		dev->printf(msg);
+	};
+
+	std::function<void(const wchar_t*)> funcw = [dev](const wchar_t* msg)
+	{
+		dev->printf(toy::utf::WCharToUTF8(msg));
+	};
+
+	toy::log::PushDevice(func,funcw);
+
+	return 1;
+}
+
+static int ToyBoxLoggerCleanOutputLog(lua_State*)
+{
+	toy::log::BackDefaultDevice();
+	return 1;
+}
+
 #if defined(_WIN32)
 	#define MY_DLL_API __declspec(dllexport)
 #else
@@ -82,7 +122,7 @@ static int ToyBoxLoggerVersion(lua_State* L)
 
 extern "C" MY_DLL_API int luaopen_toy_logger(lua_State* L)
 {
-	luaL_Reg   reg[5];
+	luaL_Reg   reg[7];
 
 	reg[0].name = "printf";
 	reg[0].func = ToyBoxLogger;
@@ -92,8 +132,12 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua_State* L)
 	reg[2].func = ToyBoxIsUTF8;
 	reg[3].name = "version";
 	reg[3].func = ToyBoxLoggerVersion;
-	reg[4].name = nullptr;
-	reg[4].func = nullptr;
+	reg[4].name = "asFile";
+	reg[4].func = ToyBoxLoggerSetOutputLog;
+	reg[5].name = "reset";
+	reg[5].func = ToyBoxLoggerCleanOutputLog;
+	reg[6].name = nullptr;
+	reg[6].func = nullptr;
 
 	luaL_newlib(L,reg);
 

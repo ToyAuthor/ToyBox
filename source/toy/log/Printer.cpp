@@ -8,7 +8,7 @@ log::Printer Logger;
 
 const log::Printer& NextLine(const log::Printer& m)
 {
-	toy::Log("\n");
+	toy::Log("\r\n");
 	return m;
 }
 

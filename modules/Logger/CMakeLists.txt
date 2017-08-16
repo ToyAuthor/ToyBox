@@ -9,6 +9,8 @@ link_directories(${TOY_library_lua})
 
 set(LIBS
 	toy
+	boost_filesystem
+	boost_system
 	${TOY_libname_lua}
 )
 

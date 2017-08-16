@@ -6,6 +6,10 @@
 #include "toy/Windows.hpp"
 #include "toy/Utf.hpp"
 
+#if TOY_OPTION_ENABLE_PLUGIN_LOG_SYSTEM
+#include "toy/log/PluginStack.hpp"
+#endif
+
 #ifdef TOY_ANDROID
 #include <android/log.h>
 #endif
@@ -16,39 +20,47 @@
 namespace toy{
 namespace log{
 
+#if TOY_OPTION_ENABLE_PLUGIN_LOG_SYSTEM
+	typedef PluginStack<std::function<void(const char*)>>    PrintFuncType;
+	typedef PluginStack<std::function<void(const wchar_t*)>> PrintFuncTypeW;
+#else
+	typedef std::function<void(const char*)>    PrintFuncType;
+	typedef std::function<void(const wchar_t*)> PrintFuncTypeW;
+#endif
+
 #if defined(TOY_WINDOWS)
-	static std::function<void(const char*)> PrintStr = [](const char *str)
+	static PrintFuncType PrintStr = [](const char *str)
 	{
 		auto      word = utf::UTF8ToWChar(std::string(str));
 		DWORD     ws;
 		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),word.c_str(),word.size(),&ws,nullptr);
 	};
 
-	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
+	static PrintFuncTypeW PrintStrW = [](const wchar_t *str)
 	{
 		DWORD     ws;
 		WriteConsoleW(GetStdHandle(STD_OUTPUT_HANDLE),str,std::wcslen(str),&ws,nullptr);
 	};
 #elif defined(TOY_ANDROID)
 	// adb logcat toybox:D *:S
-	static std::function<void(const char*)> PrintStr = [](const char *str)
+	static PrintFuncType PrintStr = [](const char *str)
 	{
 		__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%s", str);
 	};
 
 	// It still print nothing.
-	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
+	static PrintFuncTypeW PrintStrW = [](const wchar_t *str)
 	{
 		__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%s", utf::WCharToUTF8(std::wstring(str)).c_str());
 	//	__android_log_print(ANDROID_LOG_DEBUG, "toybox", "%ls", str);
 	};
 #else
-	static std::function<void(const char*)> PrintStr = [](const char *str)
+	static PrintFuncType PrintStr = [](const char *str)
 	{
 		std::printf("%s",str);
 	};
 
-	static std::function<void(const wchar_t*)> PrintStrW = [](const wchar_t *str)
+	static PrintFuncTypeW PrintStrW = [](const wchar_t *str)
 	{
 		//wprintf(L"%ls",str);    // No. It doesn't works on Linux.
 		std::printf("%s",utf::WCharToUTF8(std::wstring(str)).c_str());
@@ -58,15 +70,28 @@ namespace log{
 }//namespace log
 }//namespace toy
 
-void toy::log::SetDevice(std::function<void(const char*)> func)
+#if TOY_OPTION_ENABLE_PLUGIN_LOG_SYSTEM
+
+void toy::log::PushDevice( std::function<void(const char*)>    func,
+                           std::function<void(const wchar_t*)> funcw )
 {
-	toy::log::PrintStr = std::move(func);
+	toy::log::PrintStr.push(func);
+	toy::log::PrintStrW.push(funcw);
 }
 
-void toy::log::SetDevice(std::function<void(const wchar_t*)> func)
+void toy::log::PopDevice()
 {
-	toy::log::PrintStrW = std::move(func);
+	toy::log::PrintStr.pop();
+	toy::log::PrintStrW.pop();
 }
+
+void toy::log::BackDefaultDevice()
+{
+	toy::log::PrintStr.keepOne();
+	toy::log::PrintStrW.keepOne();
+}
+
+#endif
 
 //----------------PrintStr let you decide how to print string----------------end
 
