@@ -1,7 +1,4 @@
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/android/EnableAndroidMode.cmake" REQUIRED)
-toy_EnableAndroidMode()
-
 project(ToyBox)
 cmake_minimum_required(VERSION 2.8)
 
