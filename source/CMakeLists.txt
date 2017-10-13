@@ -31,3 +31,5 @@ else()
 		SOURCES     ${SOURCE}
 	)
 endif()
+
+add_subdirectory(toy)
