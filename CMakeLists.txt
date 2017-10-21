@@ -3,8 +3,8 @@ project(ToyBox)
 cmake_minimum_required(VERSION 2.8)
 
 if(NOT CMAKE_BUILD_TYPE)
-	#set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build" FORCE)
-	set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build" FORCE)
+#	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build" FORCE)
+	set(CMAKE_BUILD_TYPE "Debug"   CACHE STRING "Choose the type of build" FORCE)
 endif()
 
 #-------------------------------------------------------------------------------
@@ -25,6 +25,7 @@ toy_IncludeTools()
 
 add_subdirectory(third-party)
 add_subdirectory(source)
+add_subdirectory(source/toy)
 add_subdirectory(examples)
 
 if(NOT TOY_ANDROID)

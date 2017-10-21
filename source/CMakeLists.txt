@@ -32,4 +32,5 @@ else()
 	)
 endif()
 
-add_subdirectory(toy)
+# No, it doesn't work on Visual Studio 2015.
+#add_subdirectory(toy)
