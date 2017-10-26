@@ -14,10 +14,6 @@ option(TOY_ENABLE_SHARED_LIBS   "Make shared library"       ON)
 set(TOY_ROOT_SOURCE_DIR ${PROJECT_SOURCE_DIR})
 set(TOY_ROOT_BINARY_DIR ${PROJECT_BINARY_DIR})
 
-set(TOY_RESOURCE_PATH       ${TOY_ROOT_SOURCE_DIR}/resource)
-set(TOY_DEFAULT_INCLUDE_DIR ${TOY_ROOT_SOURCE_DIR}/include ${TOY_ROOT_SOURCE_DIR}/source)
-set(TOY_DEFAULT_LINK_DIR    ${TOY_ROOT_BINARY_DIR}/lib)
-
 include("${TOY_ROOT_SOURCE_DIR}/cmake/ToyTools.cmake" REQUIRED)
 toy_IncludeTools()
 

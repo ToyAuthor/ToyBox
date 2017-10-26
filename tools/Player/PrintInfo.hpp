@@ -90,10 +90,6 @@ inline std::string PrintVersion_GetVersion()
 
 	stream << toy::GetMajorVersion() << "." << toy::GetMinorVersion() << "." << toy::GetPatchVersion();
 
-	// std::stringstream could not take space?
-	//stream << "a b";
-	//print(stream)   -> a
-
 	std::string  str;
 	stream >> str;
 

@@ -56,11 +56,11 @@ static void ResetDefaultConfig()
 
 	std::string   text;
 	text += R"(
--- This config file is created by ToyBoxPlayer.
--- Type "./ToyBoxPlayer --reset" to reset config to default content.
+-- This config file is created by player.
+-- Type "./player --reset" to reset config to default content.
 
 -- Path of the project. (Where you put down main script and resource ... etc)
---main_path = "."
+main_path = "."
 --main_path = "/opt/configs"
 
 -- Path of the other modules.
@@ -70,10 +70,7 @@ static void ResetDefaultConfig()
 -- The name of main script. Now loading itself to show a simple demo.
 script = ")" + config + R"("
 
--------- This message just for demo --------start
---require("toy.logger").print("Hello")
-print("Hello")
--------- This message just for demo --------end
+print("This message just for demo")
 )";
 
 	if ( IsFileExist( config ) )

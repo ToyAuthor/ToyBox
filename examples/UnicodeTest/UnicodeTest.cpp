@@ -1,7 +1,7 @@
 
 #include <toy/Standard.hpp>
 
-int main2()
+static int main2()
 {
 	toy::Log(u8"ToyBox;玩具箱;おもちゃ箱;장난감 상자;खिलौनो का बक्सा\n");
 	toy::Log( L"ToyBox;玩具箱;おもちゃ箱;장난감 상자;खिलौनो का बक्सा\n");
@@ -9,7 +9,7 @@ int main2()
 	std::string    utf8 = u8"おもちゃ箱;";
 	std::wstring   wide = toy::utf::UTF8ToWChar(utf8);
 
-	toy::Logger<<u8"ToyBox;玩具箱;"<<wide<<u8"장난감 상자;खिलौनो का बक्सा"<<toy::NextLine;
+	toy::Logger<<u8"ToyBox;玩具箱;"<<wide<<u8"장난감 상자;"<<L"खिलौनो का बक्सा"<<toy::NextLine;
 
 	return EXIT_SUCCESS;
 }

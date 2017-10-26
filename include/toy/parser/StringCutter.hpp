@@ -19,7 +19,7 @@ class TOY_API_PARSER StringCutter
 		~StringCutter();
 
 		void    loadString(std::string &str);
-		bool    nextWord(std::string *str);
+		bool    nextWord(std::string *str);    // Next token
 
 		void    pushConfig(ConfigPtr);
 		void    popConfig(int number=1);

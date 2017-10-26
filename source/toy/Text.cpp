@@ -7,7 +7,7 @@ struct TextPrivate
 	std::string   str;
 };
 
-}//namespace toy
+}
 
 using namespace toy;
 

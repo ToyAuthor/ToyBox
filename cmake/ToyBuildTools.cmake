@@ -68,7 +68,7 @@ macro(toy_BuildLib _name)
 	toy_ProcessArguments(_srcs _includeDirs _libDirs _linkLibs _outputDirs _linkFlags _cFlags _junk ${ARGN})
 
 	if(_junk)
-		message(STATUS "WARNING: unkeyworded arguments : ${_junk}")
+		message(WARNING "ToyBox:unkeyworded arguments : ${_junk}")
 	endif()
 
 	include_directories(${TOY_DEFAULT_INCLUDE_DIR})
@@ -128,7 +128,7 @@ macro(toy_BuildExe _name)
 	toy_ProcessArguments(_srcs _includeDirs _libDirs _linkLibs _outputDirs _linkFlags _cFlags _junk ${ARGN})
 
 	if(_junk)
-		message(STATUS "WARNING: unkeyworded arguments : ${_junk}")
+		message(WARNING "ToyBox:unkeyworded arguments : ${_junk}")
 	endif()
 
 	include_directories(${TOY_DEFAULT_INCLUDE_DIR})
@@ -198,7 +198,7 @@ macro(toy_BuildModule _name)
 	toy_ProcessArguments(_srcs _includeDirs _libDirs _linkLibs _outputDirs _linkFlags _cFlags _junk ${ARGN})
 
 	if(_junk)
-		message(STATUS "WARNING: unkeyworded arguments : ${_junk}")
+		message(WARNING "ToyBox:unkeyworded arguments : ${_junk}")
 	endif()
 
 	include_directories(${TOY_DEFAULT_INCLUDE_DIR})
