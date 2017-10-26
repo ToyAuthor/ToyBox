@@ -23,7 +23,7 @@ class TOY_API Image
 		void    upsideDown();
 
 		// Give you a memory address of the image data. Return nullptr if it's a empty object.
-		uint8_t* data() const
+		const uint8_t* data() const
 		{
 			return (uint8_t*)(_allocator.data());
 		}
@@ -48,6 +48,13 @@ class TOY_API Image
 		Allocator01     _allocator;      // Saving a image data on memory.
 		int32_t         _height = 0;
 		int32_t         _width = 0;
+
+	public:
+
+		uint8_t* _data() const
+		{
+			return (uint8_t*)(_allocator.data());
+		}
 
 };
 
@@ -75,7 +82,7 @@ class ImageOpener
 
 		uint8_t* data() const
 		{
-			return _core->data();
+			return _core->_data();
 		}
 
 		int32_t height() const
@@ -123,8 +130,8 @@ enum Pixel
 	RGBA,
 };
 
-TOY_API extern bool       Create(toy::Image *output,const int32_t width,const int32_t height,uint8_t *data,enum Pixel option = RGBA);
-TOY_API extern toy::Image Create(                   const int32_t width,const int32_t height,uint8_t *data,enum Pixel option = RGBA);
+TOY_API extern bool       Create(toy::Image *output,const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option = RGBA);
+TOY_API extern toy::Image Create(                   const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option = RGBA);
 
 }//namespace image{
 

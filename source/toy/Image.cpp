@@ -27,7 +27,7 @@ static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 	pp1[3] = pp2[1];
 }
 
-static void SwitchPixel(toy::ImageOpener *image,uint8_t *data,enum Pixel option)
+static void SwitchPixel(toy::ImageOpener *image,const uint8_t *data,enum Pixel option)
 {
 	auto   target = static_cast<uint8_t*>(image->data());
 	auto   width  = image->width();
@@ -60,7 +60,7 @@ static void SwitchPixel(toy::ImageOpener *image,uint8_t *data,enum Pixel option)
 	}
 }
 
-bool Create(toy::Image *output,const int32_t width,const int32_t height,uint8_t *data,enum Pixel option)
+bool Create(toy::Image *output,const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option)
 {
 	toy::ImageOpener  image(output);
 
@@ -74,7 +74,7 @@ bool Create(toy::Image *output,const int32_t width,const int32_t height,uint8_t 
 	return true;
 }
 
-toy::Image Create(const int32_t width,const int32_t height,uint8_t *data,enum Pixel option)
+toy::Image Create(const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option)
 {
 	toy::Image        result;
 	Create(&result,width,height,data,option);
