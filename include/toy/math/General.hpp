@@ -100,7 +100,7 @@ inline Type Cot(const Type t)
 }
 
 template <typename Type>
-inline Type Sqrt(Type f)
+inline Type Sqrt(const Type f)
 {
 	Type    result=(Type)0;
 
@@ -137,13 +137,31 @@ inline Type Sqrt(Type f)
 			result=f;*/
 		#endif
 	#else
-		result=sqrt(f);
+		result = std::sqrt(f);
 	#endif
 
 	return result;
 }
 
+template <typename Type>
+inline Type Radians(const Type radians)
+{
+	return radians;
+}
 
+// degrees -> radians
+template <typename Type>
+inline Type Degrees(const Type degrees)
+{
+	return degrees * Type(0.01745329251994329576923690768489);
+}
+
+// radians -> degrees
+template <typename Type>
+inline Type RadiansToDegrees(const Type radians)
+{
+	return radians * Type(57.295779513082320876798154814105);
+}
 
 }//namespace math
 }//namespace toy

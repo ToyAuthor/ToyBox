@@ -24,76 +24,93 @@ class Vector3
 
 		Vector3(){}
 
-		Vector3(Type xx,Type yy,Type zz)
+		Vector3(const Type xx,const Type yy,const Type zz)
 		{
-			x=xx;
-			y=yy;
-			z=zz;
+			x = xx;
+			y = yy;
+			z = zz;
 		}
 
 		~Vector3(){}
 
-		void set(Type xx,Type yy,Type zz)
+		void set(const Type xx,const Type yy,const Type zz)
 		{
-			x=xx;
-			y=yy;
-			z=zz;
+			x = xx;
+			y = yy;
+			z = zz;
 		}
 
-		Type length(void)
+		Type length() const
 		{
 			Type    result;
 			result = math::Sqrt<Type>(x*x+y*y+z*z);
 			return  result;
 		}
 
-		void normalize(void)
+		void normalize()
 		{
 			Type    len = length();
-			x/=len;
-			y/=len;
-			z/=len;
+
+			x /= len;
+			y /= len;
+			z /= len;
 		}
 
-		Vector3<Type>& operator -(Vector3<Type>& v)
+		Vector3<Type> operator +(const Vector3<Type>& v) const
 		{
-			static  Vector3<Type>   result;
-			result.x=x-v.x;
-			result.y=y-v.y;
-			result.z=z-v.z;
-			return  result;
+			Vector3<Type>   result;
+			result.x = x+v.x;
+			result.y = y+v.y;
+			result.z = z+v.z;
+			return result;
+		}
+
+		Vector3<Type> operator -(const Vector3<Type>& v) const
+		{
+			Vector3<Type>   result;
+			result.x = x-v.x;
+			result.y = y-v.y;
+			result.z = z-v.z;
+			return result;
+		}
+
+		Vector3<Type> operator +=(const Vector3<Type>& v)
+		{
+			x += v.x;
+			y += v.y;
+			z += v.z;
+			return *this;
+		}
+
+		Vector3<Type> operator -=(const Vector3<Type>& v)
+		{
+			x -= v.x;
+			y -= v.y;
+			z -= v.z;
+			return *this;
 		}
 
 		void invert(void)
 		{
-			x=-x;
-			y=-y;
-			z=-z;
+			x =- x;
+			y =- y;
+			z =- z;
 		}
-
-	//----------------Maybe not necessary----------------start
 
 		Vector3(const Vector3<Type> &v)
 		{
-			copy_mykind(v);
+			x = v.x;
+			y = v.y;
+			z = v.z;
 		}
 
 		Vector3<Type> operator =(const Vector3<Type> &v)
 		{
-			copy_mykind(v);
+			x = v.x;
+			y = v.y;
+			z = v.z;
 			return *this;
 		}
-
-	protected:
-
-		void copy_mykind(const Vector3<Type> &v)
-		{
-			x=v.x;
-			y=v.y;
-			z=v.z;
-		}
-
-	//----------------Maybe not necessary----------------end
 };
 
 

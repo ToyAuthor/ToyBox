@@ -15,13 +15,13 @@ namespace math{
 
 
 template <typename Type>
-inline Vector3<Type> CreateV3(Type x,Type y,Type z)
+inline Vector3<Type> CreateV3(const Type x,const Type y,const Type z)
 {
 	return Vector3<Type>(x,y,z);
 }
 
 template <typename Type>
-inline Vector3<Type> Normalize3(Vector3<Type> t)
+inline Vector3<Type> Normalize3(const Vector3<Type> t)
 {
 	Vector3<Type>    result;
 
@@ -33,7 +33,7 @@ inline Vector3<Type> Normalize3(Vector3<Type> t)
 
 // "->" become "<-"
 template <typename Type>
-inline Vector3<Type> Vector3Invert(Vector3<Type> t)
+inline Vector3<Type> Vector3Invert(const Vector3<Type> t)
 {
 	Vector3<Type>    result;
 
@@ -44,13 +44,13 @@ inline Vector3<Type> Vector3Invert(Vector3<Type> t)
 }
 
 template <typename Type>
-inline Type Vector3Dot(Vector3<Type> a,Vector3<Type> b)
+inline Type Vector3Dot(const Vector3<Type> a,const Vector3<Type> b)
 {
 	return  a.x*b.x+a.y*b.y+a.z*b.z;
 }
 
 template <typename Type>
-inline Vector3<Type> Vector3Cross(Vector3<Type> a,Vector3<Type> b)
+inline Vector3<Type> Vector3Cross(const Vector3<Type> a,const Vector3<Type> b)
 {
 	Vector3<Type>    result;
 
@@ -63,7 +63,7 @@ inline Vector3<Type> Vector3Cross(Vector3<Type> a,Vector3<Type> b)
 
 /*
 template <typename Type>
-inline Vector3<Type> Vector3Cross(Vector4<Type> &a,Vector4<Type> &b)
+inline Vector3<Type> Vector3Cross(const Vector4<Type> &a,const Vector4<Type> &b)
 {
 	Vector3<Type>   result;
 	return result;
