@@ -49,16 +49,25 @@ bool loader::Load(toy::File *f,ImageBuffer *map)
 
 	stbi_set_flip_vertically_on_load(1);    //upside down
 
-	auto   data = stbi_load_from_callbacks( &callback, io, &width, &height, &pixel, STBI_rgb_alpha );
+	auto   data = stbi_load_from_callbacks( &callback, io, &width, &height, &pixel, STBI_default );
 
-	if ( pixel != 4 )
+	enum toy::Option   fmt = toy::RGBA;
+
+	switch (pixel)
 	{
-		toy::Oops(TOY_MARK);
-		stbi_image_free(data);
-		return false;
+		case 4:
+			fmt = toy::RGBA;
+			break;
+		case 3:
+			fmt = toy::RGB;
+			break;
+		default:
+			toy::Oops(TOY_MARK);
+			stbi_image_free(data);
+			return false;
 	}
 
-	if ( ! image::Create(map,width,height,data) )
+	if ( ! image::Create(map,width,height,data,fmt) )
 	{
 		toy::Oops(TOY_MARK);
 		stbi_image_free(data);
