@@ -7,17 +7,17 @@
 
 namespace toy{
 
-class ImageOpener;
+class ImageBufferOpener;
 
 
 // It's a container of image file.
-class TOY_API Image
+class TOY_API ImageBuffer
 {
 	public:
-		friend class toy::ImageOpener;
+		friend class toy::ImageBufferOpener;
 
-		Image();
-		~Image();
+		ImageBuffer();
+		~ImageBuffer();
 
 		void    clean();
 		void    upsideDown();
@@ -43,11 +43,17 @@ class TOY_API Image
 			return _width * _height;
 		}
 
+		::toy::Option format() const
+		{
+			return _format;
+		}
+
 	private:
 
-		Allocator01     _allocator;      // Saving a image data on memory.
-		int32_t         _height = 0;
-		int32_t         _width = 0;
+		Allocator01          _allocator;      // Saving a image data on memory.
+		int32_t              _height = 0;
+		int32_t              _width = 0;
+		enum ::toy::Option   _format = ::toy::RGBA;
 
 	public:
 
@@ -55,20 +61,19 @@ class TOY_API Image
 		{
 			return (uint8_t*)(_allocator.data());
 		}
-
 };
 
 // You can use it to modify the inside of Image.
-class ImageOpener
+class ImageBufferOpener
 {
 	public:
 
-		ImageOpener(Image *core):_core(core)
+		ImageBufferOpener(::toy::ImageBuffer *core):_core(core)
 		{
 			;
 		}
 
-		~ImageOpener(){}
+		~ImageBufferOpener(){}
 
 		void clean()
 		{
@@ -115,23 +120,20 @@ class ImageOpener
 			_core->_width=n;
 		}
 
+		void format(enum ::toy::Option fmt)
+		{
+			_core->_format = fmt;
+		}
+
 	private:
 
-		Image   *_core;
+		::toy::ImageBuffer   *_core;
 };
 
 namespace image{
 
-enum Pixel
-{
-	GREY = 1,
-	GREY_ALPHA,
-	RGB,
-	RGBA,
-};
-
-TOY_API extern bool       Create(toy::Image *output,const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option = RGBA);
-TOY_API extern toy::Image Create(                   const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option = RGBA);
+TOY_API extern bool Create(toy::ImageBuffer *output,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA);
+TOY_API extern auto Create(                         const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA)->toy::ImageBuffer;
 
 }//namespace image{
 

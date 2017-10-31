@@ -1,4 +1,4 @@
-﻿#include "toy/Image.hpp"
+﻿#include "toy/ImageBuffer.hpp"
 #include "toy/file/loader/Bmp.hpp"
 #include "toy/file/File.hpp"
 
@@ -105,7 +105,7 @@ static inline void BGR_to_RGB( uint8_t* data,   // The address of image.
 	}
 }
 
-static inline void BGR_to_RGBA(ImageOpener *image)
+static inline void BGR_to_RGBA(ImageBufferOpener *image)
 {
 	uint32_t    size = image->size()*3;   // 1 pixel == 3 byte.
 	uint8_t*    data = image->data();
@@ -122,7 +122,7 @@ static inline void ReadInfo(File *pIO, struct BMP_Info *info)
 	pIO->read(info,head.bfOffBits-sizeof(struct BMP_Head));
 }
 
-static inline void LoadImage( File *pIO, ImageOpener *image )
+static inline void LoadImage( File *pIO, ImageBufferOpener *image )
 {
 	struct BMP_Info     info;
 
@@ -147,11 +147,11 @@ static inline void LoadImage( File *pIO, ImageOpener *image )
 	pIO->read(image->data(),size);
 }
 
-bool loader::bmp::Load(File *pIO,Image *map)
+bool loader::bmp::Load(File *pIO,ImageBuffer *map)
 {
 //	pIO->Seek(File::SET,0);   May be it will crash system. But it's much safe.
 
-	ImageOpener  image(map);
+	ImageBufferOpener  image(map);
 
 	LoadImage( pIO, &image );
 
@@ -161,7 +161,7 @@ bool loader::bmp::Load(File *pIO,Image *map)
 }
 
 // no good
-bool loader::bmp::Save(File *pIO,Image *map)
+bool loader::bmp::Save(File *pIO,ImageBuffer *map)
 {
 	struct BMP_Head     head;
 	struct BMP_Info     info;

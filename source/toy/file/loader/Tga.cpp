@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include "toy/Image.hpp"
+#include "toy/ImageBuffer.hpp"
 #include "toy/file/loader/Tga.hpp"
 #include "toy/file/File.hpp"
 
@@ -94,9 +94,9 @@ static inline void RGB_to_RGBA(    uint8_t* data,   // The address of image.
 		pp1[3] = 0xff;
 }
 
-bool loader::tga::Load(File *pIO,Image *map)
+bool loader::tga::Load(File *pIO,ImageBuffer *map)
 {
-	ImageOpener        image(map);
+	ImageBufferOpener  image(map);
 	struct TGA_Head    header;
 
 	pIO->seek(SEEK_SET,0);
@@ -208,7 +208,7 @@ bool loader::tga::Load(File *pIO,Image *map)
 	return 1;
 }
 
-bool loader::tga::Save(File *pIO,Image *map)
+bool loader::tga::Save(File *pIO,ImageBuffer *map)
 {
 	pIO->seek(SEEK_SET,0);
 

@@ -1,4 +1,4 @@
-#include "toy/Image.hpp"
+#include "toy/ImageBuffer.hpp"
 #include "toy/file/File.hpp"
 #include "toy/file/loader/Image.hpp"
 
@@ -33,7 +33,7 @@ static int EndOfFile(void *user)
 	return dev->isEnd();
 }
 
-bool loader::Load(toy::File *f,Image *map)
+bool loader::Load(toy::File *f,ImageBuffer *map)
 {
 	auto   io = static_cast<void*>(f);
 
@@ -70,7 +70,7 @@ bool loader::Load(toy::File *f,Image *map)
 	return true;
 }
 
-bool loader::Save(std::string filename,Image *map)
+bool loader::Save(std::string filename,ImageBuffer *map)
 {
 	stbi_write_tga(filename.c_str(), map->width(), map->height(), 4, map->data());
 	return 1;

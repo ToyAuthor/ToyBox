@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cstring>
-#include "toy/Image.hpp"
+#include "toy/ImageBuffer.hpp"
 #include "toy/Math.hpp"
 
 
@@ -27,30 +27,31 @@ static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 	pp1[3] = pp2[1];
 }
 
-static void SwitchPixel(toy::ImageOpener *image,const uint8_t *data,enum Pixel option)
+static void SwitchPixel(toy::ImageBufferOpener *image,const uint8_t *data,enum ::toy::Option option)
 {
-	auto   target = static_cast<uint8_t*>(image->data());
+	auto   target = image->data();
 	auto   width  = image->width();
 	auto   height = image->height();
 
+	image->format(option);
+
 	switch ( option )
 	{
-		case GREY:
+		case toy::GREY:
 			toy::Oops(TOY_MARK);   // Not ready yet.
 			image->clean();
 			break;
 
-		case GREY_ALPHA:
+		case toy::GREY_ALPHA:
 			std::memcpy(target,data, width * height * 2);
 			GREY_ALPHA_to_RGBA( target, width * height * 2);
 			break;
 
-		case RGB:
-			toy::Oops(TOY_MARK);   // Not ready yet.
-			image->clean();
+		case toy::RGB:
+			std::memcpy(target,data, width * height * 3);
 			break;
 
-		case RGBA:
+		case toy::RGBA:
 			std::memcpy(target,data, width * height * 4);
 			break;
 
@@ -60,9 +61,9 @@ static void SwitchPixel(toy::ImageOpener *image,const uint8_t *data,enum Pixel o
 	}
 }
 
-bool Create(toy::Image *output,const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option)
+bool Create(toy::ImageBuffer *output,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
 {
-	toy::ImageOpener  image(output);
+	toy::ImageBufferOpener  image(output);
 
 	image.width(width);
 	image.height(height);
@@ -74,9 +75,9 @@ bool Create(toy::Image *output,const int32_t width,const int32_t height,const ui
 	return true;
 }
 
-toy::Image Create(const int32_t width,const int32_t height,const uint8_t *data,enum Pixel option)
+toy::ImageBuffer Create(const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
 {
-	toy::Image        result;
+	toy::ImageBuffer        result;
 	Create(&result,width,height,data,option);
 
 	return result;
@@ -89,17 +90,17 @@ toy::Image Create(const int32_t width,const int32_t height,const uint8_t *data,e
 using namespace toy;
 
 
-Image::Image()
+ImageBuffer::ImageBuffer()
 {
 	;
 }
 
-Image::~Image()
+ImageBuffer::~ImageBuffer()
 {
 	clean();
 }
 
-void Image::clean()
+void ImageBuffer::clean()
 {
 	_allocator.free();
 }
@@ -110,7 +111,7 @@ inline static std::shared_ptr<T> MakeArray(int size)
 	return std::shared_ptr<T>( new T[size], []( T *p ){ delete [] p; } );
 }
 
-void Image::upsideDown()
+void ImageBuffer::upsideDown()
 {
 	auto        data        = static_cast<uint8_t*>(_allocator.data());
 	const int   color_pixel = 4;

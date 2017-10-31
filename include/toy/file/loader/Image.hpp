@@ -8,13 +8,13 @@
 namespace toy{
 
 class File;
-class Image;
+class ImageBuffer;
 
 namespace file{
 namespace loader{
 
-TOY_API_FILE bool Load(File *f,Image *m);
-TOY_API_FILE bool Save(std::string filename,Image *map);
+TOY_API_FILE bool Load(File *f,ImageBuffer *m);
+TOY_API_FILE bool Save(std::string filename,ImageBuffer *map);
 
 }//namespace loader
 }//namespace file

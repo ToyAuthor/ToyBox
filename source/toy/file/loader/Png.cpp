@@ -7,7 +7,7 @@
 namespace toy{
 namespace file{
 
-bool loader::png::Load(File *pIO,Image *map)
+bool loader::png::Load(File *pIO,ImageBuffer *map)
 {
 	return loader::Load(pIO,map);
 }
