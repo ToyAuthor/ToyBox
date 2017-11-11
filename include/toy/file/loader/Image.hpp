@@ -4,18 +4,16 @@
 #include "toy/Standard.hpp"
 #include "toy/file/Export.hpp"
 
-
 namespace toy{
-
 class File;
 class ImageBuffer;
+}
 
+namespace toy{
 namespace file{
 namespace loader{
 
-TOY_API_FILE bool Load(File *f,ImageBuffer *m);
-TOY_API_FILE bool Save(std::string filename,ImageBuffer *map);
+TOY_API_FILE bool Load(::toy::File *f,::toy::ImageBuffer *m);
+TOY_API_FILE bool Save(std::string filename,::toy::ImageBuffer *map);
 
-}//namespace loader
-}//namespace file
-}//namespace toy
+}}}

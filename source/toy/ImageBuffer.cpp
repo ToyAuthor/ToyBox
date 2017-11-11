@@ -27,13 +27,13 @@ static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 	pp1[3] = pp2[1];
 }
 
-static void SwitchPixel(toy::ImageBufferOpener *image,const uint8_t *data,enum ::toy::Option option)
+static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::Option option)
 {
-	auto   target = image->data();
+	auto   target = image->_data();
 	auto   width  = image->width();
 	auto   height = image->height();
 
-	image->format(option);
+	image->_setFormat(option);
 
 	switch ( option )
 	{
@@ -61,16 +61,14 @@ static void SwitchPixel(toy::ImageBufferOpener *image,const uint8_t *data,enum :
 	}
 }
 
-bool Create(toy::ImageBuffer *output,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
+bool Create(toy::ImageBuffer *image,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
 {
-	toy::ImageBufferOpener  image(output);
+	image->_setWidth(width);
+	image->_setHeight(height);
 
-	image.width(width);
-	image.height(height);
+	image->_getAllocator()->size(width * height * 4);
 
-	image.allocator()->size(width * height * 4);
-
-	SwitchPixel(&image,data,option);
+	SwitchPixel(image,data,option);
 
 	return true;
 }

@@ -105,16 +105,16 @@ static inline void BGR_to_RGB( uint8_t* data,   // The address of image.
 	}
 }
 
-static inline void BGR_to_RGBA(ImageBufferOpener *image)
+static inline void BGR_to_RGBA(toy::ImageBuffer *image)
 {
 	uint32_t    size = image->size()*3;   // 1 pixel == 3 byte.
-	uint8_t*    data = image->data();
+	uint8_t*    data = image->_data();
 
 	BGR_to_RGB(data,size);
 	RGB_to_RGBA(data,size,0);
 }
 
-static inline void ReadInfo(File *pIO, struct BMP_Info *info)
+static inline void ReadInfo(toy::File *pIO, struct BMP_Info *info)
 {
 	struct BMP_Head     head;
 
@@ -122,7 +122,7 @@ static inline void ReadInfo(File *pIO, struct BMP_Info *info)
 	pIO->read(info,head.bfOffBits-sizeof(struct BMP_Head));
 }
 
-static inline void LoadImage( File *pIO, ImageBufferOpener *image )
+static inline void LoadImage( toy::File *pIO, toy::ImageBuffer *image )
 {
 	struct BMP_Info     info;
 
@@ -138,30 +138,28 @@ static inline void LoadImage( File *pIO, ImageBufferOpener *image )
 		Oops(TOY_MARK);
 	}
 
-	image->height(height);
-	image->width(width);
-	image->allocator()->size((size/3)*4);  // Allocate more memory. May be we need it later.
+	image->_setHeight(height);
+	image->_setWidth(width);
+	image->_getAllocator()->size((size/3)*4);  // Allocate more memory. May be we need it later.
 
 	// I need to checkout memory enough over here.
 
-	pIO->read(image->data(),size);
+	pIO->read(image->_data(),size);
 }
 
-bool loader::bmp::Load(File *pIO,ImageBuffer *map)
+bool loader::bmp::Load(toy::File *pIO,toy::ImageBuffer *image)
 {
 //	pIO->Seek(File::SET,0);   May be it will crash system. But it's much safe.
 
-	ImageBufferOpener  image(map);
+	LoadImage( pIO, image );
 
-	LoadImage( pIO, &image );
-
-	BGR_to_RGBA(&image);
+	BGR_to_RGBA(image);
 
 	return 1;
 }
 
 // no good
-bool loader::bmp::Save(File *pIO,ImageBuffer *map)
+bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 {
 	struct BMP_Head     head;
 	struct BMP_Info     info;

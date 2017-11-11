@@ -94,9 +94,8 @@ static inline void RGB_to_RGBA(    uint8_t* data,   // The address of image.
 		pp1[3] = 0xff;
 }
 
-bool loader::tga::Load(File *pIO,ImageBuffer *map)
+bool loader::tga::Load(File *pIO,ImageBuffer *image)
 {
-	ImageBufferOpener  image(map);
 	struct TGA_Head    header;
 
 	pIO->seek(SEEK_SET,0);
@@ -129,16 +128,16 @@ bool loader::tga::Load(File *pIO,ImageBuffer *map)
 	   header.bitsperpixel!=32)  return 0;
 
 
-	image.width(width);
-	image.height(height);
+	image->_setWidth(width);
+	image->_setHeight(height);
 
 	if(header.bitsperpixel==32)//GBRA format
 	{
 		uint32_t   size = width * height * 4;
 
-		image.allocator()->size(size);
+		image->_getAllocator()->size(size);
 
-		uint8_t*   data=(uint8_t*)image.data();
+		uint8_t*   data=(uint8_t*)image->_data();
 
 		if( (header.imagedescriptor & 0x20) == 0)// bottom-left
 		{
@@ -171,9 +170,9 @@ bool loader::tga::Load(File *pIO,ImageBuffer *map)
 	{
 		uint32_t   size = width * height * 3;
 
-		image.allocator()->size(width*height*4);// Finally, we want RBGA format not RBG.
+		image->_getAllocator()->size(width*height*4);// Finally, we want RBGA format not RBG.
 
-		uint8_t*   data=(uint8_t*)image.data();
+		uint8_t*   data=(uint8_t*)image->_data();
 
 		if( (header.imagedescriptor & 0x20) == 0)// bottom-left
 		{
@@ -208,7 +207,7 @@ bool loader::tga::Load(File *pIO,ImageBuffer *map)
 	return 1;
 }
 
-bool loader::tga::Save(File *pIO,ImageBuffer *map)
+bool loader::tga::Save(toy::File *pIO,toy::ImageBuffer *map)
 {
 	pIO->seek(SEEK_SET,0);
 

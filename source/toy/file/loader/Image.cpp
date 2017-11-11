@@ -33,7 +33,7 @@ static int EndOfFile(void *user)
 	return dev->isEnd();
 }
 
-bool loader::Load(toy::File *f,ImageBuffer *map)
+bool loader::Load(toy::File *f,toy::ImageBuffer *map)
 {
 	auto   io = static_cast<void*>(f);
 
@@ -79,7 +79,7 @@ bool loader::Load(toy::File *f,ImageBuffer *map)
 	return true;
 }
 
-bool loader::Save(std::string filename,ImageBuffer *map)
+bool loader::Save(std::string filename,toy::ImageBuffer *map)
 {
 	stbi_write_tga(filename.c_str(), map->width(), map->height(), 4, map->data());
 	return 1;
