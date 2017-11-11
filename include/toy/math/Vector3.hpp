@@ -22,14 +22,9 @@ class Vector3
 			Type    data[3];
 		};
 
-		Vector3(){}
+		Vector3():x(Type(0)),y(Type(0)),z(Type(0)){}
 
-		Vector3(const Type xx,const Type yy,const Type zz)
-		{
-			x = xx;
-			y = yy;
-			z = zz;
-		}
+		Vector3(const Type xx,const Type yy,const Type zz):x(xx),y(yy),z(zz){}
 
 		~Vector3(){}
 
@@ -42,9 +37,7 @@ class Vector3
 
 		Type length() const
 		{
-			Type    result;
-			result = math::Sqrt<Type>(x*x+y*y+z*z);
-			return  result;
+			return  ::toy::math::Sqrt<Type>(x*x+y*y+z*z);
 		}
 
 		void normalize()
@@ -58,20 +51,16 @@ class Vector3
 
 		Vector3<Type> operator +(const Vector3<Type>& v) const
 		{
-			Vector3<Type>   result;
-			result.x = x+v.x;
-			result.y = y+v.y;
-			result.z = z+v.z;
-			return result;
+			return Vector3<Type>( x+v.x,
+			                      y+v.y,
+			                      z+v.z );
 		}
 
 		Vector3<Type> operator -(const Vector3<Type>& v) const
 		{
-			Vector3<Type>   result;
-			result.x = x-v.x;
-			result.y = y-v.y;
-			result.z = z-v.z;
-			return result;
+			return Vector3<Type>( x-v.x,
+			                      y-v.y,
+			                      z-v.z );
 		}
 
 		Vector3<Type> operator +=(const Vector3<Type>& v)
@@ -90,11 +79,11 @@ class Vector3
 			return *this;
 		}
 
-		void invert(void)
+		void invert()
 		{
-			x =- x;
-			y =- y;
-			z =- z;
+			x = -x;
+			y = -y;
+			z = -z;
 		}
 
 		Vector3(const Vector3<Type> &v)

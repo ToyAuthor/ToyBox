@@ -22,18 +22,9 @@ class Vector4
 			Type    data[4];
 		};
 
-		Vector4()
-		{
-			x = y = z = w = (Type)0;
-		}
+		Vector4():x(Type(0)),y(Type(0)),z(Type(0)),w(Type(0)){}
 
-		Vector4(const Type xx,const Type yy,const Type zz,const Type ww)
-		{
-			x = xx;
-			y = yy;
-			z = zz;
-			w = ww;
-		}
+		Vector4(const Type xx,const Type yy,const Type zz,const Type ww):x(xx),y(yy),z(zz),w(ww){}
 
 		~Vector4(){}
 
@@ -47,15 +38,12 @@ class Vector4
 
 		Type length() const
 		{
-			Type    result;
-			result = math::Sqrt<Type>(x*x+y*y+z*z+w*w);
-			return  result;
+			return  ::toy::math::Sqrt<Type>(x*x+y*y+z*z+w*w);
 		}
 
 		void normalize()
 		{
-			Type    len;
-			len = length();
+			Type    len = length();
 			x /= len;
 			y /= len;
 			z /= len;
@@ -64,22 +52,18 @@ class Vector4
 
 		Vector4<Type> operator +(const Vector4<Type>& v) const
 		{
-			Vector4<Type>   result;
-			result.x = x+v.x;
-			result.y = y+v.y;
-			result.z = z+v.z;
-			result.w = z+v.w;
-			return result;
+			return Vector4<Type>( x+v.x,
+			                      y+v.y,
+			                      z+v.z,
+			                      w+v.w );
 		}
 
 		Vector4<Type> operator -(const Vector4<Type>& v) const
 		{
-			Vector4<Type>   result;
-			result.x = x-v.x;
-			result.y = y-v.y;
-			result.z = z-v.z;
-			result.w = z-v.w;
-			return result;
+			return Vector4<Type>( x-v.x,
+			                      y-v.y,
+			                      z-v.z,
+			                      w-v.w );
 		}
 
 		Vector4<Type> operator +=(const Vector4<Type>& v)
@@ -98,6 +82,14 @@ class Vector4
 			z -= v.z;
 			w -= v.w;
 			return *this;
+		}
+
+		void invert()
+		{
+			x = -x;
+			y = -y;
+			z = -z;
+			w = -w;
 		}
 
 		Vector4(const Vector4<Type>& v)

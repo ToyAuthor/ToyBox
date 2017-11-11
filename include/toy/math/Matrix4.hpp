@@ -55,22 +55,22 @@ public:
 		Type   wz = q.w * q.z * s;
 
 		// x axis
-		m11 = 1 - (yy + zz);
+		m11 = Type(1) - (yy + zz);
 		m21 = xy + wz;
 		m31 = xz - wy;
 
 		// y axis
 		m12 = xy - wz;
-		m22 = 1 - (xx + zz);
+		m22 = Type(1) - (xx + zz);
 		m32 = yz + wx;
 
 		// z axis
 		m13 = xz + wy;
 		m23 = yz - wx;
-		m33 = 1 - (xx + yy);
+		m33 = Type(1) - (xx + yy);
 
-		m41 = m42 = m43 = m14 = m24 = m34 = 0;
-		m44 = 1;
+		m41 = m42 = m43 = m14 = m24 = m34 = Type(0);
+		m44 = Type(1);
 	}
 
 	Matrix4(const Matrix4<Type>& model)
@@ -82,8 +82,8 @@ public:
 
 	void identity()
 	{
-		m12=m13=m14=m21=m23=m24=m31=m32=m34=m41=m42=m43=(Type)0;
-		m11=m22=m33=m44=(Type)1;
+		m12=m13=m14=m21=m23=m24=m31=m32=m34=m41=m42=m43=Type(0);
+		m11=m22=m33=m44=Type(1);
 	}
 
 	void setColumn(const int32_t i,const Vector4<Type> & v)

@@ -25,68 +25,60 @@ class Vector2
 			Type    data[2];
 		};
 
-		Vector2()
-		{
-			x=y=(Type)0;
-		}
+		Vector2():x(Type(0)),y(Type(0)){}
 
-		Vector2(const Type _x,const Type _y)
-		{
-			x=_x;
-			y=_y;
-		}
+		Vector2(const Type xx,const Type yy):x(xx),y(yy){}
 
 		~Vector2(){}
 
-		void set(const Type _x,const Type _y)
+		void set(const Type xx,const Type yy)
 		{
-			x=_x;
-			y=_y;
+			x = xx;
+			y = yy;
 		}
 
 		Type length() const
 		{
-			Type    result;
-			result = math::Sqrt<Type>(x*x+y*y);
-			return  result;
+			return ::toy::math::Sqrt<Type>(x*x+y*y);
 		}
 
 		void normalize()
 		{
-			Type    len;
-			len = length();
-			x/=len;
-			y/=len;
+			Type    len = length();
+			x /= len;
+			y /= len;
 		}
 
 		Vector2<Type> operator +(const Vector2<Type>& v) const
 		{
-			Vector2<Type>   result;
-			result.x = x+v.x;
-			result.y = y+v.y;
-			return result;
+			return Vector2<Type>( x+v.x,
+			                      y+v.y );
 		}
 
 		Vector2<Type> operator -(const Vector2<Type>& v) const
 		{
-			Vector2<Type>   result;
-			result.x = x-v.x;
-			result.y = y-v.y;
-			return result;
+			return Vector2<Type>( x-v.x,
+			                      y-v.y );
 		}
 
 		Vector2<Type> operator +=(const Vector2<Type>& v)
 		{
-			x+=v.x;
-			y+=v.y;
+			x += v.x;
+			y += v.y;
 			return *this;
 		}
 
 		Vector2<Type> operator -=(const Vector2<Type>& v)
 		{
-			x-=v.x;
-			y-=v.y;
+			x -= v.x;
+			y -= v.y;
 			return *this;
+		}
+
+		void invert()
+		{
+			x = -x;
+			y = -y;
 		}
 
 		Vector2(const Vector2<Type> &v)
