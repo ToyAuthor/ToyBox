@@ -43,24 +43,27 @@ const Printer& Printer:: operator << (const long long num) const
 
 const Printer& Printer:: operator << (const unsigned int num) const
 {
-	toy::Log("%d",num);
+	toy::Log("%u",num);
 	return *this;
 }
 
 const Printer& Printer:: operator << (const unsigned long int num) const
 {
-	toy::Log("%ld",num);
+	toy::Log("%lu",num);
 	return *this;
 }
 
 const Printer& Printer:: operator << (const unsigned long long num) const
 {
+	// I should replace %lld with %llu here.
+	// Linux 64bit looks fine.
+
 	#ifdef TOY_WIN64
-	toy::Log("%lld",num);
+	toy::Log("%llu",num);
 	#elif defined(TOY_WIN32)
-	toy::Log("%I64d",num);
+	toy::Log("%I64u",num);
 	#else
-	toy::Log("%lld",num);
+	toy::Log("%llu",num);
 	#endif
 	return *this;
 }
@@ -73,6 +76,7 @@ const Printer& Printer:: operator << (const float num) const
 
 const Printer& Printer:: operator << (const double num) const
 {
+//	toy::Log("%lf",num);   // ISO C++ does not support this?
 	toy::Log("%f",num);
 	return *this;
 }
