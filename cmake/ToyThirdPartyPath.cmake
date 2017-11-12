@@ -13,7 +13,7 @@ macro(toy_SetThirdPartyLibraryPath)
 	endif()
 
 	if(NOT EXISTS ${TOY_SDK_PATH})
-		# TOY_SDK_PATH is not necessity.
+		# TOY_SDK_PATH is not necessary.
 		# You can just modify the following paths and ignore this error.
 		message(FATAL_ERROR "ToyBox:Are you sure you have all the third-party libraries?")
 	endif()

@@ -17,7 +17,7 @@
 	}}
 #else
 	#include "toy/io/Stream.hpp"
-	#define TOY_TEXT_FILE_READER_BUFFER_SIZE 128
+	#define BUFFER_SIZE 128
 #endif
 
 #include "toy/Standard.hpp"
@@ -49,9 +49,9 @@ class Reader
 			std::ifstream   _file;
 		#else
 			T               _file;
-			uint32_t        _strHead = TOY_TEXT_FILE_READER_BUFFER_SIZE;
-			char            _buffer[TOY_TEXT_FILE_READER_BUFFER_SIZE] = {0};
-			bool            _cr = false;      // It does nothing if the file doesn't had new line character "\r\n".
+			uint32_t        _strHead = BUFFER_SIZE;
+			char            _buffer[BUFFER_SIZE] = {0};
+			bool            _cr = false;
 		#endif
 };
 
@@ -120,10 +120,12 @@ bool Reader<T>::open(std::string filename)
 /*
  * Find out the index of next string.
  * return [index]
- * return TOY_TEXT_FILE_READER_BUFFER_SIZE   :Could not find new line character.
- * return TOY_TEXT_FILE_READER_BUFFER_SIZE-1 :There is no more data need to read in the buffer.
+ * return BUFFER_SIZE   :Could not find new line character.
+ * return BUFFER_SIZE-1 :There is no more data need to read in the buffer.
  */
-inline uint32_t _GetNewLineIndex(uint32_t head, char *str,bool *cr,const uint32_t BUFFER_SIZE)
+inline uint32_t _GetNewLineIndex( const uint32_t head,
+                                  char           *str,
+                                  bool           *cr )
 {
 	for ( uint32_t i=head ; i<BUFFER_SIZE-1 ; i++ )
 	{
@@ -174,13 +176,15 @@ inline uint32_t _GetNewLineIndex(uint32_t head, char *str,bool *cr,const uint32_
 	return BUFFER_SIZE;
 }
 
-static bool _OutputStringLine(toy::io::Stream *file,uint32_t *head,char *buffer,std::string *str,bool *cr,const uint32_t BUFFER_SIZE)
+static bool _OutputStringLine( toy::io::Stream *file,
+                               uint32_t        *head,
+                               char            *buffer,
+                               std::string     *str,
+                               bool            *cr )
 {
-	uint32_t  locat = BUFFER_SIZE;
-
 	if ( *head==BUFFER_SIZE )
 	{
-		locat = file->read(buffer,BUFFER_SIZE-1);
+		uint32_t  locat = file->read(buffer,BUFFER_SIZE-1);
 
 		if ( locat==0 )
 		{
@@ -212,16 +216,16 @@ static bool _OutputStringLine(toy::io::Stream *file,uint32_t *head,char *buffer,
 		}
 	}
 
-	auto   index = toy::io::_GetNewLineIndex(*head,buffer,cr,BUFFER_SIZE);
+	auto   index = toy::io::_GetNewLineIndex(*head,buffer,cr);
 
 	if ( index==BUFFER_SIZE )
 	{
-		*str += buffer + *head;
+		*str += ( buffer + *head );
 		*head = BUFFER_SIZE;
 	}
 	else if ( index==BUFFER_SIZE-1 )
 	{
-		*str += buffer + *head;
+		*str += ( buffer + *head );
 		*head = BUFFER_SIZE;
 		return false;
 	}
@@ -231,7 +235,7 @@ static bool _OutputStringLine(toy::io::Stream *file,uint32_t *head,char *buffer,
 	}
 	else
 	{
-		*str += buffer + *head;
+		*str += ( buffer + *head );
 		*head = index;
 		return false;
 	}
@@ -256,7 +260,7 @@ bool Reader<T>::nextLine(std::string *str)
 
 	if ( _file.isEnd() )
 	{
-		if ( _strHead==TOY_TEXT_FILE_READER_BUFFER_SIZE )
+		if ( _strHead==BUFFER_SIZE )
 		{
 			// No more data could output.
 			return false;
@@ -265,10 +269,10 @@ bool Reader<T>::nextLine(std::string *str)
 
 	str->clear();
 
-	while ( toy::io::_OutputStringLine(&_file,&_strHead,_buffer,str,&_cr,TOY_TEXT_FILE_READER_BUFFER_SIZE) )
+	while ( toy::io::_OutputStringLine(&_file,&_strHead,_buffer,str,&_cr) )
 	{}
 
-	if ( _strHead==TOY_TEXT_FILE_READER_BUFFER_SIZE+1 )
+	if ( _strHead==BUFFER_SIZE+1 )
 	{
 		return false;
 	}
@@ -282,7 +286,7 @@ bool Reader<T>::nextLine(std::string *str)
 }//namespace toy
 
 #if ! TOY_OPTION_USE_STD_TEXT_INPUT_STREAM
-	#undef TOY_TEXT_FILE_READER_BUFFER_SIZE
+	#undef BUFFER_SIZE
 #endif
 
 #undef TOY_OPTION_USE_STD_TEXT_INPUT_STREAM

@@ -1,26 +1,38 @@
 
+------------ToyBox------------
 
-
-       TTTTTTTTTTTTTT    OOOOOOOOOO    YY          YY
-             TT         OO        OO     YY      YY
-             TT         OO        OO       YY  YY
-             TT         OO        OO         YY
-             TT         OO        OO         YY
-             TT         OO        OO         YY
-             TT         OO        OO         YY
-             TT         OO        OO         YY
-             TT          OOOOOOOOOO          YY
-
-        BBBBBBBBBBB      OOOOOOOOOO     XXX      XXX
-        BB        BB    OO        OO      XX    XX
-        BB        BB    OO        OO       XX  XX
-        BB        BB    OO        OO        XXXX
-        BBBBBBBBBBB     OO        OO         XX
-        BB        BB    OO        OO        XXXX
-        BB        BB    OO        OO       XX  XX
-        BB        BB    OO        OO      XX    XX
-        BBBBBBBBBBB      OOOOOOOOOO     XXX      XXX
+   ToyBox is a set of libraries for the C++ programming language.
 
 
 
-This software released into the public domain.
+------------Tags------------
+
+   C++11, Public domain, Linux, Windows, Mac, OpenGL
+
+
+
+------------Guide------------
+
+   cmake        All the options of building system are put here.
+
+   examples     Sample code is the best tutorial.
+
+   include      The head files of ToyBox.
+
+   license      All licenses of third-party projects are here.
+
+   modules      All the lua modules are here.
+
+   resource     Something like font file, image file, lua script, etc.
+
+   source       The source code of ToyBox.
+
+   third-party  Only those tiny size third-party projects are here.
+
+   tools        Some useful tools.
+
+
+
+------------Document------------
+
+   https://toyauthor.github.io/ToyBoxDoc

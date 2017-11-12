@@ -1,3 +1,6 @@
+/*
+ * Follow Semantic Versioning 2.0.0
+ */
 
 #pragma once
 

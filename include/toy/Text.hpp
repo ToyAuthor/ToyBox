@@ -18,6 +18,7 @@ class TOY_API Text
 
 		int  size();  // Not include null character.
 		auto c_str()->const char*;
+		auto cpp_str()->std::string;
 
 	private:
 

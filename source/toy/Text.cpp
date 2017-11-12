@@ -35,3 +35,8 @@ auto Text::c_str()->const char*
 {
 	return _this->str.c_str();
 }
+
+auto Text::cpp_str()->std::string
+{
+	return _this->str;
+}

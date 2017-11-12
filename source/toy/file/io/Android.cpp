@@ -14,7 +14,7 @@ using namespace io;
 #include <android/native_activity.h>
 #include <android/asset_manager.h>
 
-// 可以參考
+// Take a look.
 // https://github.com/fabiensanglard/Shmup/blob/master/engine/android/jni/android/android_main.c
 // https://developer.android.com/ndk/reference/group___asset.html
 
