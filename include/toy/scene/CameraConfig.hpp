@@ -9,44 +9,33 @@
 namespace toy{
 namespace scene{
 
-
 class TOY_API_SCENE CameraConfig
 {
 	public:
 
 		CameraConfig(){}
-		CameraConfig(const CameraConfig& model)
-		{
-			_projection=model._projection;
-			_modelview =model._modelview;
-		}
-
 		~CameraConfig(){}
 
-		void ortho(float w, float h, float near, float far);
-		void perspect(float fovy, float aspect, float near, float far);
+		void ortho(const float w, const float h, const float near, const float far);
 
-		auto projection()->math::Matrix4<float>&;
-		void projection(   math::Matrix4<float> m);
-		auto modelview() ->math::Matrix4<float>&;
-		void modelview(    math::Matrix4<float> m);
+		void perspect( const float fovy,     // Radians
+		               const float aspect,   // height/width
+		               const float near,
+		               const float far );
 
-		void    lookat( math::Vector3<float> eye,       // Location of camera.
-		                math::Vector3<float> focus,     // Camera look at where.
-		                math::Vector3<float> up         // The direction of the top of camera. Usually use (0,1,0).
-		                );
+		auto projection()const ->const toy::math::Matrix4<float>&;
+		void projection(         const toy::math::Matrix4<float>&);
+		auto modelview()const  ->const toy::math::Matrix4<float>&;
+		void modelview(          const toy::math::Matrix4<float>&);
 
-		CameraConfig& operator =(const CameraConfig& model)
-		{
-			_projection=model._projection;
-			_modelview =model._modelview;
-			return *this;
-		}
+		void lookat( const toy::math::Vector3<float> &eye,       // Location of camera.
+		             const toy::math::Vector3<float> &focus,     // Camera look at where.
+		             const toy::math::Vector3<float> &up );      // The direction of the top of camera. Usually use (0,1,0).
 
 	private:
 
-		math::Matrix4<float>     _projection;
-		math::Matrix4<float>     _modelview;
+		toy::math::Matrix4<float>     _projection;
+		toy::math::Matrix4<float>     _modelview;
 };
 
 }}

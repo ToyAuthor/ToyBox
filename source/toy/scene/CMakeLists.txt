@@ -5,8 +5,7 @@ toy_StdReady()
 file(GLOB SOURCE *.cpp */*.cpp)
 
 set(LIBS toy
-	boost_filesystem
-	boost_system
+	toy_graph
 )
 
 if(TOY_ENABLE_SHARED_LIBS)
