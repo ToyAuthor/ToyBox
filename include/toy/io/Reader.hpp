@@ -181,6 +181,13 @@ static bool _OutputStringLine(toy::io::Stream *file,uint32_t *head,char *buffer,
 	if ( *head==BUFFER_SIZE )
 	{
 		locat = file->read(buffer,BUFFER_SIZE-1);
+
+		if ( locat==0 )
+		{
+			*head = BUFFER_SIZE+1;   // It's mean end of file.
+			return false;
+		}
+
 		buffer[locat] = '\0';   // It's mean no more data after here.
 		*head = 0;
 
@@ -195,6 +202,11 @@ static bool _OutputStringLine(toy::io::Stream *file,uint32_t *head,char *buffer,
 			*cr = false;
 			if ( buffer[0]=='\n' )
 			{
+				if ( locat==1 )
+				{
+					*head = BUFFER_SIZE+1;
+					return false;
+				}
 				*head = 1;  // Ignore '\n'.
 			}
 		}
@@ -255,6 +267,11 @@ bool Reader<T>::nextLine(std::string *str)
 
 	while ( toy::io::_OutputStringLine(&_file,&_strHead,_buffer,str,&_cr,TOY_TEXT_FILE_READER_BUFFER_SIZE) )
 	{}
+
+	if ( _strHead==TOY_TEXT_FILE_READER_BUFFER_SIZE+1 )
+	{
+		return false;
+	}
 
 	return true;
 }
