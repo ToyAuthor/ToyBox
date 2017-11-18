@@ -68,7 +68,7 @@ auto Painter::newImage(float x, float y,float width,float height,toy::graph::Tex
 	toy::graph::ModelBuffer   modelBuffer(_brush);
 
 	modelBuffer.setShape(vbuffer);
-	modelBuffer.setIndices({0,1,2,0,2,3});
+	modelBuffer.setIndices({0,2,1,0,3,2});
 
 	auto   image = std::make_shared<toy::graph::Image>(_brush);
 
