@@ -7,24 +7,43 @@
 namespace toy{
 namespace image{
 
+static inline void GREY_to_RGBA( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data + size * 4;
+	uint8_t  *pp2 = data + size;
+	uint8_t  color = 255;
+
+	do
+	{
+		pp1 -= 4;
+		pp2 -= 1;
+
+		color = *pp2==0 ? 0 : 255;
+
+		pp1[2] = color;
+		pp1[1] = color;
+		pp1[0] = color;
+		pp1[3] = *pp2;
+	}
+	while( pp2 != data );
+}
+
 static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 {
-	uint8_t      *pp1 = data + size*2 - 4;
-	uint8_t      *pp2 = data + size   - 2;
+	uint8_t  *pp1 = data + size * 2;
+	uint8_t  *pp2 = data + size;
 
-	for( ; pp2 != data ; pp1-=4,pp2-=2 )
+	do
 	{
+		pp1 -= 4;
+		pp2 -= 2;
+
 		pp1[2] = pp2[0];
 		pp1[1] = pp2[0];
 		pp1[0] = pp2[0];
 		pp1[3] = pp2[1];
 	}
-
-	// Handle the last pixel.
-	pp1[2] = pp2[0];
-	pp1[1] = pp2[0];
-	pp1[0] = pp2[0];
-	pp1[3] = pp2[1];
+	while ( pp2 != data );
 }
 
 static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::Option option)
@@ -38,13 +57,15 @@ static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::
 	switch ( option )
 	{
 		case toy::GREY:
-			toy::Oops(TOY_MARK);   // Not ready yet.
-			image->clean();
+			std::memcpy(target,data, width * height);
+			GREY_to_RGBA( target, width * height);
+			image->_setFormat(toy::RGBA);
 			break;
 
 		case toy::GREY_ALPHA:
 			std::memcpy(target,data, width * height * 2);
 			GREY_ALPHA_to_RGBA( target, width * height * 2);
+			image->_setFormat(toy::RGBA);
 			break;
 
 		case toy::RGB:
