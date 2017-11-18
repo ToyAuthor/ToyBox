@@ -123,27 +123,3 @@ void ImageBuffer::clean()
 {
 	_allocator.free();
 }
-
-template<typename T>
-inline static std::shared_ptr<T> MakeArray(int size)
-{
-	return std::shared_ptr<T>( new T[size], []( T *p ){ delete [] p; } );
-}
-
-void ImageBuffer::upsideDown()
-{
-	auto        data        = static_cast<uint8_t*>(_allocator.data());
-	const int   color_pixel = 4;
-	const int   oneline     = _width*color_pixel;
-	const auto  temp        = MakeArray<uint8_t>(oneline);
-	const auto  size        = _height*oneline;
-	const auto  redraw      = ( (size - (size%2))/2 )- _width-1;
-
-	for ( int i=0 ; i<redraw ; i=i+oneline )
-	{
-		// Swap two line.
-		std::memcpy(temp.get(),data+i,oneline);        // temp = top
-		std::memcpy(data+i,data+(size-i),oneline);     // top = bottom
-		std::memcpy(data+(size-i),temp.get(),oneline); // bottom = temp
-	}
-}

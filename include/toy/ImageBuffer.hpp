@@ -15,7 +15,6 @@ class TOY_API ImageBuffer
 		~ImageBuffer();
 
 		void    clean();
-		void    upsideDown();
 
 		/*
 		 * Give you a memory address of the image data.

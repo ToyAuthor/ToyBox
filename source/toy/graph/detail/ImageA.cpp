@@ -273,10 +273,6 @@ void ImageA::render(toy::graph::Brush *brush,float diff)
 	glVertexAttribPointer(_var.textureCoord, 2, GL_FLOAT, GL_FALSE, 32, BUFFER_OFFSET(24));
 	glEnableVertexAttribArray(_var.textureCoord);
 
-	/*
-	 * 如果圖片可以一起繪製會比較有效率
-	 * 可以考慮在 GPU 上面建立類似 memory pool 的機制
-	 */
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
 
 	glDisableVertexAttribArray(_var.textureCoord);
