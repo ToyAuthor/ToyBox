@@ -12,6 +12,7 @@ endif()
 add_subdirectory(lua)
 add_subdirectory(boost)
 add_subdirectory(zlib)
+add_subdirectory(lz4)
 
 
 if(UNIX)
