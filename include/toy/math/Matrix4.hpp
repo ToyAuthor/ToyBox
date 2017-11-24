@@ -119,25 +119,25 @@ public:
 	{
 		Matrix4<Type>  result;
 
-		result.m11 = m11*bb.m11 + m12*bb.m21 + m13*bb.m31 + m14*bb.m41;
-		result.m12 = m11*bb.m12 + m12*bb.m22 + m13*bb.m32 + m14*bb.m42;
-		result.m13 = m11*bb.m13 + m12*bb.m23 + m13*bb.m33 + m14*bb.m43;
-		result.m14 = m11*bb.m14 + m12*bb.m24 + m13*bb.m34 + m14*bb.m44;
+		result.m11 = m11*bb.m11 + m21*bb.m12 + m31*bb.m13 + m41*bb.m14;
+		result.m12 = m12*bb.m11 + m22*bb.m12 + m32*bb.m13 + m42*bb.m14;
+		result.m13 = m13*bb.m11 + m23*bb.m12 + m33*bb.m13 + m43*bb.m14;
+		result.m14 = m14*bb.m11 + m24*bb.m12 + m34*bb.m13 + m44*bb.m14;
 
-		result.m21 = m21*bb.m11 + m22*bb.m21 + m23*bb.m31 + m24*bb.m41;
-		result.m22 = m21*bb.m12 + m22*bb.m22 + m23*bb.m32 + m24*bb.m42;
-		result.m23 = m21*bb.m13 + m22*bb.m23 + m23*bb.m33 + m24*bb.m43;
-		result.m24 = m21*bb.m14 + m22*bb.m24 + m23*bb.m34 + m24*bb.m44;
+		result.m21 = m11*bb.m21 + m21*bb.m22 + m31*bb.m23 + m41*bb.m24;
+		result.m22 = m12*bb.m21 + m22*bb.m22 + m32*bb.m23 + m42*bb.m24;
+		result.m23 = m13*bb.m21 + m23*bb.m22 + m33*bb.m23 + m43*bb.m24;
+		result.m24 = m14*bb.m21 + m24*bb.m22 + m34*bb.m23 + m44*bb.m24;
 
-		result.m31 = m31*bb.m11 + m32*bb.m21 + m33*bb.m31 + m34*bb.m41;
-		result.m32 = m31*bb.m12 + m32*bb.m22 + m33*bb.m32 + m34*bb.m42;
-		result.m33 = m31*bb.m13 + m32*bb.m23 + m33*bb.m33 + m34*bb.m43;
-		result.m34 = m31*bb.m14 + m32*bb.m24 + m33*bb.m34 + m34*bb.m44;
+		result.m31 = m11*bb.m31 + m21*bb.m32 + m31*bb.m33 + m41*bb.m34;
+		result.m32 = m12*bb.m31 + m22*bb.m32 + m32*bb.m33 + m42*bb.m34;
+		result.m33 = m13*bb.m31 + m23*bb.m32 + m33*bb.m33 + m43*bb.m34;
+		result.m34 = m14*bb.m31 + m24*bb.m32 + m34*bb.m33 + m44*bb.m34;
 
-		result.m41 = m41*bb.m11 + m42*bb.m21 + m43*bb.m31 + m44*bb.m41;
-		result.m42 = m41*bb.m12 + m42*bb.m22 + m43*bb.m32 + m44*bb.m42;
-		result.m43 = m41*bb.m13 + m42*bb.m23 + m43*bb.m33 + m44*bb.m43;
-		result.m44 = m41*bb.m14 + m42*bb.m24 + m43*bb.m34 + m44*bb.m44;
+		result.m41 = m11*bb.m41 + m21*bb.m42 + m31*bb.m43 + m41*bb.m44;
+		result.m42 = m12*bb.m41 + m22*bb.m42 + m32*bb.m43 + m42*bb.m44;
+		result.m43 = m13*bb.m41 + m23*bb.m42 + m33*bb.m43 + m43*bb.m44;
+		result.m44 = m14*bb.m41 + m24*bb.m42 + m34*bb.m43 + m44*bb.m44;
 
 		return result;
 	}
@@ -146,6 +146,15 @@ public:
 	{
 		Matrix4<Type>  result = (*this)*model;
 		*this = result;
+	}
+
+	// translation
+	void operator +=(const toy::math::Vector3<Type>& place)
+	{
+		m41 = m11*place.x + m21*place.y + m31*place.z + m41;
+		m42 = m12*place.x + m22*place.y + m32*place.z + m42;
+		m43 = m13*place.x + m23*place.y + m33*place.z + m43;
+		m44 = m14*place.x + m24*place.y + m34*place.z + m44;
 	}
 };
 

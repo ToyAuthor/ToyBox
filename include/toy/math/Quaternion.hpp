@@ -22,6 +22,12 @@ class Quaternion
 			Type    data[4];
 		};
 
+		Quaternion():x(0),y(0),z(0),w(0)
+		{
+			// No. It waste too much time.
+		//	this->setEuler(0,0,0);
+		}
+
 		// Axis angles
 		Quaternion(const Type ax,const Type ay,const Type az,const Type angle)
 		{
@@ -36,13 +42,35 @@ class Quaternion
 		// Euler angles
 		Quaternion(const Type ax,const Type ay,const Type az)
 		{
-			x = std::sin(ay/Type(2))*std::sin(az/Type(2))*std::cos(ax/Type(2)) + std::cos(ay/Type(2))*std::cos(az/Type(2))*std::sin(ax/Type(2));
-			y = std::sin(ay/Type(2))*std::cos(az/Type(2))*std::cos(ax/Type(2)) + std::cos(ay/Type(2))*std::sin(az/Type(2))*std::sin(ax/Type(2));
-			z = std::cos(ay/Type(2))*std::sin(az/Type(2))*std::cos(ax/Type(2)) - std::sin(ay/Type(2))*std::cos(az/Type(2))*std::sin(ax/Type(2));
-			w = std::cos(ay/Type(2))*std::cos(az/Type(2))*std::cos(ax/Type(2)) - std::sin(ay/Type(2))*std::sin(az/Type(2))*std::sin(ax/Type(2));
+			Type  cx = std::cos(ax/Type(2));
+			Type  sx = std::sin(ax/Type(2));
+			Type  cy = std::cos(ay/Type(2));
+			Type  sy = std::sin(ay/Type(2));
+			Type  cz = std::cos(az/Type(2));
+			Type  sz = std::sin(az/Type(2));
+
+			x = sy * sz * cx + cy * cz * sx;
+			y = sy * cz * cx + cy * sz * sx;
+			z = cy * sz * cx - sy * cz * sx;
+			w = cy * cz * cx - sy * sz * sx;
 		}
 
 		~Quaternion(){}
+
+		void setEuler(const Type ax,const Type ay,const Type az)
+		{
+			Type  cx = std::cos(ax/Type(2));
+			Type  sx = std::sin(ax/Type(2));
+			Type  cy = std::cos(ay/Type(2));
+			Type  sy = std::sin(ay/Type(2));
+			Type  cz = std::cos(az/Type(2));
+			Type  sz = std::sin(az/Type(2));
+
+			x = sy * sz * cx + cy * cz * sx;
+			y = sy * cz * cx + cy * sz * sx;
+			z = cy * sz * cx - sy * cz * sx;
+			w = cy * cz * cx - sy * sz * sx;
+		}
 
 		void set(const Type xx,const Type yy,const Type zz,const Type ww)
 		{
@@ -119,9 +147,9 @@ class Quaternion
 			return *this;
 		}
 
-		const Quaternion<Type>& operator *(const Quaternion<Type> &v) const
+		const Quaternion<Type> operator *(const Quaternion<Type> &v) const
 		{
-			static Quaternion<Type> ret;
+			Quaternion<Type> ret;
 
 			ret.x = y*v.z - z*v.y + w*v.x + x*v.w;
 			ret.y = z*v.x - x*v.z + w*v.y + y*v.w;

@@ -22,7 +22,7 @@ inline auto CreateV3(const Type x,const Type y,const Type z)->::toy::math::Vecto
 }
 
 template <typename Type>
-inline auto Normalize3(const ::toy::math::Vector3<Type> t)->::toy::math::Vector3<Type>
+inline auto Normalize3(const ::toy::math::Vector3<Type> &t)->::toy::math::Vector3<Type>
 {
 	::toy::math::Vector3<Type>    result = t;
 	result.normalize();
@@ -30,9 +30,8 @@ inline auto Normalize3(const ::toy::math::Vector3<Type> t)->::toy::math::Vector3
 	return result;
 }
 
-// "->" become "<-"
 template <typename Type>
-inline auto Vector3Invert(const ::toy::math::Vector3<Type> t)->::toy::math::Vector3<Type>
+inline auto Vector3Invert(const ::toy::math::Vector3<Type> &t)->::toy::math::Vector3<Type>
 {
 	::toy::math::Vector3<Type>    result = t;
 	result.invert();
@@ -41,8 +40,8 @@ inline auto Vector3Invert(const ::toy::math::Vector3<Type> t)->::toy::math::Vect
 }
 
 template <typename Type>
-inline Type Vector3Dot(const ::toy::math::Vector3<Type> a,
-                       const ::toy::math::Vector3<Type> b)
+inline Type Vector3Dot(const ::toy::math::Vector3<Type> &a,
+                       const ::toy::math::Vector3<Type> &b)
 {
 	return  a.x*b.x+a.y*b.y+a.z*b.z;
 }

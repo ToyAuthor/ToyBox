@@ -78,7 +78,7 @@ uint32_t Standard::read(void *file,uint32_t size)
 	if ( isEmpty() )
 		return 0;
 
-	size_t	result = fread(file,1,size,_file);	// "fread(file,size,1,_file)" was wrong.
+	size_t	result = fread(file,1,size,_file);
 
 	if ( result>size )
 	{
