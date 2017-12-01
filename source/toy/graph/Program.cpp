@@ -15,7 +15,6 @@ struct ProgramPrivate
 using namespace toy;
 using namespace graph;
 
-
 Program::Program(std::shared_ptr<Code> vs,std::shared_ptr<Code> fs):
 	_this(new ProgramPrivate),
 	_vertex(vs),

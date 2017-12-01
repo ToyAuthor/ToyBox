@@ -6,17 +6,11 @@
 #include <cstring>
 #include "toy/Math.hpp"
 
-namespace toy
-{
+namespace toy{
 
 using math::Exp1;
 
-
-
-/*
- * The memory size of Allocator01 always base of 2.
- * 記憶體大小一直維持為2的n次方
- */
+// The memory size of Allocator01 always base of 2.
 class Allocator01
 {
 	public:
@@ -137,5 +131,4 @@ class Allocator01
 		}
 };
 
-
-}//namespace toy
+}

@@ -48,9 +48,9 @@ class TOY_API_MEMORY Manager01
 		{
 			Page*     next;
 			uint8_t*  blocks;         // A list of blocks.
-			uint32_t  pool_index;     // To record this Page is belong to which Pool.
-			uint16_t  free_block;     // To record how many unused blocks.
-			uint8_t   level;          // To record the size of Block is how many times of 8 byte.
+			uint32_t  pool_index;     // For recording this Page is belong to which Pool.
+			uint16_t  free_block;     // For recording how many unused blocks.
+			uint8_t   level;          // For recording the size of Block is how many times of 8 byte.
 		};
 
 		// To handl the latst Pool this Manager get.

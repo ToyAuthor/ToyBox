@@ -46,7 +46,7 @@ class TOY_API_GRAPH Brush
 		 *     toy::GL_2_0
 		 *     toy::WHATEVER
 		 */
-		Brush(enum toy::Option version,bool *result);
+		Brush(enum toy::Option version,bool *isOK);
 		~Brush();
 
 		// diff:the passing time since latest data update.

@@ -39,7 +39,6 @@ struct BrushPrivate
 using namespace toy;
 using namespace graph;
 
-
 Brush::Brush(enum toy::Option option,bool *result):_this(new BrushPrivate)
 {
 	MakeSureOnlyOneBrushExist();

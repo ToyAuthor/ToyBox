@@ -181,7 +181,7 @@ void* Manager01::malloc(size_t size)
 	*/
 	if( page->free_block )
 	{
-		uint8_t      *the_next_free_block=*((uint8_t **) free_memory);
+		uint8_t      *the_next_free_block = *((uint8_t **) free_memory);
 
 		if( the_next_free_block )
 		{
@@ -205,17 +205,17 @@ void* Manager01::malloc(size_t size)
 
 void* Manager01::realloc(void *pointer, size_t size)
 {
-	if( !pointer )
+	if( pointer==nullptr )
 	{
-		toy::Logger<<"memory::Manager01::realloc() has error"<<toy::NextLine;
+		toy::Oops(TOY_MARK);
 		return this->malloc(size);
 	}
 
 	if( !size )
 	{
-		toy::Logger<<"memory::Manager01::realloc() has something wrong"<<toy::NextLine;
+		toy::Oops(TOY_MARK);
 		this->free(pointer);
-		return nullptr ;
+		return nullptr;
 	}
 
 	Page	*page = find_page(pointer);
@@ -278,7 +278,7 @@ void Manager01::free(void *pointer)
 			else
 			{
 				// The number of release memory is more than the number of allocate memory? It's impossible.
-				toy::Logger<<"toy::memory::Manager01::free()"<<toy::NextLine;
+				toy::Oops(TOY_MARK);
 			}
 
 			// Add this block to the free block list.
