@@ -161,7 +161,15 @@ void BrushB::flush()
 
 void BrushB::viewport(int x, int y, int width, int height)
 {
+	_width = width;
+	_height = height;
 	glViewport(x, y, width, height);
+}
+
+void BrushB::viewport(int *width,int *height)
+{
+	*width  = _width;
+	*height = _height;
 }
 
 void BrushB::_useProgram(toy::graph::Program *program)

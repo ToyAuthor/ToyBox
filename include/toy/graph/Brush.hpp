@@ -49,6 +49,9 @@ class TOY_API_GRAPH Brush
 		Brush(enum toy::Option version,bool *isOK);
 		~Brush();
 
+		void viewport(int width, int height);
+		void viewport(int *width,int *height);
+		void viewport(int x, int y, int width, int height);
 		// diff:the passing time since latest data update.
 		void render(float diff = 0.0f);
 		void sorting();
@@ -63,7 +66,6 @@ class TOY_API_GRAPH Brush
 		void setClearColor(float r, float g, float b, float a);
 		void clear();
 		void flush();
-		void viewport(int x, int y, int width, int height);
 
 	private:
 

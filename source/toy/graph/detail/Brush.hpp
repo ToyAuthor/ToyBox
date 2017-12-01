@@ -22,6 +22,8 @@ class Brush
 		Brush(){}
 		virtual ~Brush(){}
 
+		virtual void viewport(int x, int y, int width, int height)=0;
+		virtual void viewport(int *width,int *height)=0;
 		virtual void render(toy::graph::Brush*,float diff)=0;
 		virtual void sorting()=0;
 		virtual void setProjection(const toy::math::Matrix4<float> &matrix)=0;
@@ -34,11 +36,8 @@ class Brush
 		virtual void setClearColor(float r, float g, float b, float a)=0;
 		virtual void clear()=0;
 		virtual void flush()=0;
-		virtual void viewport(int x, int y, int width, int height)=0;
 
-	private:
-
-	public:
+	//--------------------------------private--------------------------------
 
 		virtual void _useProgram(toy::graph::Program *program)=0;
 		virtual bool _isSameProgram(toy::graph::Program *program)=0;

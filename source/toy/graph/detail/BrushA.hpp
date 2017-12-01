@@ -18,6 +18,8 @@ class BrushA : public toy::graph::_detail::Brush
 		BrushA();
 		~BrushA();
 
+		void viewport(int x, int y, int width, int height);
+		void viewport(int *width,int *height);
 		void render(toy::graph::Brush*,float diff);
 		void sorting();
 		void setProjection(const toy::math::Matrix4<float> &matrix);
@@ -30,13 +32,14 @@ class BrushA : public toy::graph::_detail::Brush
 		void setClearColor(float r, float g, float b, float a);
 		void clear();
 		void flush();
-		void viewport(int x, int y, int width, int height);
 
 	private:
 
 		toy::graph::Program*    _program = nullptr;
 		toy::graph::DataMgrA    _mgr;
 		GLuint                  _oldTextureID = 0;
+		int                     _width = 0;
+		int                     _height = 0;
 
 	public:
 

@@ -118,6 +118,16 @@ void Brush::viewport(int x, int y, int width, int height)
 	_this->detail->viewport(x,y,width,height);
 }
 
+void Brush::viewport(int width, int height)
+{
+	_this->detail->viewport(0,0,width,height);
+}
+
+void Brush::viewport(int *width,int *height)
+{
+	_this->detail->viewport(width,height);
+}
+
 void Brush::_useProgram(toy::graph::Program *program)
 {
 	_this->detail->_useProgram(program);
