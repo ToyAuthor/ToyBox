@@ -67,7 +67,7 @@ bool loader::Load(toy::File *f,toy::ImageBuffer *map)
 			return false;
 	}
 
-	if ( ! image::Create(map,width,height,data,fmt) )
+	if ( ! toy::CreateImageBuffer(map,width,height,data,fmt) )
 	{
 		toy::Oops(TOY_MARK);
 		stbi_image_free(data);

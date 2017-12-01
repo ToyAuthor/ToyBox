@@ -80,11 +80,7 @@ class TOY_API ImageBuffer
 		}
 };
 
-namespace image{
+TOY_API extern bool CreateImageBuffer(toy::ImageBuffer *output,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA);
+TOY_API extern auto CreateImageBuffer(                         const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA)->toy::ImageBuffer;
 
-TOY_API extern bool Create(toy::ImageBuffer *output,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA);
-TOY_API extern auto Create(                         const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA)->toy::ImageBuffer;
-
-}//namespace image{
-
-}//namespace toy
+}

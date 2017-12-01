@@ -3,9 +3,7 @@
 #include "toy/ImageBuffer.hpp"
 #include "toy/Math.hpp"
 
-
 namespace toy{
-namespace image{
 
 static inline void GREY_to_RGBA( uint8_t* data, uint32_t size )
 {
@@ -82,7 +80,7 @@ static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::
 	}
 }
 
-bool Create(toy::ImageBuffer *image,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
+bool CreateImageBuffer(toy::ImageBuffer *image,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
 {
 	image->_setWidth(width);
 	image->_setHeight(height);
@@ -94,20 +92,17 @@ bool Create(toy::ImageBuffer *image,const int32_t width,const int32_t height,con
 	return true;
 }
 
-toy::ImageBuffer Create(const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
+toy::ImageBuffer CreateImageBuffer(const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
 {
 	toy::ImageBuffer        result;
-	Create(&result,width,height,data,option);
+	CreateImageBuffer(&result,width,height,data,option);
 
 	return result;
 }
 
-}//namespace image{
-}//namespace toy{
-
+}
 
 using namespace toy;
-
 
 ImageBuffer::ImageBuffer()
 {
