@@ -103,6 +103,13 @@ void Brush::setClearColor(float r, float g, float b, float a)
 	_this->detail->setClearColor(r,g,b,a);
 }
 
+void Brush::setClearColor(const toy::Color& color)
+{
+	float r,g,b,a;
+	color.data(&r,&g,&b,&a);
+	_this->detail->setClearColor(r,g,b,a);
+}
+
 void Brush::clear()
 {
 	_this->detail->clear();

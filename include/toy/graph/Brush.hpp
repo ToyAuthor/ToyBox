@@ -3,6 +3,7 @@
 
 #include "toy/Standard.hpp"
 #include "toy/ImageBuffer.hpp"
+#include "toy/Color.hpp"
 #include "toy/math/Matrix4.hpp"
 #include "toy/graph/Export.hpp"
 #include "toy/graph/Texture.hpp"
@@ -63,6 +64,7 @@ class TOY_API_GRAPH Brush
 		//-------------------Basic-------------------
 		auto newTextureID(const toy::ImageBuffer &image)->uint32_t;
 		void delTextureID(uint32_t id);
+		void setClearColor(const toy::Color& color);
 		void setClearColor(float r, float g, float b, float a);
 		void clear();
 		void flush();
