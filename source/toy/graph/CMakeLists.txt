@@ -10,7 +10,11 @@ file(GLOB SOURCE
 set(LIBS toy)
 
 if(NOT TOY_ANDROID)
+if(TOY_USE_GLEW)
+	include_directories(${TOY_include_glew})
+	link_directories(${TOY_library_glew})
 	list(APPEND LIBS ${TOY_libname_glew})
+endif()
 endif()
 
 if(TOY_ENABLE_SHARED_LIBS)
@@ -20,8 +24,6 @@ else()
 endif()
 
 toy_BuildLib(toy_graph
-	INCLUDEDIRS ${TOY_include_glew}
-	LIBDIRS     ${TOY_library_glew}
 	SOURCES     ${SOURCE}
 	LINKLIBS    ${LIBS}
 )

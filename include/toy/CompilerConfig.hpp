@@ -13,6 +13,7 @@
 /*------------They defined at "ToyBox/cmake/ToyOptions.cmake"------------
 #define TOY_OPTION_RELEASE              1   // Set it to 0, if you want to debug.
 #define TOY_OPTION_DYNAMIC_LIBRARY      1   // It's only work on Windows, To build dynamic link library.
+#define TOY_OPTION_USE_GLEW             1
 */
 
 

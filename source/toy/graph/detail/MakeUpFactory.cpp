@@ -23,6 +23,7 @@ struct GraphVersionList
 	std::string       str     = "Unknown";
 };
 
+#if TOY_OPTION_USE_GLEW
 inline static std::vector<GraphVersionList> GetVersionSupportedList()
 {
 	std::vector<GraphVersionList>   list;
@@ -39,7 +40,6 @@ inline static std::vector<GraphVersionList> GetVersionSupportedList()
 
 	if( GLEW_VERSION_4_3 )
 	{
-
 		list.push_back(GraphVersionList(toy::GL_4_3,"4.3"));
 	}
 
@@ -120,6 +120,14 @@ inline static std::vector<GraphVersionList> GetVersionSupportedList()
 
 	return list;
 }
+#else
+inline static std::vector<GraphVersionList> GetVersionSupportedList()
+{
+	std::vector<GraphVersionList>   list;
+	list.push_back(GraphVersionList(toy::GL_2_0,"2.0"));
+	return list;
+}
+#endif
 
 inline static bool IsVersionOK( enum toy::Option maximum,
                                 enum toy::Option minimum,
@@ -158,6 +166,7 @@ inline static bool CheckVersion(enum toy::Option *expectVersion)
 
 	toy::Logger<<str<<glGetString(GL_VERSION)<<R"( (got from "glGetString"))"<<toy::NextLine;
 
+	#if TOY_OPTION_USE_GLEW
 	GLenum	err = glewInit();
 
 	if ( GLEW_OK != err )
@@ -166,10 +175,15 @@ inline static bool CheckVersion(enum toy::Option *expectVersion)
 		toy::Logger<<"error:"<<glewGetErrorString(err)<<toy::NextLine;
 		return false;
 	}
+	#endif
 
 	auto   list = GetVersionSupportedList();
 
+	#if TOY_OPTION_USE_GLEW
 	toy::Logger<<str<<list.front().str<<" (got from GLEW)"<<toy::NextLine;
+	#else
+	toy::Logger<<str<<list.front().str<<" (assumed)"<<toy::NextLine;
+	#endif
 
 	if ( *expectVersion==toy::WHATEVER )
 	{
@@ -240,7 +254,7 @@ bool MakeUpFactory(enum toy::Option version,toy::graph::Factory **factory_addres
 
 	//--------------------------------------------------------------------------
 
-	if ( version > toy::GL_3_0 )
+	if ( version >= toy::GL_3_0 )
 	{
 		config.createBrush = CreateBrushA;
 		config.createCode01 = CreateCodeA01;
@@ -250,7 +264,7 @@ bool MakeUpFactory(enum toy::Option version,toy::graph::Factory **factory_addres
 		config.createImage = CreateImageA;
 		config.createGeometry = CreateGeometryA;
 	}
-	else if ( version > toy::GL_2_0 )
+	else if ( version >= toy::GL_2_0 )
 	{
 		config.createBrush = CreateBrushB;
 		config.createCode01 = CreateCodeA01;
