@@ -8,18 +8,8 @@
 #include "toy/math/Vector4.hpp"
 #include "toy/math/Matrix4.hpp"
 
-
 namespace toy{
 namespace math{
-
-//-----------------3 dimension------------------start
-
-
-template <typename Type>
-inline auto CreateV3(const Type x,const Type y,const Type z)->::toy::math::Vector3<Type>
-{
-	return ::toy::math::Vector3<Type>(x,y,z);
-}
 
 template <typename Type>
 inline auto Normalize3(const ::toy::math::Vector3<Type> &t)->::toy::math::Vector3<Type>
@@ -54,9 +44,6 @@ inline auto Vector3Cross( const ::toy::math::Vector3<Type> a,
 	                                   a.z*b.x-a.x*b.z,
 	                                   a.x*b.y-a.y*b.x );
 }
-
-
-//-----------------3 dimension------------------end
 
 template <typename Type>
 inline void MakeOrtho( ::toy::math::Matrix4<Type> *mat,

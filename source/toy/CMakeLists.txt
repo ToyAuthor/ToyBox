@@ -1,5 +1,6 @@
 
 add_subdirectory(memory)
+add_subdirectory(math)
 add_subdirectory(photo)
 add_subdirectory(file)
 add_subdirectory(parser)
