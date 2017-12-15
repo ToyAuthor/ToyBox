@@ -42,10 +42,19 @@ class TOY_API Color
 		void data(float    r,float    g,float    b,float    a);
 		void data(float*   r,float*   g,float*   b,float*   a) const;
 
-		auto red()   const->::toy::_PrimaryColor;
-		auto green() const->::toy::_PrimaryColor;
-		auto blue()  const->::toy::_PrimaryColor;
-		auto alpha() const->::toy::_PrimaryColor;
+		void red(float);
+		void red(uint8_t);
+		void green(float);
+		void green(uint8_t);
+		void blue(float);
+		void blue(uint8_t);
+		void alpha(float);
+		void alpha(uint8_t);
+
+		auto red()   const -> ::toy::_PrimaryColor;
+		auto green() const -> ::toy::_PrimaryColor;
+		auto blue()  const -> ::toy::_PrimaryColor;
+		auto alpha() const -> ::toy::_PrimaryColor;
 
 	private:
 

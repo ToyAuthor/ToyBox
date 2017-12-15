@@ -52,7 +52,7 @@ _PrimaryColor::operator uint8_t()
 	return FloatToInt(_color);
 }
 
-Color::Color(const Color& bro)
+Color::Color(const Color& bro):_this(new ::toy::ColorPrivate)
 {
 	*_this = *(bro._this);
 }
@@ -120,6 +120,15 @@ void Color::data(float *r,float *g,float *b,float *a) const
 	*b = _this->b;
 	*a = _this->a;
 }
+
+void Color::red(float     color) { _this->r = color; }
+void Color::red(uint8_t   color) { _this->r = IntToFloat(color); }
+void Color::green(float   color) { _this->g = color; }
+void Color::green(uint8_t color) { _this->g = IntToFloat(color); }
+void Color::blue(float    color) { _this->b = color; }
+void Color::blue(uint8_t  color) { _this->b = IntToFloat(color); }
+void Color::alpha(float   color) { _this->a = color; }
+void Color::alpha(uint8_t color) { _this->a = IntToFloat(color); }
 
 auto Color::red() const->_PrimaryColor
 {
