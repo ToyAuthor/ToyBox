@@ -1,11 +1,11 @@
 #include <vector>
 #include <cstring>
-#include "toy/math/Real.hpp"
+#include "toy/math/Int.hpp"
 
 namespace toy{
 namespace math{
 
-struct RealPrivate
+struct IntPrivate
 {
 	std::vector<uint8_t>  data;
 //	std::vector<uint8_t>  divisor;
@@ -17,17 +17,17 @@ struct RealPrivate
 using namespace toy;
 using namespace math;
 
-Real::~Real()
+Int::~Int()
 {
 	delete _this;
 }
 
-Real::Real(const Real &number):_this(new struct RealPrivate)
+Int::Int(const Int &number):_this(new struct IntPrivate)
 {
 	*_this = *(number._this);
 }
 
-Real::Real(int8_t number):_this(new struct RealPrivate)
+Int::Int(int8_t number):_this(new struct IntPrivate)
 {
 	if ( number<0 )
 	{
@@ -38,12 +38,12 @@ Real::Real(int8_t number):_this(new struct RealPrivate)
 	_this->data.push_back(number);
 }
 
-Real::Real(uint8_t number):_this(new struct RealPrivate)
+Int::Int(uint8_t number):_this(new struct IntPrivate)
 {
 	_this->data.push_back(number);
 }
 
-Real::Real(int16_t number):_this(new struct RealPrivate)
+Int::Int(int16_t number):_this(new struct IntPrivate)
 {
 	if ( number<0 )
 	{
@@ -56,14 +56,14 @@ Real::Real(int16_t number):_this(new struct RealPrivate)
 	_this->data.push_back((number - temp)>>8);
 }
 
-Real::Real(uint16_t number):_this(new struct RealPrivate)
+Int::Int(uint16_t number):_this(new struct IntPrivate)
 {
 	uint16_t  temp = number%0x100;
 	_this->data.push_back( temp);  if ( temp==number ) return;
 	_this->data.push_back((number - temp)>>8);
 }
 
-Real::Real(int32_t number):_this(new struct RealPrivate)
+Int::Int(int32_t number):_this(new struct IntPrivate)
 {
 	if ( number<0 )
 	{
@@ -79,7 +79,7 @@ Real::Real(int32_t number):_this(new struct RealPrivate)
 	_this->data.push_back((number - temp )>>24);
 }
 
-Real::Real(uint32_t number):_this(new struct RealPrivate)
+Int::Int(uint32_t number):_this(new struct IntPrivate)
 {
 	uint32_t  temp = number%0x100;
 	int32_t  temp2;
@@ -89,7 +89,7 @@ Real::Real(uint32_t number):_this(new struct RealPrivate)
 	_this->data.push_back((number - temp )>>24);
 }
 
-Real::Real(int64_t number):_this(new struct RealPrivate)
+Int::Int(int64_t number):_this(new struct IntPrivate)
 {
 	if ( number<0 )
 	{
@@ -109,7 +109,7 @@ Real::Real(int64_t number):_this(new struct RealPrivate)
 	_this->data.push_back((number - temp )>>56);
 }
 
-Real::Real(uint64_t number):_this(new struct RealPrivate)
+Int::Int(uint64_t number):_this(new struct IntPrivate)
 {
 	uint64_t  temp = number%0x100;
 	int64_t  temp2;
@@ -124,7 +124,7 @@ Real::Real(uint64_t number):_this(new struct RealPrivate)
 }
 
 template<typename T>
-inline static void CopyArrayToReal(struct RealPrivate *member,const T *number, int datasize)
+inline static void CopyArrayToReal(struct IntPrivate *member,const T *number, int datasize)
 {
 	member->data.resize(datasize);
 
@@ -133,21 +133,21 @@ inline static void CopyArrayToReal(struct RealPrivate *member,const T *number, i
 	             datasize );
 }
 
-Real::Real(const int8_t *number, int datasize,bool negative):_this(new struct RealPrivate)
+Int::Int(const int8_t *number, int datasize,bool negative):_this(new struct IntPrivate)
 {
 	_this->negative = negative;
 
 	CopyArrayToReal(_this,number,datasize);
 }
 
-Real::Real(const uint8_t *number, int datasize,bool negative):_this(new struct RealPrivate)
+Int::Int(const uint8_t *number, int datasize,bool negative):_this(new struct IntPrivate)
 {
 	_this->negative = negative;
 
 	CopyArrayToReal(_this,number,datasize);
 }
 
-bool Real::get(int8_t *number) const
+bool Int::get(int8_t *number) const
 {
 	if ( _this->data.size()>1 )
 	{
@@ -169,7 +169,7 @@ bool Real::get(int8_t *number) const
 	return true;
 }
 
-bool Real::get(uint8_t *number) const
+bool Int::get(uint8_t *number) const
 {
 	if ( _this->data.size()>1 )
 	{
@@ -186,7 +186,7 @@ bool Real::get(uint8_t *number) const
 	return true;
 }
 
-bool Real::get(int16_t *number) const
+bool Int::get(int16_t *number) const
 {
 	if ( _this->data.size()>2 )
 	{
@@ -210,7 +210,7 @@ bool Real::get(int16_t *number) const
 	return true;
 }
 
-bool Real::get(uint16_t *number) const
+bool Int::get(uint16_t *number) const
 {
 	if ( _this->data.size()>2 )
 	{
@@ -229,7 +229,7 @@ bool Real::get(uint16_t *number) const
 	return true;
 }
 
-bool Real::get(int32_t *number) const
+bool Int::get(int32_t *number) const
 {
 	if ( _this->data.size()>4 )
 	{
@@ -255,7 +255,7 @@ bool Real::get(int32_t *number) const
 	return true;
 }
 
-bool Real::get(uint32_t *number) const
+bool Int::get(uint32_t *number) const
 {
 	if ( _this->data.size()>4 )
 	{
@@ -276,7 +276,7 @@ bool Real::get(uint32_t *number) const
 	return true;
 }
 
-bool Real::get(int64_t *number) const
+bool Int::get(int64_t *number) const
 {
 	if ( _this->data.size()>8 )
 	{
@@ -306,7 +306,7 @@ bool Real::get(int64_t *number) const
 	return true;
 }
 
-bool Real::get(uint64_t *number) const
+bool Int::get(uint64_t *number) const
 {
 	if ( _this->data.size()>8 )
 	{
@@ -424,7 +424,7 @@ inline static int GetNotZeroIndex(char *str)
 	return 0;
 }
 
-bool Real::get(std::string *number) const
+bool Int::get(std::string *number) const
 {
 	std::vector<int>   nbuffer;
 
@@ -560,7 +560,7 @@ static void ArrayMinusEqualArray2(std::vector<uint8_t> *arrayA,const std::vector
 	;
 }*/
 
-void Real::operator +=(const Real &number)
+void Int::operator +=(const Int &number)
 {
 	if      ( _this->negative==true  && number._this->negative==true )
 	{
