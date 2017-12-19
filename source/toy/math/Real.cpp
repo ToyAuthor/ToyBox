@@ -51,16 +51,16 @@ Real::Real(int16_t number):_this(new struct RealPrivate)
 		number *= -1;
 	}
 
-	int16_t  temp = number%256;
+	int16_t  temp = number%0x100;
 	_this->data.push_back( temp);  if ( temp==number ) return;
-	_this->data.push_back((number - _this->data[0])>>8);
+	_this->data.push_back((number - temp)>>8);
 }
 
 Real::Real(uint16_t number):_this(new struct RealPrivate)
 {
-	uint16_t  temp = number%256;
+	uint16_t  temp = number%0x100;
 	_this->data.push_back( temp);  if ( temp==number ) return;
-	_this->data.push_back((number - _this->data[0])>>8);
+	_this->data.push_back((number - temp)>>8);
 }
 
 Real::Real(int32_t number):_this(new struct RealPrivate)
@@ -71,20 +71,22 @@ Real::Real(int32_t number):_this(new struct RealPrivate)
 		number *= -1;
 	}
 
-	int32_t  temp = number%256;
-	_this->data.push_back( temp);                          if ( temp==number ) return; temp = number%65536;
-	_this->data.push_back((temp   - _this->data[0] )>>8 ); if ( temp==number ) return; temp = number%16777216;
-	_this->data.push_back((temp   - number%65536   )>>16); if ( temp==number ) return;
-	_this->data.push_back((number - number%16777216)>>24);
+	int32_t  temp = number%0x100;
+	int32_t  temp2;
+	_this->data.push_back( temp);                if ( temp==number ) return; temp2 = temp; temp = number%0x10000;
+	_this->data.push_back((temp   - temp2)>>8 ); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000;
+	_this->data.push_back((temp   - temp2)>>16); if ( temp==number ) return;
+	_this->data.push_back((number - temp )>>24);
 }
 
 Real::Real(uint32_t number):_this(new struct RealPrivate)
 {
-	uint32_t  temp = number%256;
-	_this->data.push_back( temp);                          if ( temp==number ) return; temp = number%65536;
-	_this->data.push_back((temp   - _this->data[0] )>>8 ); if ( temp==number ) return; temp = number%16777216;
-	_this->data.push_back((temp   - number%65536   )>>16); if ( temp==number ) return;
-	_this->data.push_back((number - number%16777216)>>24);
+	uint32_t  temp = number%0x100;
+	int32_t  temp2;
+	_this->data.push_back( temp);                if ( temp==number ) return; temp2 = temp; temp = number%0x10000;
+	_this->data.push_back((temp   - temp2)>>8 ); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000;
+	_this->data.push_back((temp   - temp2)>>16); if ( temp==number ) return;
+	_this->data.push_back((number - temp )>>24);
 }
 
 Real::Real(int64_t number):_this(new struct RealPrivate)
@@ -95,28 +97,30 @@ Real::Real(int64_t number):_this(new struct RealPrivate)
 		number *= -1;
 	}
 
-	int64_t  temp = number%256;
-	_this->data.push_back( temp);                                   if ( temp==number ) return; temp = number%65536;
-	_this->data.push_back((temp   - _this->data[0])          >>8 ); if ( temp==number ) return; temp = number%16777216;
-	_this->data.push_back((temp   - number%65536)            >>16); if ( temp==number ) return; temp = number%4294967296;
-	_this->data.push_back((temp   - number%16777216)         >>24); if ( temp==number ) return; temp = number%1099511627776;
-	_this->data.push_back((temp   - number%4294967296)       >>32); if ( temp==number ) return; temp = number%281474976710656;
-	_this->data.push_back((temp   - number%1099511627776)    >>40); if ( temp==number ) return; temp = number%72057594037927936;
-	_this->data.push_back((temp   - number%281474976710656)  >>48); if ( temp==number ) return;
-	_this->data.push_back((number - number%72057594037927936)>>56);
+	int64_t  temp = number%0x100;
+	int64_t  temp2;
+	_this->data.push_back( temp);                if ( temp==number ) return; temp2 = temp; temp = number%0x10000;
+	_this->data.push_back((temp   - temp2)>>8 ); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000;
+	_this->data.push_back((temp   - temp2)>>16); if ( temp==number ) return; temp2 = temp; temp = number%0x100000000;
+	_this->data.push_back((temp   - temp2)>>24); if ( temp==number ) return; temp2 = temp; temp = number%0x10000000000;
+	_this->data.push_back((temp   - temp2)>>32); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000000000;
+	_this->data.push_back((temp   - temp2)>>40); if ( temp==number ) return; temp2 = temp; temp = number%0x100000000000000;
+	_this->data.push_back((temp   - temp2)>>48); if ( temp==number ) return;
+	_this->data.push_back((number - temp )>>56);
 }
 
 Real::Real(uint64_t number):_this(new struct RealPrivate)
 {
-	uint64_t  temp = number%256;
-	_this->data.push_back( temp);                                   if ( temp==number ) return; temp = number%65536;
-	_this->data.push_back((temp   - _this->data[0])          >>8 ); if ( temp==number ) return; temp = number%16777216;
-	_this->data.push_back((temp   - number%65536)            >>16); if ( temp==number ) return; temp = number%4294967296;
-	_this->data.push_back((temp   - number%16777216)         >>24); if ( temp==number ) return; temp = number%1099511627776;
-	_this->data.push_back((temp   - number%4294967296)       >>32); if ( temp==number ) return; temp = number%281474976710656;
-	_this->data.push_back((temp   - number%1099511627776)    >>40); if ( temp==number ) return; temp = number%72057594037927936;
-	_this->data.push_back((temp   - number%281474976710656)  >>48); if ( temp==number ) return;
-	_this->data.push_back((number - number%72057594037927936)>>56);
+	uint64_t  temp = number%0x100;
+	int64_t  temp2;
+	_this->data.push_back( temp);                if ( temp==number ) return; temp2 = temp; temp = number%0x10000;
+	_this->data.push_back((temp   - temp2)>>8 ); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000;
+	_this->data.push_back((temp   - temp2)>>16); if ( temp==number ) return; temp2 = temp; temp = number%0x100000000;
+	_this->data.push_back((temp   - temp2)>>24); if ( temp==number ) return; temp2 = temp; temp = number%0x10000000000;
+	_this->data.push_back((temp   - temp2)>>32); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000000000;
+	_this->data.push_back((temp   - temp2)>>40); if ( temp==number ) return; temp2 = temp; temp = number%0x100000000000000;
+	_this->data.push_back((temp   - temp2)>>48); if ( temp==number ) return;
+	_this->data.push_back((number - temp )>>56);
 }
 
 template<typename T>
