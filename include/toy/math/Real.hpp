@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include "toy/math/Export.hpp"
 
 namespace toy{
@@ -23,8 +24,8 @@ class TOY_API_MATH Real
 		Real(uint32_t number);
 		Real(int64_t  number);
 		Real(uint64_t number);
-		Real(const  int8_t *number, int datasize,bool negative=false);
-		Real(const uint8_t *number, int datasize,bool negative=false);
+		Real(const  int8_t *number, int datasize, bool negative=false);
+		Real(const uint8_t *number, int datasize, bool negative=false);
 
 		bool get( int8_t  *number) const;
 		bool get(uint8_t  *number) const;
@@ -34,6 +35,7 @@ class TOY_API_MATH Real
 		bool get(uint32_t *number) const;
 		bool get( int64_t *number) const;
 		bool get(uint64_t *number) const;
+		bool get(std::string *number) const;
 
 	//	bool setRawData(const uint8_t *number,int dataSize);
 	//	int  getRawData(      uint8_t *number);    // getRawData(nullptr) return raw data size.
@@ -47,10 +49,22 @@ class TOY_API_MATH Real
 	//	void operator *=(const Real &number);
 
 	//	auto operator + (const Real &number) const -> const Real &number;
-	//	void operator +=(const Real &number);
+		void operator +=(const Real &number);
 
 	//	auto operator - (const Real &number) const -> const Real &number;
 	//	void operator -=(const Real &number);
+
+	//	void operator >>(int);
+	//	void operator <<(int);
+
+	//	bool isAbsoluteValueBiggerThan (const Real &number);
+	//	bool isAbsoluteValueSmallerThan(const Real &number);
+
+	//	bool operator > (const Real &number);
+	//	bool operator < (const Real &number);
+	//	bool operator <=(const Real &number);
+	//	bool operator >=(const Real &number);
+	//	bool operator ==(const Real &number);
 
 	private:
 
