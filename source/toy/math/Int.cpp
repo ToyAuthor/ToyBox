@@ -368,13 +368,13 @@ inline static void AddNumberToArray(std::vector<int> *nbuffer,int num)
 
 inline static void CalRealNumber(const int index,int deep,std::vector<int> *nbuffer,const std::vector<uint8_t>& data)
 {
-	for ( int i=256 ; i>0 ; i-- )
+	if ( deep==1 )
 	{
-		if ( deep==1 )
-		{
-			AddNumberToArray(nbuffer,data[index]);
-		}
-		else
+		AddNumberToArray(nbuffer,data[index]*256);
+	}
+	else
+	{
+		for ( int i=256 ; i>0 ; i-- )
 		{
 			CalRealNumber(index,deep-1,nbuffer,data);
 		}
