@@ -5,7 +5,11 @@
 #include <toy/Utf.hpp>
 #include <toy/io/Writer.hpp>
 
-static int ToyBoxIsUTF8(lua_State* L)
+namespace toy{
+namespace luamodule{
+namespace logger{
+
+static int IsUTF8(lua_State* L)
 {
 	std::string    str;
 
@@ -42,20 +46,20 @@ inline static void PrintString(lua_State* L)
 	lua_pop(L,1);
 }
 
-static int ToyBoxLogger(lua_State* L)
+static int Log(lua_State* L)
 {
 	PrintString(L);
 	return 1;
 }
 
-static int ToyBoxLoggerWithNewLine(lua_State* L)
+static int LogWithNewLine(lua_State* L)
 {
 	PrintString(L);
 	toy::Logger<<toy::NextLine;
 	return 1;
 }
 
-static int ToyBoxLoggerVersion(lua_State* L)
+static int Version(lua_State* L)
 {
 	auto   setValue = [L](const char* key,lua_Integer value)
 	{
@@ -75,7 +79,7 @@ static int ToyBoxLoggerVersion(lua_State* L)
 	return 1;
 }
 
-static int ToyBoxLoggerSetOutputLog(lua_State* L)
+static int SetOutputLog(lua_State* L)
 {
 	std::string    str;
 
@@ -108,11 +112,13 @@ static int ToyBoxLoggerSetOutputLog(lua_State* L)
 	return 1;
 }
 
-static int ToyBoxLoggerCleanOutputLog(lua_State*)
+static int CleanOutputLog(lua_State*)
 {
 	toy::log::BackDefaultDevice();
 	return 1;
 }
+
+}}}
 
 #if defined(_WIN32)
 	#define MY_DLL_API __declspec(dllexport)
@@ -122,20 +128,22 @@ static int ToyBoxLoggerCleanOutputLog(lua_State*)
 
 extern "C" MY_DLL_API int luaopen_toy_logger(lua_State* L)
 {
+	namespace module = ::toy::luamodule::logger;
+
 	luaL_Reg   reg[7];
 
 	reg[0].name = "printf";
-	reg[0].func = ToyBoxLogger;
+	reg[0].func = module::Log;
 	reg[1].name = "print";
-	reg[1].func = ToyBoxLoggerWithNewLine;
+	reg[1].func = module::LogWithNewLine;
 	reg[2].name = "isUTF8";
-	reg[2].func = ToyBoxIsUTF8;
+	reg[2].func = module::IsUTF8;
 	reg[3].name = "version";
-	reg[3].func = ToyBoxLoggerVersion;
+	reg[3].func = module::Version;
 	reg[4].name = "asFile";
-	reg[4].func = ToyBoxLoggerSetOutputLog;
+	reg[4].func = module::SetOutputLog;
 	reg[5].name = "reset";
-	reg[5].func = ToyBoxLoggerCleanOutputLog;
+	reg[5].func = module::CleanOutputLog;
 	reg[6].name = nullptr;
 	reg[6].func = nullptr;
 

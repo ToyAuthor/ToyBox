@@ -1,7 +1,11 @@
 #include <lua.hpp>
 #include <toy/Environment.hpp>
 
-static int ToyEnv_GetOS(lua_State* L)
+namespace toy{
+namespace luamodule{
+namespace env{
+
+static int GetOS(lua_State* L)
 {
 	#if defined(TOY_LINUX)
 		lua_pushstring(L, "linux");
@@ -16,7 +20,7 @@ static int ToyEnv_GetOS(lua_State* L)
 	return 1;
 }
 
-static int ToyEnv_GetCompiler(lua_State* L)
+static int GetCompiler(lua_State* L)
 {
 	#if defined(TOY_GCC)
 		lua_pushstring(L, "GCC");
@@ -35,6 +39,8 @@ static int ToyEnv_GetCompiler(lua_State* L)
 	return 1;
 }
 
+}}}
+
 #ifdef TOY_WINDOWS
 	#define MY_DLL_API __declspec(dllexport)
 #else
@@ -43,12 +49,14 @@ static int ToyEnv_GetCompiler(lua_State* L)
 
 extern "C" MY_DLL_API int luaopen_toy_env(lua_State* L)
 {
+	namespace module = ::toy::luamodule::env;
+
 	luaL_Reg   reg[3];
 
 	reg[0].name = "os";
-	reg[0].func = ToyEnv_GetOS;
+	reg[0].func = module::GetOS;
 	reg[1].name = "compiler";
-	reg[1].func = ToyEnv_GetCompiler;
+	reg[1].func = module::GetCompiler;
 	reg[2].name = nullptr;
 	reg[2].func = nullptr;
 

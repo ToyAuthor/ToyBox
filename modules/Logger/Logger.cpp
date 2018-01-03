@@ -5,7 +5,11 @@
 #include <toy/Utf.hpp>
 #include <toy/io/Writer.hpp>
 
-static int ToyBoxIsUTF8(lua::NativeState L)
+namespace toy{
+namespace luamodule{
+namespace logger{
+
+static int IsUTF8(lua::NativeState L)
 {
 	lua::Str   str;
 	lua::CheckVarFromLua(L,&str,-1);
@@ -25,20 +29,20 @@ inline static void PrintString(lua::NativeState L)
 	toy::Logger<<str;
 }
 
-static int ToyBoxLogger(lua::NativeState L)
+static int Log(lua::NativeState L)
 {
 	PrintString(L);
 	return 1;
 }
 
-static int ToyBoxLoggerWithNewLine(lua::NativeState L)
+static int LogWithNewLine(lua::NativeState L)
 {
 	PrintString(L);
 	toy::Logger<<toy::NextLine;
 	return 1;
 }
 
-static int ToyBoxLoggerVersion(lua::NativeState L)
+static int Version(lua::NativeState L)
 {
 	lua::Table  ver;
 
@@ -51,14 +55,14 @@ static int ToyBoxLoggerVersion(lua::NativeState L)
 	return 1;
 }
 
-static int ToyBoxLoggerCleanOutputLog(lua::NativeState)
+static int CleanOutputLog(lua::NativeState)
 {
 	toy::log::BackDefaultDevice();
 
 	return 1;
 }
 
-static int ToyBoxLoggerSetOutputLog(lua::NativeState L)
+static int SetOutputLog(lua::NativeState L)
 {
 	lua::Str   str;
 
@@ -85,6 +89,8 @@ static int ToyBoxLoggerSetOutputLog(lua::NativeState L)
 	return 1;
 }
 
+}}}
+
 #if defined(_WIN32)
 	#define MY_DLL_API __declspec(dllexport)
 #else
@@ -93,14 +99,16 @@ static int ToyBoxLoggerSetOutputLog(lua::NativeState L)
 
 extern "C" MY_DLL_API int luaopen_toy_logger(lua::NativeState L)
 {
+	namespace module = ::toy::luamodule::logger;
+
 	lua::State<>    lua(L);
 
-	lua.setFunc( "printf", ToyBoxLogger );
-	lua.setFunc( "print",  ToyBoxLoggerWithNewLine );
-	lua.setFunc( "isUTF8", ToyBoxIsUTF8 );
-	lua.setFunc( "asFile", ToyBoxLoggerSetOutputLog );
-	lua.setFunc( "reset",  ToyBoxLoggerCleanOutputLog );
-	lua.setFunc( "version",ToyBoxLoggerVersion );
+	lua.setFunc( "printf", module::Log );
+	lua.setFunc( "print",  module::LogWithNewLine );
+	lua.setFunc( "isUTF8", module::IsUTF8 );
+	lua.setFunc( "asFile", module::SetOutputLog );
+	lua.setFunc( "reset",  module::CleanOutputLog );
+	lua.setFunc( "version",module::Version );
 
 	return 1;
 }
