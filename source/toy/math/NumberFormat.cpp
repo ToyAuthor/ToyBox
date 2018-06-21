@@ -131,7 +131,7 @@ NumberFormat::NumberFormat(const std::string &num):_this(new NumberFormatPrivate
 		return;
 	}
 
-	for (; size>index+1 ;index++)
+	for (; size>index ;index++)
 	{
 		if ( num[index]=='.' )
 		{
