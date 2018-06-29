@@ -87,13 +87,37 @@ const Printer& Printer:: operator << (const unsigned char *str) const
 	return *this;
 }
 
-const Printer& Printer:: operator << (const std::string str) const
+const Printer& Printer:: operator << (char *const str) const
+{
+	toy::Log("%s",str);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const char *const str) const
+{
+	toy::Log("%s",str);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const std::string &str) const
 {
 	toy::Log("%s",str.c_str());
 	return *this;
 }
 
-const Printer& Printer:: operator << (const std::wstring str) const
+const Printer& Printer:: operator << (wchar_t *const str) const
+{
+	toy::Log(L"%ls",str);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const wchar_t *const str) const
+{
+	toy::Log(L"%ls",str);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const std::wstring &str) const
 {
 	toy::Log(L"%ls",str.c_str());
 	return *this;

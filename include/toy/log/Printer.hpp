@@ -23,11 +23,22 @@ class TOY_API Printer
 		const Printer& operator << (const float) const;
 		const Printer& operator << (const double) const;
 		const Printer& operator << (const unsigned char *str) const;
-		const Printer& operator << (const std::string str) const;
-		const Printer& operator << (const std::wstring str) const;
+		const Printer& operator << (      char *const str) const;
+		const Printer& operator << (const char *const str) const;
+		const Printer& operator << (const std::string &str) const;
+		const Printer& operator << (      wchar_t *const str) const;
+		const Printer& operator << (const wchar_t *const str) const;
+		const Printer& operator << (const std::wstring &str) const;
 		const Printer& operator << (const std::string *str) const;
 		const Printer& operator << (const std::wstring *str) const;
 		const Printer& operator << (const Printer& (*func)(const Printer&)) const;
+
+		template<typename T>
+		const Printer& operator << (const T &obj) const
+		{
+			(*this)<<obj.str();
+			return *this;
+		}
 };
 
 }}
