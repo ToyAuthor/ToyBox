@@ -7,7 +7,7 @@
 namespace toy{
 namespace parser{
 
-class TOY_API_PARSER StringCutterConfig
+class TOY_API_PARSER AnalyzerConfig
 {
 	public:
 
@@ -46,7 +46,7 @@ class TOY_API_PARSER StringCutterConfig
 		template<typename T>
 		class List
 		{
-			friend class StringCutter;
+			friend class Analyzer;
 
 			public:
 
@@ -73,8 +73,8 @@ class TOY_API_PARSER StringCutterConfig
 				std::vector<T>    array;
 		};
 
-		StringCutterConfig();
-		~StringCutterConfig();
+		AnalyzerConfig();
+		~AnalyzerConfig();
 
 		void    useDefault();
 		void    useDefaultIgnore();
@@ -89,9 +89,9 @@ class TOY_API_PARSER StringCutterConfig
 		std::string   desireWord;
 };
 
-inline std::shared_ptr<toy::parser::StringCutterConfig> NewCutterConfig()
+inline std::shared_ptr<toy::parser::AnalyzerConfig> NewAnalyzerConfig()
 {
-	return std::make_shared<toy::parser::StringCutterConfig>();
+	return std::make_shared<toy::parser::AnalyzerConfig>();
 }
 
 

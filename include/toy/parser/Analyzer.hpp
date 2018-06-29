@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "toy/parser/StringCutterConfig.hpp"
+#include "toy/parser/AnalyzerConfig.hpp"
 #include "toy/parser/Export.hpp"
 
 namespace toy{
@@ -9,14 +9,14 @@ namespace parser{
 
 
 // Take string apart by given rule. You can call it analyzer.
-class TOY_API_PARSER StringCutter
+class TOY_API_PARSER Analyzer
 {
 	public:
 
-		typedef std::shared_ptr<StringCutterConfig> ConfigPtr;
+		typedef std::shared_ptr<AnalyzerConfig> ConfigPtr;
 
-		StringCutter();
-		~StringCutter();
+		Analyzer();
+		~Analyzer();
 
 		void    loadString(std::string &str);
 		bool    nextWord(std::string *str);    // Next token

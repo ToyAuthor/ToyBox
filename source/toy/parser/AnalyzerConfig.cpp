@@ -1,26 +1,26 @@
-#include "toy/parser/StringCutterConfig.hpp"
+#include "toy/parser/AnalyzerConfig.hpp"
 
 
 using namespace toy;
 using namespace parser;
 
-StringCutterConfig::StringCutterConfig()
+AnalyzerConfig::AnalyzerConfig()
 {
 	;
 }
 
-StringCutterConfig::~StringCutterConfig()
+AnalyzerConfig::~AnalyzerConfig()
 {
 	;
 }
 
-void StringCutterConfig::useDefaultIgnore()
+void AnalyzerConfig::useDefaultIgnore()
 {
 	ignoreCharList.push(' ');
 	ignoreCharList.push('\t');
 }
 
-void StringCutterConfig::useDefaultBreak01()
+void AnalyzerConfig::useDefaultBreak01()
 {
 	// ansi key code
 	breakCharList.push('\n');
@@ -57,7 +57,7 @@ void StringCutterConfig::useDefaultBreak01()
 	breakCharList.push('?');
 }
 
-void StringCutterConfig::useDefaultBreak02()
+void AnalyzerConfig::useDefaultBreak02()
 {
 //	breakDoubleCharList.push(CChar('\r','\n'));
 	breakDoubleCharList.push(CChar('=','='));    // ==
@@ -66,14 +66,14 @@ void StringCutterConfig::useDefaultBreak02()
 	breakDoubleCharList.push(CChar('<','='));    // <=
 }
 
-void StringCutterConfig::useDefaultBreak03()
+void AnalyzerConfig::useDefaultBreak03()
 {
 	breakTripleCharList.push(TChar('>','>','>'));    // >>>
 	breakTripleCharList.push(TChar('<','<','<'));    // <<<
 	breakTripleCharList.push(TChar('"','"','"'));    // """
 }
 
-void StringCutterConfig::useDefault()
+void AnalyzerConfig::useDefault()
 {
 	useDefaultIgnore();
 	useDefaultBreak01();

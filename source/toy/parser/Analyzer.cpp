@@ -1,20 +1,20 @@
-#include "toy/parser/StringCutter.hpp"
+#include "toy/parser/Analyzer.hpp"
 
 
 using namespace toy;
 using namespace parser;
 
-StringCutter::StringCutter()
+Analyzer::Analyzer()
 {
 	;
 }
 
-StringCutter::~StringCutter()
+Analyzer::~Analyzer()
 {
 	this->drop();
 }
 
-void StringCutter::drop()
+void Analyzer::drop()
 {
 	if ( _configStack.size()>0 )
 	{
@@ -29,13 +29,13 @@ void StringCutter::drop()
 	}
 }
 
-void StringCutter::loadString(std::string &str)
+void Analyzer::loadString(std::string &str)
 {
 	_string = str;
 	_index=0;
 }
 
-void StringCutter::pushFront(std::string str)
+void Analyzer::pushFront(std::string str)
 {
 	if ( static_cast<decltype(_index)>(str.size())>_index )
 	{
@@ -45,7 +45,7 @@ void StringCutter::pushFront(std::string str)
 	_index -= str.size();
 }
 
-bool StringCutter::nextWord(std::string *_str)
+bool Analyzer::nextWord(std::string *_str)
 {
 	auto&   str = *_str;
 	auto    latest_stack = _configStack.back();
@@ -229,12 +229,12 @@ bool StringCutter::nextWord(std::string *_str)
 	return 0;
 }
 
-void StringCutter::pushConfig(ConfigPtr ptr)
+void Analyzer::pushConfig(ConfigPtr ptr)
 {
 	_configStack.push_back(ptr);
 }
 
-void StringCutter::popConfig(int num)
+void Analyzer::popConfig(int num)
 {
 	auto   size = static_cast<decltype(num)>(_configStack.size());
 
@@ -249,7 +249,7 @@ void StringCutter::popConfig(int num)
 	}
 }
 
-auto StringCutter::getConfig()->ConfigPtr
+auto Analyzer::getConfig()->ConfigPtr
 {
 	if ( _configStack.empty() )
 	{
