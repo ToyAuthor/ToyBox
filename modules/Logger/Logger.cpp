@@ -24,6 +24,7 @@ inline static void PrintString(lua::NativeState L)
 	lua::Str   str;
 
 	lua::CheckVarFromLua(L,&str,-1);
+
 	lua::Pop(L,1);
 
 	toy::Logger<<str;

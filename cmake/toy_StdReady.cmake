@@ -1,0 +1,28 @@
+
+macro(toy_StdReady)
+	if(NOT MSVC)
+		if( TOY_RELEASE )
+			add_definitions(-O2 -s -Werror -Wall -Wextra)
+		else()
+			add_definitions(-O2 -g -Werror -Wall -Wextra)
+		endif()
+
+		if(WIN32)
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+		else()
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+		endif()
+
+		if(APPLE)
+			add_definitions(-Qunused-arguments)
+		elseif(UNIX)
+			include_directories(/usr/include)
+
+			if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+				link_directories(/usr/lib/x86_64-linux-gnu)
+			else()
+				link_directories(/usr/lib)
+			endif()
+		endif()
+	endif()
+endmacro(toy_StdReady)

@@ -1,10 +1,19 @@
 
-include("${TOY_ROOT_SOURCE_DIR}/cmake/ToyOptions.cmake" REQUIRED)
-include("${TOY_ROOT_SOURCE_DIR}/cmake/ToyBuildTools.cmake" REQUIRED)
-include("${TOY_ROOT_SOURCE_DIR}/cmake/ToyThirdPartyPath.cmake" REQUIRED)
-include("${TOY_ROOT_SOURCE_DIR}/cmake/ToyCheckEnvironment.cmake" REQUIRED)
+
 
 macro(toy_IncludeTools)
+
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_ProcessOptions.cmake" REQUIRED)
+	if(TOY_ANDROID)
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/android/create_apk.cmake" REQUIRED)
+	endif()
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_StdReady.cmake" REQUIRED)
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_ProcessArguments.cmake" REQUIRED)
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_BuildLib.cmake" REQUIRED)
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_BuildExe.cmake" REQUIRED)
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_BuildModule.cmake" REQUIRED)
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_SetThirdPartyLibraryPath.cmake" REQUIRED)
+	include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_CheckEnvironment.cmake" REQUIRED)
 
 	if(NOT CMAKE_BUILD_TYPE)
 	#	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build" FORCE)
