@@ -2,6 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
+#include "toy/Exception.hpp"
 #include "toy/math/Vector3.hpp"
 #include "toy/math/Vector4.hpp"
 #include "toy/math/Quaternion.hpp"
@@ -89,7 +90,10 @@ public:
 	void setColumn(const int32_t i,const Vector4<Type> & v)
 	{
 		#ifdef TOY_OPTION_CHECK
-		if(i<1||4<i)toy::Oops(TOY_MARK);
+		if(i<1||4<i)
+		{
+			throw toy::Exception(TOY_MARK);
+		}
 		#endif
 
 		data[i-1]  = v.x;
