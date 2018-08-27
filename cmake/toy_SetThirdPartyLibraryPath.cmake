@@ -67,4 +67,13 @@ macro(toy_SetThirdPartyLibraryPath)
 
 	set(TOY_include_glm         "${TOY_ROOT_SOURCE_DIR}/third-party/glm" )
 
+
+	set(TOY_include_gmp         "${TOY_SDK_PATH}/gmp" )
+	set(TOY_library_gmp         "${TOY_SDK_PATH}/gmp" )
+	if(MSVC)
+	set(TOY_libname_gmp         "mpir" )
+	else()
+	set(TOY_libname_gmp         "gmp" )
+	endif()
+
 endmacro(toy_SetThirdPartyLibraryPath)

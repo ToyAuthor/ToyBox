@@ -1,6 +1,7 @@
 
 add_subdirectory(memory)
 add_subdirectory(math)
+add_subdirectory(bignum)
 add_subdirectory(photo)
 add_subdirectory(time)
 add_subdirectory(file)

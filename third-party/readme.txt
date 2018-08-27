@@ -13,4 +13,6 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
     luapp-2.2.0             MIT License
     zlib-1.2.8              zlib License
     stb_image-2.16          Public Domain
+    GMP-6.1.2               GNU LGPL
+    MPIR-3.0.0              GNU LGPL
     lz4-1.8.0               BSD 2-Clause License
