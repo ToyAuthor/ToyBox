@@ -1,4 +1,3 @@
-
 #include "toy/math/NumberFormat.hpp"
 
 namespace toy{
@@ -65,11 +64,10 @@ NumberFormat::NumberFormat(const std::string &num):_this(new NumberFormatPrivate
 
 	if ( num[index]=='-' )
 	{
+		if ( size==1 ) return;
 		index++;
 		_this->isNegative = 1;
 	}
-
-	if ( size<index+2 ) return;
 
 	bool maybeIsHexadecimal = false;
 	bool dotFound = false;
@@ -116,7 +114,7 @@ NumberFormat::NumberFormat(const std::string &num):_this(new NumberFormatPrivate
 		}
 		else if ( num[index+1]=='.' )
 		{
-			if ( size<index+3 ) return;  // 0x0.
+			if ( size<index+3 ) return;  // 0.
 
 			dotFound = true;
 			index += 2;

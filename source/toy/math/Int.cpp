@@ -1,14 +1,20 @@
 #include <vector>
+#include <memory>
 #include <cstring>
+#include <limits>
+#include "toy/Exception.hpp"
+#include "toy/Log.hpp"
 #include "toy/math/Int.hpp"
+#include "toy/math/Int2.hpp"
+#include "toy/math/NumberFormat.hpp"
+#include "toy/math/IntCommon.hpp"
 
 namespace toy{
 namespace math{
 
 struct IntPrivate
 {
-	std::vector<uint8_t>  data;
-//	std::vector<uint8_t>  divisor;
+	std::vector<uint8_t>  data;  // Unsigned little endian.
 	bool                  negative = false;
 };
 
@@ -20,6 +26,43 @@ using namespace math;
 Int::~Int()
 {
 	delete _this;
+}
+
+void Int::setRawData(const uint8_t* ptr, uint32_t size, bool isNegative)
+{
+	_this->data.resize(size);
+	std::memcpy((void*)_this->data.data(),(void*)ptr,size);
+	_this->negative = isNegative;
+}
+
+bool Int::negative() const
+{
+	return _this->negative;
+}
+
+const uint8_t* Int::data() const
+{
+	return _this->data.data();
+}
+
+uint32_t Int::size() const
+{
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::vector<uint8_t>::size_type)>sizeof(uint32_t) )
+		{
+			if ( _this->data.size() > static_cast<std::vector<uint8_t>::size_type>(std::numeric_limits<uint32_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	return _this->data.size();
+}
+
+Int::Int():_this(new struct IntPrivate)
+{
+	_this->data.push_back(0);
 }
 
 Int::Int(const Int &number):_this(new struct IntPrivate)
@@ -45,6 +88,12 @@ Int::Int(uint8_t number):_this(new struct IntPrivate)
 
 Int::Int(int16_t number):_this(new struct IntPrivate)
 {
+	if ( number==0 )
+	{
+		_this->data.push_back(0);
+		return;
+	}
+
 	if ( number<0 )
 	{
 		_this->negative = true;
@@ -58,6 +107,12 @@ Int::Int(int16_t number):_this(new struct IntPrivate)
 
 Int::Int(uint16_t number):_this(new struct IntPrivate)
 {
+	if ( number==0 )
+	{
+		_this->data.push_back(0);
+		return;
+	}
+
 	uint16_t  temp = number%0x100;
 	_this->data.push_back( temp);  if ( temp==number ) return;
 	_this->data.push_back((number - temp)>>8);
@@ -65,6 +120,12 @@ Int::Int(uint16_t number):_this(new struct IntPrivate)
 
 Int::Int(int32_t number):_this(new struct IntPrivate)
 {
+	if ( number==0 )
+	{
+		_this->data.push_back(0);
+		return;
+	}
+
 	if ( number<0 )
 	{
 		_this->negative = true;
@@ -81,8 +142,14 @@ Int::Int(int32_t number):_this(new struct IntPrivate)
 
 Int::Int(uint32_t number):_this(new struct IntPrivate)
 {
+	if ( number==0 )
+	{
+		_this->data.push_back(0);
+		return;
+	}
+
 	uint32_t  temp = number%0x100;
-	int32_t  temp2;
+	uint32_t  temp2;
 	_this->data.push_back( temp);                if ( temp==number ) return; temp2 = temp; temp = number%0x10000;
 	_this->data.push_back((temp   - temp2)>>8 ); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000;
 	_this->data.push_back((temp   - temp2)>>16); if ( temp==number ) return;
@@ -91,6 +158,12 @@ Int::Int(uint32_t number):_this(new struct IntPrivate)
 
 Int::Int(int64_t number):_this(new struct IntPrivate)
 {
+	if ( number==0 )
+	{
+		_this->data.push_back(0);
+		return;
+	}
+
 	if ( number<0 )
 	{
 		_this->negative = true;
@@ -111,8 +184,14 @@ Int::Int(int64_t number):_this(new struct IntPrivate)
 
 Int::Int(uint64_t number):_this(new struct IntPrivate)
 {
+	if ( number==0 )
+	{
+		_this->data.push_back(0);
+		return;
+	}
+
 	uint64_t  temp = number%0x100;
-	int64_t  temp2;
+	uint64_t  temp2;
 	_this->data.push_back( temp);                if ( temp==number ) return; temp2 = temp; temp = number%0x10000;
 	_this->data.push_back((temp   - temp2)>>8 ); if ( temp==number ) return; temp2 = temp; temp = number%0x1000000;
 	_this->data.push_back((temp   - temp2)>>16); if ( temp==number ) return; temp2 = temp; temp = number%0x100000000;
@@ -123,28 +202,182 @@ Int::Int(uint64_t number):_this(new struct IntPrivate)
 	_this->data.push_back((number - temp )>>56);
 }
 
-template<typename T>
-inline static void CopyArrayToReal(struct IntPrivate *member,const T *number, int datasize)
+static auto FindTheCloseOneBase256(const Int2 &target)->std::shared_ptr<std::vector<Int2>>
 {
-	member->data.resize(datasize);
+	auto ptr = std::make_shared<std::vector<Int2>>();
 
-	std::memcpy( static_cast<void*>(member->data.data()),
-	             static_cast<const void*>(number),
-	             datasize );
+	if ( target<256)
+	{
+		ptr->push_back(Int2("256"));
+		return ptr;
+	}
+
+	Int2   base("1");
+
+	do
+	{
+		base *= 256;
+		ptr->push_back(base);
+	}
+	while( target>=base );
+
+	return ptr;
 }
 
-Int::Int(const int8_t *number, int datasize,bool negative):_this(new struct IntPrivate)
+static void StringToNumber(const char *str,int size,std::vector<uint8_t> *data)
 {
-	_this->negative = negative;
+	std::vector<uint8_t> buffer;
 
-	CopyArrayToReal(_this,number,datasize);
+	Int2      num(std::string(str,size));
+	auto      baseList = FindTheCloseOneBase256(num);
+	Int2      bb;
+	uint8_t   temp;
+	Int2      temp1;
+
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::vector<Int2>::size_type)>=sizeof(int) )
+		{
+			if ( baseList->size() > static_cast<std::vector<Int2>::size_type>(std::numeric_limits<int>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	for ( int i = baseList->size()-1 ; i>=0 ; i-- )
+	{
+		bb = (*baseList)[i];
+		temp1 = num;
+		num = temp1.divide(bb);
+		temp1.get(&temp);
+		buffer.push_back(temp);
+
+		if (i==0)
+		{
+			num.get(&temp);
+			buffer.push_back(temp);
+		}
+	}
+
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::vector<uint8_t>::size_type)>=sizeof(int) )
+		{
+			if ( buffer.size() > static_cast<std::vector<uint8_t>::size_type>(std::numeric_limits<int>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	for ( int i = buffer.size()-1 ; i>=0 ; i-- )
+	{
+		data->push_back(buffer[i]);
+	}
+
+	CleanZeroEnd(data);
 }
 
-Int::Int(const uint8_t *number, int datasize,bool negative):_this(new struct IntPrivate)
+static inline uint8_t CharToNumber(const char ch)
 {
-	_this->negative = negative;
+	return ch-'0';
+}
 
-	CopyArrayToReal(_this,number,datasize);
+static uint8_t HexCharToNumber(const char ch)
+{
+	if ( ch>'9' )
+	{
+		switch ( ch )
+		{
+			case 'a': return 10;
+			case 'A': return 10;
+			case 'b': return 11;
+			case 'B': return 11;
+			case 'c': return 12;
+			case 'C': return 12;
+			case 'd': return 13;
+			case 'D': return 13;
+			case 'e': return 14;
+			case 'E': return 14;
+			case 'f': return 15;
+			case 'F': return 15;
+			default:
+				toy::Oops(TOY_MARK);
+		}
+	}
+	else
+	{
+		return CharToNumber(ch);
+	}
+
+	return 0;
+}
+
+static void HexStringToNumber(const char *str,int size,std::vector<uint8_t> *data)
+{
+	bool isFull = true;
+	const char *num = str + (size-1);
+
+	for ( ; size>0 ;num--,size--)
+	{
+		if ( isFull )
+		{
+			isFull = false;
+			data->push_back(HexCharToNumber(*num));
+		}
+		else
+		{
+			isFull = true;
+			uint8_t  temp = data->back();
+			temp += (HexCharToNumber(*num)<<4);
+			(*data)[data->size()-1] = temp;
+		}
+	}
+
+	#if TOY_OPTION_CHECK
+		if ( data->back()==uint8_t(0) )
+		{
+			toy::Oops(TOY_MARK);
+		}
+	#endif
+}
+
+static void StringToIntClass(const std::string &number,struct IntPrivate *obj)
+{
+	NumberFormat  report(number);
+
+	const char* point = number.c_str();
+	int   size = number.size();
+
+	if ( report.isInteger() )
+	{
+		if ( report.isNegative() )
+		{
+			obj->negative = true;
+			point = point+1;
+			size--;
+		}
+
+		if ( report.isHexadecimal() )
+		{
+			point = point+2;
+			size = size - 2;
+			HexStringToNumber(point,size,&(obj->data));
+			return;
+		}
+		else if ( report.isDecimal() )
+		{
+			StringToNumber(point,size,&(obj->data));
+			return;
+		}
+	}
+
+	toy::Oops(TOY_MARK);
+	obj->data.push_back(0);
+}
+
+Int::Int(std::string number):_this(new struct IntPrivate)
+{
+	StringToIntClass(number,_this);
 }
 
 bool Int::get(int8_t *number) const
@@ -331,7 +564,7 @@ bool Int::get(uint64_t *number) const
 	return true;
 }
 
-inline static void AddNumberToArray(std::vector<int> *nbuffer,int num)
+static inline void AddNumberTo32bitArray(std::vector<uint32_t> *nbuffer,uint32_t num)
 {
 	if ( nbuffer->size()==0 )
 	{
@@ -340,6 +573,16 @@ inline static void AddNumberToArray(std::vector<int> *nbuffer,int num)
 	}
 
 	(*nbuffer)[0] += num;
+
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::vector<uint32_t>::size_type)>=sizeof(int) )
+		{
+			if ( nbuffer->size() > static_cast<std::vector<uint32_t>::size_type>(std::numeric_limits<int>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
 
 	int size = nbuffer->size();
 
@@ -350,7 +593,6 @@ inline static void AddNumberToArray(std::vector<int> *nbuffer,int num)
 			auto  temp = ((*nbuffer)[i])%1000000000;
 			(*nbuffer)[i+1] += ((*nbuffer)[i] - temp)/1000000000;
 			(*nbuffer)[i] = temp;
-			return;
 		}
 		else
 		{
@@ -366,28 +608,28 @@ inline static void AddNumberToArray(std::vector<int> *nbuffer,int num)
 	}
 }
 
-inline static void CalRealNumber(const int index,int deep,std::vector<int> *nbuffer,const std::vector<uint8_t>& data)
+static inline void CalRealNumber(const uint32_t& num,uint32_t deep,std::vector<uint32_t> *nbuffer)
 {
 	if ( deep==1 )
 	{
-		AddNumberToArray(nbuffer,data[index]*256);
+		AddNumberTo32bitArray(nbuffer,num*256);
 	}
 	else
 	{
 		for ( int i=256 ; i>0 ; i-- )
 		{
-			CalRealNumber(index,deep-1,nbuffer,data);
+			CalRealNumber(num,deep-1,nbuffer);
 		}
 	}
 }
 
-inline static void NumberToString(char *str,int num)
+static inline void NumberToString(char *str,uint32_t num)
 {
 	char  ff = '0';
 
-	int  bu[10] = {0};
-	int  temp1 = num%100;
-	int  temp2 = num%10;
+	uint32_t  bu[10] = {0};
+	uint32_t  temp1 = num%100;
+	uint32_t  temp2 = num%10;
 
 	bu[8] = temp2;
 	bu[7] = (temp1 - temp2)/10;       temp2 = num%1000;
@@ -411,7 +653,7 @@ inline static void NumberToString(char *str,int num)
 	str[9] = '\0';
 }
 
-inline static int GetNotZeroIndex(char *str)
+static inline int GetNotZeroIndex(char *str)
 {
 	for ( int i=0 ; i<9 ; i++ )
 	{
@@ -426,7 +668,7 @@ inline static int GetNotZeroIndex(char *str)
 
 bool Int::get(std::string *number) const
 {
-	std::vector<int>   nbuffer;
+	std::vector<uint32_t>   nbuffer;
 
 	if ( _this->data.size()>0 )
 	{
@@ -436,18 +678,29 @@ bool Int::get(std::string *number) const
 			return true;
 		}
 
-		AddNumberToArray(&nbuffer,_this->data[0]);
+		AddNumberTo32bitArray(&nbuffer,_this->data[0]);
 	}
 	else
 	{
+		toy::Oops(TOY_MARK);
 		return false;
 	}
+
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::vector<uint8_t>::size_type)>sizeof(uint32_t) )
+		{
+			if ( _this->data.size() > static_cast<std::vector<uint8_t>::size_type>(std::numeric_limits<uint32_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
 
 	uint32_t size = _this->data.size();
 
 	for ( uint32_t i=1 ; i<size ; i++ )
 	{
-		CalRealNumber(i,i,&nbuffer,_this->data);
+		CalRealNumber(_this->data[i],i,&nbuffer);
 	}
 
 	std::string   &str = *number;
@@ -464,7 +717,17 @@ bool Int::get(std::string *number) const
 	NumberToString(cbuffer,nbuffer[nbuffer.size()-1]);
 	str += (cbuffer + GetNotZeroIndex(cbuffer));
 
-	for ( int i=nbuffer.size()-2 ; i>=0 ; i-- )
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::vector<uint32_t>::size_type)>sizeof(int32_t) )
+		{
+			if ( nbuffer.size() > static_cast<std::vector<uint32_t>::size_type>(std::numeric_limits<int32_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	for ( int32_t i=nbuffer.size()-2 ; i>=0 ; i-- )
 	{
 		NumberToString(cbuffer,nbuffer[i]);
 		str += cbuffer;
@@ -473,40 +736,128 @@ bool Int::get(std::string *number) const
 	return true;
 }
 
-// [1,2,3,0,0,0,0,0] -> [1,2,3]
-// [0,0,0,0,0] -> [0]
-inline static void CleanZeroEnd(std::vector<uint8_t> *array)
+static char BinaryToChar(uint8_t num)
 {
-	while ( array->back()==0 )
-	{
-		array->pop_back();
-
-		if ( array->size()==0 )
+	#if TOY_OPTION_CHECK
+		if ( num>15 )
 		{
-			array->push_back(0);
-			break;
+			toy::Oops(TOY_MARK);
+			return '0';
 		}
+	#endif
+
+	if ( num>9 )
+	{
+		return 'a' + static_cast<char>(num-10);
+	}
+	else
+	{
+		return '0' + static_cast<char>(num);
 	}
 }
 
-inline static void SetEnoughSize(std::vector<uint8_t> *array,uint32_t size)
+static char* BinaryToString(uint8_t num,char *buffer)
 {
-	uint32_t   asize = array->size();
+	uint8_t  temp1 = num%0x10;
+	uint8_t  temp2 = (num - temp1)>>4;
 
-	if ( asize<size )
-	{
-		size -= asize;
+	buffer[0] = BinaryToChar(temp2);
+	buffer[1] = BinaryToChar(temp1);
 
-		for ( uint32_t i=0; i<size ; i++ )
-		{
-			array->push_back(0);
-		}
-	}
-
-	array->push_back(0);
+	return buffer;
 }
 
-inline static void ByteAndByte(uint8_t a,uint8_t b,uint8_t *ans8bit,uint8_t *ans16bit)
+bool Int::getHex(std::string *number) const
+{
+	number->clear();
+
+	if ( (*this)==0 )
+	{
+		*number += "0x0";
+		return true;
+	}
+
+	if ( _this->negative )
+	{
+		*number += "-";
+	}
+
+	*number += "0x";
+
+	char  buffer[3] = {'\0'};
+
+	*number += BinaryToString(_this->data.back(),buffer);
+
+	if ( buffer[0]=='0' )
+	{
+		auto i = number->size();
+		(*number)[i-2] = (*number)[i-1];
+		number->pop_back();
+	}
+
+	if ( _this->data.size()==1 ) return true;
+
+	for ( auto i = _this->data.size()-1 ; i>0 ; i-- )
+	{
+		*number += BinaryToString(_this->data[i-1],buffer);
+	}
+
+	return true;
+}
+
+auto Int::str() const -> const std::string
+{
+	std::string str;
+
+	if ( ! this->get(&str) )
+	{
+		throw toy::Exception(TOY_MARK);
+	}
+
+	return str;
+}
+
+void Int::operator = (const Int &number)
+{
+	*_this = *(number._this);
+}
+
+void Int::operator = (int8_t number)  { (*_this) = *(Int(number)._this); }
+void Int::operator = (uint8_t number) { (*_this) = *(Int(number)._this); }
+void Int::operator = ( int16_t number){ (*_this) = *(Int(number)._this); }
+void Int::operator = (uint16_t number){ (*_this) = *(Int(number)._this); }
+void Int::operator = ( int32_t number){ (*_this) = *(Int(number)._this); }
+void Int::operator = (uint32_t number){ (*_this) = *(Int(number)._this); }
+void Int::operator = ( int64_t number){ (*_this) = *(Int(number)._this); }
+void Int::operator = (uint64_t number){ (*_this) = *(Int(number)._this); }
+
+void Int::operator = (std::string number)
+{
+	_this->data.clear();
+	StringToIntClass(number,_this);
+}
+
+bool Int::isAbsoluteValueBiggerThan(const Int &number)
+{
+	if ( CompareAbsoluteValue(_this->data,number._this->data)>0 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Int::isAbsoluteValueSmallerThan(const Int &number)
+{
+	if ( CompareAbsoluteValue(_this->data,number._this->data)<0 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+static void ByteAndByte(uint8_t a,uint8_t b,uint8_t *ans8bit,uint8_t *ans16bit)
 {
 	int  x = a;
 	int  y = b;
@@ -516,98 +867,546 @@ inline static void ByteAndByte(uint8_t a,uint8_t b,uint8_t *ans8bit,uint8_t *ans
 	*ans16bit = (c-*ans8bit)>>8;
 }
 
-// ArrayA += ArrayB
-static void ArrayAndEqualArray(std::vector<uint8_t> *arrayA,const std::vector<uint8_t> arrayB)
+// ArrayA -= ArrayB
+static void ArrayMinusEqualArray(std::vector<uint8_t> *arrayA,const std::vector<uint8_t>& arrayB)
 {
-	SetEnoughSize(arrayA,arrayB.size());
-
-	uint8_t   temp1 = 0;
-	uint8_t   temp2 = 0;
-	uint8_t   temp3 = 0;
-	uint8_t   temp4 = 0;
-
 	uint32_t  size = arrayB.size();
 
 	for ( uint32_t i=0 ; i<size ; i++ )
 	{
-		ByteAndByte( (*arrayA)[i], arrayB[i], &temp1, &temp2 );
-		(*arrayA)[i]    = temp1;
-
-		uint32_t  j = 1;
-
-		do
+		if ( (*arrayA)[i] < arrayB[i] )
 		{
-			ByteAndByte( (*arrayA)[i+j], temp2, &temp3, &temp4 );
-			(*arrayA)[i+j] = temp3;
+			for ( int j=1 ;  ; j++ )
+			{
+				if ( (*arrayA)[i+j] == 0 )
+				{
+					(*arrayA)[i+j] = 0xFF;
+				}
+				else
+				{
+					(*arrayA)[i+j] -= 1;
+					break;
+				}
+			}
 
-			j++;
+			uint8_t   temp = 0xFF;
+			temp -= arrayB[i];
+			(*arrayA)[i] = temp + (*arrayA)[i] + 1;
 		}
-		while( temp4>0 );
+		else
+		{
+			(*arrayA)[i] -= arrayB[i];
+		}
 	}
 }
-
-// ArrayA -= ArrayB
-/*
-static void ArrayMinusEqualArray(std::vector<uint8_t> *arrayA,const std::vector<uint8_t> arrayB)
-{
-	;
-}*/
-
-// ArrayA = ArrayB - ArrayA
-/*
-static void ArrayMinusEqualArray2(std::vector<uint8_t> *arrayA,const std::vector<uint8_t> arrayB)
-{
-	;
-}*/
 
 void Int::operator +=(const Int &number)
 {
 	if      ( _this->negative==true  && number._this->negative==true )
 	{
-		ArrayAndEqualArray(&(_this->data),number._this->data);
+		ArrayAndEqualArray(&(_this->data),number._this->data,&ByteAndByte);
 	}
 	else if ( _this->negative==false && number._this->negative==false )
 	{
-		ArrayAndEqualArray(&(_this->data),number._this->data);
+		ArrayAndEqualArray(&(_this->data),number._this->data,&ByteAndByte);
 	}
-//	else if ( _this->negative==true  && number._this->negative==false )
-//	{
-//		if ( isDataBiggerThan(number) )
-//		{
-//			ArrayMinusEqualArray(&(_this->data),number._this->data);
-//		}
-//		else if ( isDataSmallerThan(number) )
-//		{
-//			ArrayMinusEqualArray2(&(_this->data),number._this->data);
-//			_this->negative = number._this->negative;
-//		}
-//		else
-//		{
-//			_this->data.clear();
-//			_this->data.push_back(0);
-//		}
-//	}
-//	else if ( _this->negative==false && number._this->negative==true )
-//	{
-//		if ( isDataBiggerThan(number) )
-//		{
-//			ArrayMinusEqualArray(&(_this->data),number._this->data);
-//		}
-//		else if ( isDataSmallerThan(number) )
-//		{
-//			ArrayMinusEqualArray2(&(_this->data),number._this->data);
-//			_this->negative = number._this->negative;
-//		}
-//		else
-//		{
-//			_this->data.clear();
-//			_this->data.push_back(0);
-//		}
-//	}
-//	else
-//	{
-//		toy::Oops(TOY_MARK);
-//	}
+	else if ( _this->negative==true  && number._this->negative==false )
+	{
+		if ( isAbsoluteValueBiggerThan(number) )
+		{
+			ArrayMinusEqualArray(&(_this->data),number._this->data);
+		}
+		else if ( isAbsoluteValueSmallerThan(number) )
+		{
+			std::vector<uint8_t>  data = _this->data;
+			_this->data = number._this->data;
+			ArrayMinusEqualArray(&(_this->data),data);
+			_this->negative = number._this->negative;
+		}
+		else
+		{
+			_this->data.clear();
+			_this->data.push_back(0);
+		}
+	}
+	else if ( _this->negative==false && number._this->negative==true )
+	{
+		if ( isAbsoluteValueBiggerThan(number) )
+		{
+			ArrayMinusEqualArray(&(_this->data),number._this->data);
+		}
+		else if ( isAbsoluteValueSmallerThan(number) )
+		{
+			std::vector<uint8_t>  data = _this->data;
+			_this->data = number._this->data;
+			ArrayMinusEqualArray(&(_this->data),data);
+			_this->negative = number._this->negative;
+		}
+		else
+		{
+			_this->data.clear();
+			_this->data.push_back(0);
+		}
+	}
+	else
+	{
+		toy::Oops(TOY_MARK);
+	}
 
 	CleanZeroEnd(&(_this->data));
+}
+
+auto Int::operator + (const Int &number) const -> const Int
+{
+	Int  result(*this);
+	result += number;
+	return result;
+}
+
+void Int::operator -=(const Int &number)
+{
+	_this->negative = ! _this->negative;
+	*this += number;
+	_this->negative = ! _this->negative;
+}
+
+auto Int::operator - (const Int &number) const -> const Int
+{
+	Int  result(*this);
+	result -= number;
+	return result;
+}
+
+void Int::operator *= (const Int &number)
+{
+	if ( (*this)==(int32_t)0 ) return;
+
+	if ( number==0 )
+	{
+		(*this) = 0;
+		return;
+	}
+
+	_this->negative = ( _this->negative != number._this->negative );
+
+	std::vector<uint8_t>  buffer( _this->data.size()+number._this->data.size() ,0);
+
+	auto size1 = _this->data.size();
+	auto size2 = number._this->data.size();
+
+	uint32_t  temp  = 0;
+	uint32_t  tempQ = 0;
+	uint32_t  tempR = 0;
+
+	for ( decltype(size2) i=0; i<size2 ; i++)
+	{
+		for ( decltype(size1) j=0; j<size1 ; j++)
+		{
+			temp = static_cast<uint32_t>(_this->data[j]) * static_cast<uint32_t>(number._this->data[i]);
+
+			if ( temp>255 )
+			{
+				tempQ = temp >> 8;
+				tempR = temp - (tempQ<<8);
+			}
+			else
+			{
+				tempQ = 0;
+				tempR = temp;
+			}
+
+			AddNumberToArray(&buffer,i+j  ,tempR,255);
+			AddNumberToArray(&buffer,i+j+1,tempQ,255);
+		}
+	}
+
+	CleanZeroEnd(&buffer);
+
+	_this->data.swap(buffer);  // _this->data = buffer;
+}
+
+auto Int::operator * (const Int &number) const -> const Int
+{
+	Int  result(*this);
+	result *= number;
+	return result;
+}
+
+auto Int::divide(const Int &number) -> const Int
+{
+	if ( number==0 )
+	{
+		toy::Oops(TOY_MARK);
+		return *this;
+	}
+
+	std::vector<uint8_t>  quotient;
+	Int                   residue;
+
+	residue._this->negative = _this->negative;
+
+	ArrayDivide(_this->data,number._this->data,&quotient,&(residue._this->data),255);
+
+	_this->data.swap(quotient);  // _this->data = quotient;
+
+	_this->negative = ( _this->negative != number._this->negative );
+
+	return residue;
+}
+
+void Int::operator /= (const Int &number)
+{
+	if ( number==0 )
+	{
+		toy::Oops(TOY_MARK);
+		return;
+	}
+
+	this->divide(number);
+}
+
+auto Int::operator / (const Int &number) const -> const Int
+{
+	if ( number==0 )
+	{
+		toy::Oops(TOY_MARK);
+		return *this;
+	}
+
+	std::vector<uint8_t>  residue;
+	Int                   quotient;
+
+	ArrayDivide(_this->data,number._this->data,&(quotient._this->data),&residue,255);
+
+	quotient._this->negative = ( _this->negative != number._this->negative );
+
+	return quotient;
+}
+
+void Int::operator %= (const Int &number)
+{
+	if ( number==0 )
+	{
+		toy::Oops(TOY_MARK);
+		return;
+	}
+
+	std::vector<uint8_t>  residue;
+	std::vector<uint8_t>  quotient;
+
+	ArrayDivide(_this->data,number._this->data,&quotient,&residue,255);
+
+	_this->data.swap(residue);
+}
+
+auto Int::operator % (const Int &number) const -> const Int
+{
+	if ( number==0 )
+	{
+		toy::Oops(TOY_MARK);
+		return *this;
+	}
+
+	Int                   residue;
+	std::vector<uint8_t>  quotient;
+
+	ArrayDivide(_this->data,number._this->data,&quotient,&(residue._this->data),255);
+
+	residue._this->negative = _this->negative;
+
+	return residue;
+}
+
+auto Int::operator ^ (const Int &number) const -> const Int
+{
+	if ( number==0 )
+	{
+		return Int(1);
+	}
+
+	if ( number==1 )
+	{
+		return *this;
+	}
+
+	if ( number.negative() )
+	{
+		toy::Oops(TOY_MARK);
+		return *this;
+	}
+
+	Int i      = number-1;
+	Int result = *this;
+
+	while ( i>0 )
+	{
+		result *= (*this);
+		i = i-1;
+	}
+
+	return result;
+}
+
+void Int::operator ^=(const Int &number)
+{
+	*this = (*this)^number;
+}
+
+// Return value:
+//     1 :this  > num
+//     -1:this  < num
+//     0 :this == num
+static int CompareWithInt32(const struct IntPrivate *_this,const int32_t num)
+{
+	auto size = _this->data.size();
+
+	if ( (size==1)&&(_this->data[0]==0) )
+	{
+		if ( num==0 )
+			return 0;
+		else if ( num<0 )
+			return 1;
+		else if ( num>0 )
+			return -1;
+	}
+
+	if ( num==0 )
+	{
+		if ( _this->negative )
+			return -1;
+		else
+			return 1;
+	}
+
+	if ( size>4 )
+	{
+		if ( _this->negative )
+		{
+			return -1;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+
+	if ( size==4 && _this->data[3]>127 )
+	{
+		if ( _this->negative )
+		{
+			return -1;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+
+	int number = 0;
+
+	{
+		int  buffer = 0;
+		int  base = 0;
+
+		for (decltype(size) i=0;i<size;i++)
+		{
+			buffer = _this->data[i];
+			number += buffer<< base;
+			base += 8;
+		}
+	}
+
+	if ( _this->negative )
+	{
+		number *= -1;
+	}
+
+	if ( number>num )
+	{
+		return 1;
+	}
+	else if ( number<num )
+	{
+		return -1;
+	}
+
+	return 0;
+}
+
+bool Int::operator ==(int32_t num) const
+{
+	if ( CompareWithInt32(_this,num)==0 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Int::operator !=(int32_t num) const
+{
+	if ( CompareWithInt32(_this,num)==0 )
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool Int::operator >(int32_t num) const
+{
+	if ( CompareWithInt32(_this,num)==1 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Int::operator <(int32_t num) const
+{
+	if ( CompareWithInt32(_this,num)==-1 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Int::operator >=(int32_t num) const
+{
+	if ( CompareWithInt32(_this,num)>-1 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Int::operator <=(int32_t num) const
+{
+	if ( CompareWithInt32(_this,num)<1 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Int::operator > (const Int &number) const
+{
+	if (         _this->data.size() == 1 &&
+	      number._this->data.size() == 1 &&
+	             _this->data[0]     == 0 &&
+	      number._this->data[0]     == 0 )
+	{
+		return false;
+	}
+
+	if ( _this->negative==false && number._this->negative==true )
+	{
+		return true;
+	}
+
+	if ( _this->negative==true  && number._this->negative==false )
+	{
+		return false;
+	}
+
+	auto res = CompareAbsoluteValue(_this->data,number._this->data);
+
+	if ( res==0 )
+	{
+		return false;
+	}
+
+	if ( _this->negative==false && res==1 )
+	{
+		return true;
+	}
+
+	if ( _this->negative==true && res==-1 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Int::operator < (const Int &number) const
+{
+	if (         _this->data.size() == 1 &&
+	      number._this->data.size() == 1 &&
+	             _this->data[0]     == 0 &&
+	      number._this->data[0]     == 0 )
+	{
+		return false;
+	}
+
+	if ( _this->negative==false && number._this->negative==true )
+	{
+		return false;
+	}
+
+	if ( _this->negative==true  && number._this->negative==false )
+	{
+		return true;
+	}
+
+	auto res = CompareAbsoluteValue(_this->data,number._this->data);
+
+	if ( res==0 )
+	{
+		return false;
+	}
+
+	if ( _this->negative==false && res==1 )
+	{
+		return false;
+	}
+
+	if ( _this->negative==true && res==-1 )
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool Int::operator <=(const Int &number) const
+{
+	return !( *this > number );
+}
+
+bool Int::operator >=(const Int &number) const
+{
+	return !( *this < number );
+}
+
+bool Int::operator == (const Int &number) const
+{
+	if (         _this->data.size() == 1 &&
+	      number._this->data.size() == 1 &&
+	             _this->data[0]     == 0 &&
+	      number._this->data[0]     == 0 )
+	{
+		return true;
+	}
+
+	auto res = CompareAbsoluteValue(_this->data,number._this->data);
+
+	if ( res==0 )
+	{
+		if ( _this->negative == number._this->negative )
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Int::operator !=(const Int &number) const
+{
+	return (*this)==number ? false : true;
 }
