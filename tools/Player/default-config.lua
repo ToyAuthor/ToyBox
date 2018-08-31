@@ -24,5 +24,6 @@ search_path = Toy_ResourcePathForDemo
 script = "main.lua"
 
 -- Set a path for searching main script of project.
-main_path = Toy_ResourcePathForDemo .. "/lua/examples/HelloWorld"
+  main_path = Toy_ResourcePathForDemo .. "/lua/examples/HelloWorld"
 --main_path = Toy_ResourcePathForDemo .. "/lua/examples/Window"              -- Show a empty window.
+--main_path = Toy_ResourcePathForDemo .. "/lua/test"
