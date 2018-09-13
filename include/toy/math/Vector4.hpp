@@ -3,10 +3,8 @@
 
 #include "toy/math/General.hpp"
 
-
 namespace toy{
 namespace math{
-
 
 template <typename Type>
 class Vector4

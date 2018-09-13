@@ -13,22 +13,22 @@
 namespace toy{
 namespace utf{
 
-TOY_API auto WCharToUTF8(const std::basic_string<wchar_t> str) ->std::string;
+TOY_API extern auto WCharToUTF8(const std::basic_string<wchar_t> str) ->std::string;
 
-TOY_API auto UTF8ToWChar(const std::string str) ->std::basic_string<wchar_t>;
-TOY_API auto UTF8ToUTF16(const std::string str) ->std::basic_string<uint16_t>;
-TOY_API auto UTF8ToUTF32(const std::string str) ->std::basic_string<uint32_t>;
+TOY_API extern auto UTF8ToWChar(const std::string str) ->std::basic_string<wchar_t>;
+TOY_API extern auto UTF8ToUTF16(const std::string str) ->std::basic_string<uint16_t>;
+TOY_API extern auto UTF8ToUTF32(const std::string str) ->std::basic_string<uint32_t>;
 
-TOY_API auto UTF16ToUTF32(const std::basic_string<uint16_t> str) ->std::basic_string<uint32_t>;
-TOY_API auto UTF16ToUTF8( const std::basic_string<uint16_t> str) ->std::string;
+TOY_API extern auto UTF16ToUTF32(const std::basic_string<uint16_t> str) ->std::basic_string<uint32_t>;
+TOY_API extern auto UTF16ToUTF8( const std::basic_string<uint16_t> str) ->std::string;
 
-TOY_API auto UTF32ToUTF16(const std::basic_string<uint32_t> str) ->std::basic_string<uint16_t>;
-TOY_API auto UTF32ToUTF8( const std::basic_string<uint32_t> str) ->std::string;
+TOY_API extern auto UTF32ToUTF16(const std::basic_string<uint32_t> str) ->std::basic_string<uint16_t>;
+TOY_API extern auto UTF32ToUTF8( const std::basic_string<uint32_t> str) ->std::string;
 
-TOY_API void UTF8ToWChar(const char    *input, wchar_t *output, int length);
-TOY_API void WCharToUTF8(const wchar_t *input, char    *output, int length);
+TOY_API extern void UTF8ToWChar(const char    *input, wchar_t *output, int length);
+TOY_API extern void WCharToUTF8(const wchar_t *input, char    *output, int length);
 
-inline bool IsUtf8(const std::string &source)
+static inline bool IsUtf8(const std::string &source)
 {
 	// Check the T of std::basic_string<T> is "signed char".
 	#if TOY_OPTION_CHECK_CAREFUL

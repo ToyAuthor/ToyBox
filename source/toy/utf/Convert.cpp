@@ -2,13 +2,11 @@
 #include "toy/utf/Convert.hpp"
 #include "toy/utf/ConvertUTF.hpp"
 
-
 namespace toy{
 namespace utf{
 
-
 template<typename T>
-inline void StripTrailing(T *str)
+static inline void StripTrailing(T *str)
 {
 	//str->erase( std::find(str->begin(), str->end(), '\0') ,str->end());
 

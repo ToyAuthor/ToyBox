@@ -2,7 +2,7 @@
 #pragma once
 
 #include "toy/Standard.hpp"
-#include "toy/Allocator01.hpp"
+#include "toy/memory/Manager02.hpp"
 
 namespace toy{
 
@@ -47,10 +47,10 @@ class TOY_API ImageBuffer
 
 	private:
 
-		Allocator01          _allocator;      // Saving a image data on memory.
-		int32_t              _height = 0;
-		int32_t              _width = 0;
-		enum ::toy::Option   _format = ::toy::RGBA;
+		toy::memory::Manager02    _allocator;      // Saving a image data on memory.
+		int32_t                   _height = 0;
+		int32_t                   _width  = 0;
+		enum ::toy::Option        _format = ::toy::RGBA;
 
 	public:
 
@@ -74,7 +74,7 @@ class TOY_API ImageBuffer
 			_format = fmt;
 		}
 
-		Allocator01* _getAllocator()
+		auto _getAllocator()->toy::memory::Manager02*
 		{
 			return &_allocator;
 		}

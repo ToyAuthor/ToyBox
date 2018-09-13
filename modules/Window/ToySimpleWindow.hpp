@@ -18,7 +18,7 @@ class ToySimpleWindow
 		~ToySimpleWindow(){}
 
 		auto isOpen()->lua::Bool;
-		void handleEvent();
+		auto handleEvent()->lua::Bool;
 		void display();
 		auto good()->lua::Bool;
 

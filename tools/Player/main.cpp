@@ -6,11 +6,10 @@
 #include "PrintInfo.hpp"
 #include "GetPrefix.hpp"
 
-
 #define TOYBOX_PLAYER_CONFIG_NAME "default-config.lua"
 #define TOYBOX_PLAYER_DEFAULT_MAIN_SCRIPT_NAME "main.lua"
 
-inline static bool IsFileExist(std::string &filename)
+static inline bool IsFileExist(std::string &filename)
 {
 	#ifdef TOY_WINDOWS
 		return boost::filesystem::exists( toy::utf::UTF8ToWChar(filename) );
@@ -19,7 +18,7 @@ inline static bool IsFileExist(std::string &filename)
 	#endif
 }
 
-inline static void RemoveFile(std::string &filename)
+static inline void RemoveFile(std::string &filename)
 {
 	#ifdef TOY_WINDOWS
 		boost::filesystem::remove( toy::utf::UTF8ToWChar(filename) );

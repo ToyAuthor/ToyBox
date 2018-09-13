@@ -4,28 +4,28 @@ namespace toy{
 
 struct ColorPrivate
 {
-	float r = 0.0f;
-	float g = 0.0f;
-	float b = 0.0f;
-	float a = 0.0f;
+	float r = float(0);
+	float g = float(0);
+	float b = float(0);
+	float a = float(0);
 };
 
-inline static float IntToFloat(uint8_t num)
+static inline float IntToFloat(uint8_t num)
 {
-	return ((float)num) / 255.0f;
+	return static_cast<float>(num) / float(255);
 }
 
-inline static uint8_t FloatToInt(float num)
+static inline uint8_t FloatToInt(float num)
 {
-	if ( num>1.0f )
+	if ( num>float(1) )
 	{
-		num = 1.0f;
+		num = float(1);
 	}
 
-	num *= 255.0f;
-	num += 0.5f;
+	num *= float(255);
+	num += float(0.5);
 
-	return (uint8_t)num;
+	return static_cast<uint8_t>(num);
 }
 
 }

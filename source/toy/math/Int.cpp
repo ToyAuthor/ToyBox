@@ -3,7 +3,7 @@
 #include <cstring>
 #include <limits>
 #include "toy/Exception.hpp"
-#include "toy/Log.hpp"
+#include "toy/Oops.hpp"
 #include "toy/math/Int.hpp"
 #include "toy/math/Int2.hpp"
 #include "toy/math/NumberFormat.hpp"

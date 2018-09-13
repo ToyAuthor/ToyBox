@@ -1,14 +1,10 @@
 
 #pragma once
 
-
 #include "toy/math/General.hpp"
-
 
 namespace toy{
 namespace math{
-
-
 
 template <typename Type>
 class Vector2
@@ -94,9 +90,6 @@ class Vector2
 			return *this;
 		}
 };
-
-
-
 
 }//namespace math
 }//namespace toy

@@ -1,10 +1,15 @@
 #include "toy/log/Printer.hpp"
 #include "toy/Log.hpp"
 
-
 namespace toy{
 
 log::Printer Logger;
+
+const log::Printer& NewLine(const log::Printer& m)
+{
+	toy::Log("\r\n");
+	return m;
+}
 
 const log::Printer& NextLine(const log::Printer& m)
 {
@@ -16,7 +21,7 @@ const log::Printer& NextLine(const log::Printer& m)
 
 using namespace toy;
 using namespace log;
-
+/*
 const Printer& Printer:: operator << (const int num) const
 {
 	toy::Log("%d",num);
@@ -55,9 +60,66 @@ const Printer& Printer:: operator << (const unsigned long int num) const
 
 const Printer& Printer:: operator << (const unsigned long long num) const
 {
-	// I should replace %lld with %llu here.
-	// Linux 64bit looks fine.
+	#ifdef TOY_WIN64
+	toy::Log("%llu",num);
+	#elif defined(TOY_WIN32)
+	toy::Log("%I64u",num);
+	#else
+	toy::Log("%llu",num);
+	#endif
+	return *this;
+}
+*/
+const Printer& Printer:: operator << (const int8_t num) const
+{
+	toy::Log("%d",num);
+	return *this;
+}
 
+const Printer& Printer:: operator << (const uint8_t num) const
+{
+	toy::Log("%d",num);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const int16_t num) const
+{
+	toy::Log("%d",num);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const uint16_t num) const
+{
+	toy::Log("%d",num);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const int32_t num) const
+{
+	toy::Log("%d",num);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const uint32_t num) const
+{
+	toy::Log("%d",num);
+	return *this;
+}
+
+const Printer& Printer:: operator << (const int64_t num) const
+{
+	#ifdef TOY_WIN64
+	toy::Log("%lld",num);
+	#elif defined(TOY_WIN32)
+	toy::Log("%I64d",num);
+	#else
+	toy::Log("%lld",num);
+	#endif
+	return *this;
+}
+
+const Printer& Printer:: operator << (const uint64_t num) const
+{
 	#ifdef TOY_WIN64
 	toy::Log("%llu",num);
 	#elif defined(TOY_WIN32)
@@ -138,4 +200,10 @@ const Printer& Printer:: operator << (const std::wstring *str) const
 const Printer& Printer:: operator << (const Printer& (*func)(const Printer&)) const
 {
 	return func(*this);
+}
+
+const Printer& Printer:: operator << (const std::exception &e) const
+{
+	(*this)<<"ToyBox Exception:"<<e.what();
+	return *this;
 }

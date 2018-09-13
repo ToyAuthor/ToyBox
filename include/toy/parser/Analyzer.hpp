@@ -30,7 +30,7 @@ class TOY_API_PARSER Analyzer
 	private:
 
 		std::string              _string;
-		int                      _index = 0;
+		int32_t                  _index = 0;
 
 		std::vector<ConfigPtr>   _configStack;
 };

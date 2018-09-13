@@ -20,8 +20,8 @@ class TOY_API_MATH NumberFormat
 		bool isGood();
 		bool isInteger();
 		bool isNegative();
-		bool isDecimal();
-		bool isHexadecimal();
+		bool isDecimal();         // Something like 123,-123,123.4
+		bool isHexadecimal();     // Something like 0x123a1,-0xff.f
 
 		auto operator = ( const NumberFormat & ) -> const NumberFormat&;
 

@@ -19,7 +19,7 @@ static int IsUTF8(lua::NativeState L)
 	return 1;
 }
 
-inline static void PrintString(lua::NativeState L)
+static inline void PrintString(lua::NativeState L)
 {
 	lua::Str   str;
 

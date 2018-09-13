@@ -141,7 +141,7 @@ void toy::Log(const wchar_t *fmt, ... )
 
 void toy::Log(const std::exception &except)
 {
-	toy::Log("%s\n",except.what());
+	toy::Log("ToyBox Exception:%s\n",except.what());
 }
 
 #undef STRING_SIZE

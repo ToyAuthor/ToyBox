@@ -7,35 +7,36 @@ bool HandleSystemEvent( const sf::Event&                   event,
 	switch ( event.type )
 	{
 		case sf::Event::MouseMoved:
-			return true;
+			break;
 
 		case sf::Event::MouseButtonPressed:
-			return true;
+			break;
 
 		case sf::Event::MouseButtonReleased:
-			return true;
+			break;
 
 		case sf::Event::KeyReleased:
 			if ( event.key.code==sf::Keyboard::Escape )
 			{
 				closeWindow();
+				return false;
 			}
-			return true;
+			break;
 
 		case sf::Event::KeyPressed:
-			return true;
+			break;
 
 		case sf::Event::Resized:
 			functors->resize( event.size.width, event.size.height );
-			return true;
+			break;
 
 		case sf::Event::Closed:
 			closeWindow();
-			return true;
+			return false;
 
 		default:
 			break;
 	}
 
-	return false;
+	return true;
 }

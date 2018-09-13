@@ -8,16 +8,16 @@
 
 namespace toy{
 
-TOY_API void Log(const char *fmt, ... );
-TOY_API void Log(const wchar_t *fmt, ... );
-TOY_API void Log(const std::exception &);
+TOY_API extern void Log(const char *fmt, ... );
+TOY_API extern void Log(const wchar_t *fmt, ... );
+TOY_API extern void Log(const std::exception &);
 
 #if TOY_OPTION_ENABLE_PLUGIN_LOG_SYSTEM
 
 namespace log{
-TOY_API void PushDevice(std::function<void(const char*)>,std::function<void(const wchar_t*)>);
-TOY_API void PopDevice();
-TOY_API void BackDefaultDevice();
+TOY_API extern void PushDevice(std::function<void(const char*)>,std::function<void(const wchar_t*)>);
+TOY_API extern void PopDevice();
+TOY_API extern void BackDefaultDevice();
 }
 
 #endif

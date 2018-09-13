@@ -33,6 +33,9 @@
     Oct 2004: updated to use UNI_MAX_LEGAL_UTF32 in UTF-32 conversions.
     See the header file "ConvertUTF.h" for complete documentation.
 ------------------------------------------------------------------------ */
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include "ConvertUTF.hpp"
 #ifdef CVTUTF_DEBUG
 #include <stdio.h>
@@ -489,6 +492,9 @@ ConversionResult ConvertUTF8toUTF32 (
     *targetStart = target;
     return result;
 }
+#ifdef __cplusplus
+}
+#endif
 /* ---------------------------------------------------------------------
     Note A.
     The fall-through switches in UTF-8 reading code save a

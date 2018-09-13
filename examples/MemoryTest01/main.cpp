@@ -3,6 +3,13 @@
 #include <toy/Standard.hpp>
 #include <toy/memory/Manager01.hpp>
 
+// Return how much time passed. Unit:second
+template<typename T>
+static inline double CalPeriod(T period)
+{
+    return static_cast<double>(period) / static_cast<double>(CLOCKS_PER_SEC);
+}
+
 static void DoTheTest( std::function<void*(size_t)> malloc_f,
                        std::function<void(void*)>   free_f )
 {
@@ -25,7 +32,7 @@ static void DoTheTest( std::function<void*(size_t)> malloc_f,
 		}
 	}
 
-	std::cout<<"Allocate "<<number<<" memory blocks with "<<times<<" times in "<<std::clock()-tick<<" clocks"<<std::endl;
+	std::cout<<"Allocate "<<number<<" memory blocks with "<<times<<" times in "<<CalPeriod(std::clock()-tick)<<" seconds"<<std::endl;
 }
 
 static void TestMemoryPool()

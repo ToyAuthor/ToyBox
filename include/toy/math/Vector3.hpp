@@ -3,10 +3,8 @@
 
 #include "toy/math/General.hpp"
 
-
 namespace toy{
 namespace math{
-
 
 template <typename Type>
 class Vector3
@@ -101,7 +99,6 @@ class Vector3
 			return *this;
 		}
 };
-
 
 }//namespace math
 }//namespace toy

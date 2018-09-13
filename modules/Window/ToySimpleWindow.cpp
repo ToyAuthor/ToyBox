@@ -17,7 +17,7 @@ struct WindowConfig
 	lua::Bool  visiable   = true;
 };
 
-inline static void CopyWindowConfig(WindowConfig *output,const lua::Var &input)
+static inline void CopyWindowConfig(WindowConfig *output,const lua::Var &input)
 {
 	lua::TryCopyVar(output->title,      input>>"title");
 	lua::TryCopyVar(output->width,      input>>"width");
@@ -26,7 +26,7 @@ inline static void CopyWindowConfig(WindowConfig *output,const lua::Var &input)
 	lua::TryCopyVar(output->visiable,   input>>"visiable");
 }
 
-inline static sf::String UTF8ToSfString(std::string str)
+static inline sf::String UTF8ToSfString(std::string str)
 {
 	return sf::String::fromUtf8( str.begin(), str.end() );
 }
@@ -73,14 +73,19 @@ lua::Bool ToySimpleWindow::isOpen()
 	return _window->isOpen();
 }
 
-void ToySimpleWindow::handleEvent()
+lua::Bool ToySimpleWindow::handleEvent()
 {
 	sf::Event   event;
 
 	while ( _window->pollEvent(event) )
 	{
-		HandleSystemEvent( event, &_functorList, [this](){_window->close();} );
+		if ( ! HandleSystemEvent( event, &_functorList, [this](){_window->close();} ) )
+		{
+			return false;
+		}
 	}
+
+	return true;
 }
 
 void ToySimpleWindow::display()

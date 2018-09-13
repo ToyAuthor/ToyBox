@@ -32,7 +32,7 @@ void Clock::update()
 	std::time(&(_this->tick));
 }
 
-inline static void UpdateTimeStructure(struct ClockPrivate *member)
+static inline void UpdateTimeStructure(struct ClockPrivate *member)
 {
 	if ( member->isFormat==false )
 	{

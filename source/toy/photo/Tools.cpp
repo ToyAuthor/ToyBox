@@ -5,7 +5,7 @@ namespace toy{
 namespace photo{
 
 template<typename T>
-inline static std::shared_ptr<T> MakeArray(int size)
+static inline std::shared_ptr<T> MakeArray(int size)
 {
 	return std::shared_ptr<T>( new T[size], []( T *p ){ delete [] p; } );
 }

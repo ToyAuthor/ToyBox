@@ -7,10 +7,8 @@
 #include "toy/math/Vector4.hpp"
 #include "toy/math/Quaternion.hpp"
 
-
 namespace toy{
 namespace math{
-
 
 // A 4x4 matrix.
 template <typename Type>
@@ -146,10 +144,19 @@ public:
 		return result;
 	}
 
+	Matrix4<Type> operator *(const Quaternion<Type>& q) const
+	{
+		return (*this)*(Matrix4<Type>(q));
+	}
+
 	void operator *=(const Matrix4<Type>& model)
 	{
-		Matrix4<Type>  result = (*this)*model;
-		*this = result;
+		*this = (*this)*model;
+	}
+
+	void operator *=(const Quaternion<Type>& q)
+	{
+		(*this) *= Matrix4<Type>(q);
 	}
 
 	// translation

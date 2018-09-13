@@ -1,6 +1,5 @@
 #include "toy/parser/Analyzer.hpp"
 
-
 using namespace toy;
 using namespace parser;
 
@@ -37,12 +36,24 @@ void Analyzer::loadString(std::string &str)
 
 void Analyzer::pushFront(std::string str)
 {
-	if ( static_cast<decltype(_index)>(str.size())>_index )
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::string::size_type)>sizeof(decltype(_index)) )
+		{
+			if ( str.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	auto  ss = static_cast<decltype(_index)>(str.size());
+
+	if ( ss>_index )
 	{
 		toy::Oops(TOY_MARK);
 	}
 
-	_index -= str.size();
+	_index -= ss;
 }
 
 bool Analyzer::nextWord(std::string *_str)
@@ -58,24 +69,30 @@ bool Analyzer::nextWord(std::string *_str)
 
 	auto&   i = _index;
 
-	auto    get_size = [this]() -> decltype(_index)
-	{
-		return static_cast<decltype(_index)>(_string.size());
-	};
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::string::size_type)>=sizeof(decltype(_index)) )
+		{
+			if ( _string.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
 
-	if ( i>=get_size() )
+	auto  get_size = static_cast<decltype(_index)>(_string.size());
+
+	if ( i>=get_size )
 	{
 		return 0;
 	}
 
 	str.clear();
 
-
 	if ( ! desireWord.empty() )
 	{
 		for(;;i++)
 		{
-			if ( i>=get_size() )
+			if ( i>=get_size )
 			{
 				return 0;
 			}
@@ -99,16 +116,26 @@ bool Analyzer::nextWord(std::string *_str)
 		}
 	}
 
-	for (int keep_loop = 1 ; keep_loop ; i++ )
+	for ( decltype(_index) keep_loop = 1 ; keep_loop ; i++ )
 	{
-		if ( i>=get_size() )
+		if ( i>=get_size )
 		{
 			return 0;
 		}
 
 		keep_loop=0;
 
-		for ( int j = ignore.size()-1 ; j>=0 ; j-- )
+		#if TOY_OPTION_CHECK
+			if ( sizeof(std::string::size_type)>=sizeof(decltype(_index)) )
+			{
+				if ( ignore.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+			}
+		#endif
+
+		for ( auto j = static_cast<decltype(_index)>(ignore.size()-1) ; j>=0 ; j-- )
 		{
 			if ( ignore[j] == _string[i])
 			{
@@ -120,9 +147,19 @@ bool Analyzer::nextWord(std::string *_str)
 
 	i--;
 
-	if ( i+2 < get_size() )
+	if ( i+2 < get_size )
 	{
-		for ( int j = breakTripleChar.size()-1 ; j>=0 ; j-- )
+		#if TOY_OPTION_CHECK
+			if ( sizeof(std::string::size_type)>=sizeof(decltype(_index)) )
+			{
+				if ( breakTripleChar.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+			}
+		#endif
+
+		for ( auto j = static_cast<decltype(_index)>(breakTripleChar.size()-1) ; j>=0 ; j-- )
 		{
 			if ( _string[i]  ==breakTripleChar[j].t[0] &&
 			     _string[i+1]==breakTripleChar[j].t[1] &&
@@ -137,9 +174,19 @@ bool Analyzer::nextWord(std::string *_str)
 		}
 	}
 
-	if ( i+1 < get_size() )
+	if ( i+1 < get_size )
 	{
-		for ( int j = breakDoubleChar.size()-1 ; j>=0 ; j-- )
+		#if TOY_OPTION_CHECK
+			if ( sizeof(std::string::size_type)>=sizeof(decltype(_index)) )
+			{
+				if ( breakDoubleChar.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+			}
+		#endif
+
+		for ( auto j = static_cast<decltype(_index)>(breakDoubleChar.size()-1) ; j>=0 ; j-- )
 		{
 			if ( _string[i]  ==breakDoubleChar[j].t[0] &&
 			     _string[i+1]==breakDoubleChar[j].t[1] )
@@ -152,9 +199,19 @@ bool Analyzer::nextWord(std::string *_str)
 		}
 	}
 
-	if ( i < get_size() )
+	if ( i < get_size )
 	{
-		for ( int j = breakChar.size()-1 ; j>=0 ; j-- )
+		#if TOY_OPTION_CHECK
+			if ( sizeof(std::string::size_type)>=sizeof(decltype(_index)) )
+			{
+				if ( breakChar.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+			}
+		#endif
+
+		for ( auto j = static_cast<decltype(_index)>(breakChar.size()-1) ; j>=0 ; j-- )
 		{
 			if ( _string[i] == breakChar[j] )
 			{
@@ -167,12 +224,37 @@ bool Analyzer::nextWord(std::string *_str)
 
 	for (;; i++ )
 	{
-		if ( i>=get_size() )
+		if ( i>=get_size )
 		{
 			return 1;
 		}
 
-		for ( int j = ignore.size()-1 ; j>=0 ; j-- )
+		#if TOY_OPTION_CHECK
+			if ( sizeof(std::string::size_type)>=sizeof(decltype(_index)) )
+			{
+				if ( ignore.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+
+				if ( breakChar.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+
+				if ( breakDoubleChar.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+
+				if ( breakTripleChar.size() > static_cast<std::string::size_type>(std::numeric_limits<decltype(_index)>::max()) )
+				{
+					toy::Oops(TOY_MARK);
+				}
+			}
+		#endif
+
+		for ( auto j = static_cast<decltype(_index)>(ignore.size()-1) ; j>=0 ; j-- )
 		{
 			if ( _string[i] == ignore[j] )
 			{
@@ -180,7 +262,7 @@ bool Analyzer::nextWord(std::string *_str)
 			}
 		}
 
-		for ( int j = breakChar.size()-1 ; j>=0 ; j-- )
+		for ( auto j = static_cast<decltype(_index)>(breakChar.size()-1) ; j>=0 ; j-- )
 		{
 			if ( _string[i] == breakChar[j] )
 			{
@@ -188,11 +270,11 @@ bool Analyzer::nextWord(std::string *_str)
 			}
 		}
 
-		for ( int j=breakDoubleChar.size()-1 ; j>=0 ; j-- )
+		for ( auto j = static_cast<decltype(_index)>(breakDoubleChar.size()-1) ; j>=0 ; j-- )
 		{
 			if ( _string[i] == breakDoubleChar[j].t[0] )
 			{
-				if ( i+1 < get_size() )
+				if ( i+1 < get_size )
 				{
 					if ( _string[i+1] == breakDoubleChar[j].t[1] )
 					{
@@ -202,15 +284,15 @@ bool Analyzer::nextWord(std::string *_str)
 			}
 		}
 
-		for ( int j=breakTripleChar.size()-1 ; j>=0 ; j-- )
+		for ( auto j = static_cast<decltype(_index)>(breakTripleChar.size()-1) ; j>=0 ; j-- )
 		{
 			if ( _string[i] == breakTripleChar[j].t[0] )
 			{
-				if ( i+1 < get_size() )
+				if ( i+1 < get_size )
 				{
 					if ( _string[i+1] == breakTripleChar[j].t[1] )
 					{
-						if ( i+2 < get_size() )
+						if ( i+2 < get_size )
 						{
 							if ( _string[i+2] == breakTripleChar[j].t[2] )
 							{
@@ -236,12 +318,22 @@ void Analyzer::pushConfig(ConfigPtr ptr)
 
 void Analyzer::popConfig(int num)
 {
-	auto   size = static_cast<decltype(num)>(_configStack.size());
-
-	if ( num == size )
-	{
-		toy::Oops(TOY_MARK);
-	}
+	#if TOY_OPTION_CHECK
+		if ( sizeof(decltype(num)) > sizeof(std::string::size_type) )
+		{
+			if ( static_cast<decltype(num)>(_configStack.size()) <= num )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+		else
+		{
+			if ( _configStack.size() <= static_cast<std::string::size_type>(num) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
 
 	for ( ; num>0 ; num-- )
 	{

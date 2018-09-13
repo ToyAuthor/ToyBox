@@ -94,7 +94,7 @@ bool Reader<T>::nextLine(std::string *str)
 
 #else
 
-inline bool _IsFileExist(const std::string &filename)
+static inline bool _IsFileExist(const std::string &filename)
 {
 	#ifdef TOY_WINDOWS
 		return boost::filesystem::exists( toy::utf::UTF8ToWChar(filename) );
@@ -123,9 +123,9 @@ bool Reader<T>::open(std::string filename)
  * return BUFFER_SIZE   :Could not find new line character.
  * return BUFFER_SIZE-1 :There is no more data need to read in the buffer.
  */
-inline uint32_t _GetNewLineIndex( const uint32_t head,
-                                  char           *str,
-                                  bool           *cr )
+static inline uint32_t _GetNewLineIndex( const uint32_t head,
+                                         char           *str,
+                                         bool           *cr )
 {
 	for ( uint32_t i=head ; i<BUFFER_SIZE-1 ; i++ )
 	{
@@ -176,11 +176,11 @@ inline uint32_t _GetNewLineIndex( const uint32_t head,
 	return BUFFER_SIZE;
 }
 
-static bool _OutputStringLine( toy::io::Stream *file,
-                               uint32_t        *head,
-                               char            *buffer,
-                               std::string     *str,
-                               bool            *cr )
+static inline bool _OutputStringLine( toy::io::Stream *file,
+                                      uint32_t        *head,
+                                      char            *buffer,
+                                      std::string     *str,
+                                      bool            *cr )
 {
 	if ( *head==BUFFER_SIZE )
 	{

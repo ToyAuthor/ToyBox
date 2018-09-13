@@ -8,12 +8,13 @@
 ------------Tags------------
 
    C++11, Lua, Public domain, Linux, Windows, Mac, OpenGL, OpenAL
+   GCC, MinGW, Visual Studio 2015
 
 
 
 ------------Guide------------
 
-   cmake        All the options of building system are put here.
+   cmake        All options of building system are here.
 
    examples     Sample code is the best tutorial.
 
@@ -27,9 +28,11 @@
 
    source       The source code of ToyBox.
 
-   third-party  Only those tiny size third-party projects are here.
+   third-party  Only tiny size third-party projects are here.
 
    tools        Some useful tools.
+
+   usage        About ToyBox API.
 
 
 

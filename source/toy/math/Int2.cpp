@@ -1,9 +1,8 @@
 #include <vector>
 #include <memory>
 #include <limits>
-#include "toy/Mark.hpp"
 #include "toy/Exception.hpp"
-#include "toy/Log.hpp"
+#include "toy/Oops.hpp"
 #include "toy/math/Int2.hpp"
 #include "toy/math/NumberFormat.hpp"
 #include "toy/math/IntCommon.hpp"

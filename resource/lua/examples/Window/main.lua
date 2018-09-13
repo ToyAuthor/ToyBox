@@ -18,9 +18,9 @@ msg.print("Starting")
 local  window = CreateWindow()
 
 if window:good() then
-	while window:isOpen() do
-		window:handleEvent()   -- Mouse event, keyboard event, system event, etc.
-		window:display()       -- Refresh screen.
+	-- handleEvent:Mouse event, keyboard event, system event, etc.
+	while window:handleEvent() do
+		window:display()           -- Refresh screen.
 	end
 else
 	msg.print("error:" .. window:error())

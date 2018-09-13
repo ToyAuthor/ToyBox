@@ -10,14 +10,14 @@ namespace toy{
 namespace math{
 
 template <typename Type>
-Type Min(const Type a,const Type b)
+static inline Type Min(const Type a,const Type b)
 {
 	if(a>b)  return b;
 	else     return a;
 }
 
 template <typename Type>
-Type Min(const Type a,const Type b,const Type c)
+static inline Type Min(const Type a,const Type b,const Type c)
 {
 	Type  result;
 
@@ -30,7 +30,7 @@ Type Min(const Type a,const Type b,const Type c)
 }
 
 template <typename Type>
-Type Min(const Type a,const Type b,const Type c,const Type d)
+static inline Type Min(const Type a,const Type b,const Type c,const Type d)
 {
 	Type  result;
 
@@ -46,7 +46,7 @@ Type Min(const Type a,const Type b,const Type c,const Type d)
 // Find next power of 2.
 // Figure out a number base on 2 and bigger than t and most close t.
 template <typename Type>
-inline Type Exp1(const Type t)
+static inline Type Exp1(const Type t)
 {
 	Type    answer=2;
 
@@ -60,7 +60,7 @@ inline Type Exp1(const Type t)
 
 // Same function with exp1().
 template <typename Type>
-inline Type Exp2(const Type t)
+static inline Type Exp2(const Type t)
 {
 	Type    answer=2;
 
@@ -74,7 +74,7 @@ inline Type Exp2(const Type t)
 
 // Figure out a number(f(x)=1+2+4+8+16+...) smaller than t and most close t.
 template <typename Type>
-inline Type Exp3(const Type t)
+static inline Type Exp3(const Type t)
 {
 	Type    answer=1;
 	Type    item  =1;
@@ -94,13 +94,13 @@ inline Type Exp3(const Type t)
  * cot(x) = tan(PI/2 - x)----better  M_PI_2
  */
 template <typename Type>
-inline Type Cot(const Type t)
+static inline Type Cot(const Type t)
 {
 	return static_cast<Type>(std::tan(1.57079632679489661923 - t));
 }
 
 template <typename Type>
-inline Type Sqrt(const Type f)
+static inline Type Sqrt(const Type f)
 {
 	Type    result=(Type)0;
 
@@ -144,21 +144,21 @@ inline Type Sqrt(const Type f)
 }
 
 template <typename Type>
-inline Type Radians(const Type radians)
+static inline Type Radians(const Type radians)
 {
 	return radians;
 }
 
 // degrees -> radians
 template <typename Type>
-inline Type Degrees(const Type degrees)
+static inline Type Degrees(const Type degrees)
 {
 	return degrees * Type(0.01745329251994329576923690768489);
 }
 
 // radians -> degrees
 template <typename Type>
-inline Type RadiansToDegrees(const Type radians)
+static inline Type RadiansToDegrees(const Type radians)
 {
 	return radians * Type(57.295779513082320876798154814105);
 }

@@ -26,17 +26,27 @@ Text::~Text()
 	delete _this;
 }
 
-int Text::size()
+uint32_t Text::size() const
 {
-	return (int)_this->str.size();
+	#if TOY_OPTION_CHECK
+		if ( sizeof(std::string::size_type)>sizeof(uint32_t) )
+		{
+			if ( _this->str.size() > static_cast<std::string::size_type>(std::numeric_limits<uint32_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	return _this->str.size();
 }
 
-auto Text::c_str()->const char*
+const char* Text::c_str() const
 {
 	return _this->str.c_str();
 }
 
-auto Text::cpp_str()->std::string
+const std::string& Text::str() const
 {
 	return _this->str;
 }

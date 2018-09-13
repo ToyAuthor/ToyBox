@@ -31,7 +31,7 @@ static int IsUTF8(lua_State* L)
 	return 1;
 }
 
-inline static void PrintString(lua_State* L)
+static inline void PrintString(lua_State* L)
 {
 	if ( lua_type(L, -1)==LUA_TSTRING )
 	{

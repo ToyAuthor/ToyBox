@@ -9,30 +9,31 @@
 namespace toy{
 
 using math::Exp1;
+namespace memory{
 
-// The memory size of Allocator01 always base of 2.
-class Allocator01
+// The memory size of Manager02 always base of 2.
+class Manager02
 {
 	public:
 
-		Allocator01()
+		Manager02()
 		{
 			;
 		}
 
-		~Allocator01()
+		~Manager02()
 		{
 			free();
 		}
 
-		Allocator01(const Allocator01 &other)
+		Manager02(const Manager02 &other)
 		{
-			copy_mykind(const_cast<Allocator01&>(other));
+			copy_mykind(const_cast<Manager02&>(other));
 		}
 
-		Allocator01 operator = (const Allocator01 &other)
+		Manager02 operator = (const Manager02 &other)
 		{
-			copy_mykind(const_cast<Allocator01&>(other));
+			copy_mykind(const_cast<Manager02&>(other));
 			return *this;
 		}
 
@@ -121,7 +122,7 @@ class Allocator01
 		size_t  _size = 0;
 		size_t  _trueSize = 0;
 
-		inline void copy_mykind(Allocator01 &other)
+		inline void copy_mykind(Manager02 &other)
 		{
 			free();
 			_size     = other._size;
@@ -131,4 +132,4 @@ class Allocator01
 		}
 };
 
-}
+}}

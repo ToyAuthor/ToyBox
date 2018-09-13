@@ -98,7 +98,7 @@ using namespace time;
 
 #if defined(TOY_WINDOWS)
 
-inline static int64_t GetSystemCurrentTime()
+static inline int64_t GetSystemCurrentTime()
 {
 	int64_t    result;
 
@@ -107,19 +107,19 @@ inline static int64_t GetSystemCurrentTime()
 	return result;
 }
 
-inline static float RawTimeDataToSeconds(uint64_t raw)
+static inline float RawTimeDataToSeconds(uint64_t raw)
 {
 	return ((float)raw) * ::toy::time::GetFrequency()->data();
 }
 
 #elif defined(TOY_MAC)
 
-inline static uint64_t GetSystemCurrentTime()
+static inline uint64_t GetSystemCurrentTime()
 {
 	return mach_absolute_time();
 }
 
-inline static float RawTimeDataToSeconds(uint64_t raw)
+static inline float RawTimeDataToSeconds(uint64_t raw)
 {
 	double result = double(raw) * double(::toy::time::GetFrequency()->data()->numer)
 		/ double(::toy::time::GetFrequency()->data()->denom) / double(1000000);
@@ -130,7 +130,7 @@ inline static float RawTimeDataToSeconds(uint64_t raw)
 #else
 
 // Power by <sys/time.h>
-inline static uint64_t GetSystemCurrentTime()
+static inline uint64_t GetSystemCurrentTime()
 {
 	struct ::timeval   timenow;
 
@@ -141,7 +141,7 @@ inline static uint64_t GetSystemCurrentTime()
 
 // Power by <time.h>
 /*
-inline static uint64_t GetSystemCurrentTime()
+static inline uint64_t GetSystemCurrentTime()
 {
 	struct ::timespec  timenow;
     ::clock_gettime(CLOCK_MONOTONIC, &timenow);
@@ -150,7 +150,7 @@ inline static uint64_t GetSystemCurrentTime()
 }
 */
 
-inline static float RawTimeDataToSeconds(uint64_t raw)
+static inline float RawTimeDataToSeconds(uint64_t raw)
 {
 	return double(raw) / double(1000000);
 }

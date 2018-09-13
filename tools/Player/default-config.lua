@@ -6,7 +6,8 @@ Release version doesn't has it.
 Declare it again, if you want to show demo in release mode.
 
 For example:
-    Toy_ResourcePathForDemo = "d:/lua/projects/resource"
+    Toy_ResourcePathForDemo = "d:/ToyBox/resource"
+    Toy_ResourcePathForDemo = "~/ToyBox/resource"
 ]]
 
 --------------------------------------------------------------------------------
