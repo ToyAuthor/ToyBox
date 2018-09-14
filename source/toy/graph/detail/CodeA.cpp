@@ -29,7 +29,7 @@ class FileStream
 			if ( file==nullptr )
 			{
 				toy::Oops(TOY_MARK);
-				toy::Logger<<"File not found:"<<filename<<toy::NextLine;
+				toy::Logger<<"File not found:"<<filename<<toy::NewLine;
 				return 0;
 			}
 

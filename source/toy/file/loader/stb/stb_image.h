@@ -2898,11 +2898,11 @@ static int stbi__process_scan_header(stbi__jpeg *z)
       int id = stbi__get8(z->s), which;
       int q = stbi__get8(z->s);
       for (which = 0; which < z->s->img_n; ++which)
-         if (z->img_comp[which].id == id)
+         if (z->img_comp[which%4].id == id)
             break;
       if (which == z->s->img_n) return 0; // no match
-      z->img_comp[which].hd = q >> 4;   if (z->img_comp[which].hd > 3) return stbi__err("bad DC huff","Corrupt JPEG");
-      z->img_comp[which].ha = q & 15;   if (z->img_comp[which].ha > 3) return stbi__err("bad AC huff","Corrupt JPEG");
+      z->img_comp[which%4].hd = q >> 4;   if (z->img_comp[which%4].hd > 3) return stbi__err("bad DC huff","Corrupt JPEG");
+      z->img_comp[which%4].ha = q & 15;   if (z->img_comp[which%4].ha > 3) return stbi__err("bad AC huff","Corrupt JPEG");
       z->order[i] = which;
    }
 

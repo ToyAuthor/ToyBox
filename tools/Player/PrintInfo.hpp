@@ -100,17 +100,17 @@ inline std::string PrintVersion_GetVersion()
 
 inline void PrintVersion_English()
 {
-	toy::Logger<<TOY_TEXT("ToyBox version ")<<PrintVersion_GetVersion()<<toy::NextLine;
+	toy::Logger<<TOY_TEXT("ToyBox version ")<<PrintVersion_GetVersion()<<toy::NewLine;
 }
 
 inline void PrintVersion_TraditionalChinese()
 {
-	toy::Logger<<TOY_TEXT("ToyBox 當前版本為 ")<<PrintVersion_GetVersion()<<toy::NextLine;
+	toy::Logger<<TOY_TEXT("ToyBox 當前版本為 ")<<PrintVersion_GetVersion()<<toy::NewLine;
 }
 
 inline void PrintVersion_SimplifiedChinese()
 {
-	toy::Logger<<TOY_TEXT("ToyBox 当前版本为 ")<<PrintVersion_GetVersion()<<toy::NextLine;
+	toy::Logger<<TOY_TEXT("ToyBox 当前版本为 ")<<PrintVersion_GetVersion()<<toy::NewLine;
 }
 
 inline void PrintVersion(const SystemArgs &arg)
@@ -136,19 +136,19 @@ inline void PrintPrompt(const SystemArgs &arg)
 
 		if(param=="-tc")
 		{
-			toy::Logger<<TOY_TEXT("沒有 \"")<<cmd<<TOY_TEXT("\" 這個指令，只有提供下列選項:")<<toy::NextLine<<toy::NextLine;
+			toy::Logger<<TOY_TEXT("沒有 \"")<<cmd<<TOY_TEXT("\" 這個指令，只有提供下列選項:")<<toy::NewLine<<toy::NewLine;
 			PrintOptionList_TraditionalChinese();
 			return;
 		}
 		if(param=="-sc")
 		{
-			toy::Logger<<TOY_TEXT("没有 \"")<<cmd<<TOY_TEXT("\" 这个指令，只有提供下列选项:")<<toy::NextLine<<toy::NextLine;
+			toy::Logger<<TOY_TEXT("没有 \"")<<cmd<<TOY_TEXT("\" 这个指令，只有提供下列选项:")<<toy::NewLine<<toy::NewLine;
 			PrintOptionList_SimplifiedChinese();
 			return;
 		}
 	}
 
-	toy::Logger<<TOY_TEXT("Command \"")<<cmd<<TOY_TEXT("\" doesn't exist! You just only have following options:")<<toy::NextLine<<toy::NextLine;
+	toy::Logger<<TOY_TEXT("Command \"")<<cmd<<TOY_TEXT("\" doesn't exist! You just only have following options:")<<toy::NewLine<<toy::NewLine;
 	PrintOptionList_English();
 }
 
@@ -292,8 +292,8 @@ inline void PrintInformation_English()
 	toy::Log(TOY_TEXT("    License   Public Domain\n"));
 	toy::Log(TOY_TEXT("    Website   https://toyauthor.github.io/ToyBoxDoc\n"));
 
-	toy::Logger<<TOY_TEXT("    Version   ")<<PrintVersion_GetVersion()<<toy::NextLine;
-	toy::Logger<<TOY_TEXT("    Platform  ")<<PrintInformation_GetPlatform()<<toy::NextLine;
+	toy::Logger<<TOY_TEXT("    Version   ")<<PrintVersion_GetVersion()<<toy::NewLine;
+	toy::Logger<<TOY_TEXT("    Platform  ")<<PrintInformation_GetPlatform()<<toy::NewLine;
 }
 
 inline void PrintInformation_TraditionalChinese()
@@ -303,8 +303,8 @@ inline void PrintInformation_TraditionalChinese()
 	toy::Log(TOY_TEXT("    授權條款  Public Domain\n"));
 	toy::Log(TOY_TEXT("    網站      https://toyauthor.github.io/ToyBoxDoc\n"));
 
-	toy::Logger<<TOY_TEXT("    版本號    ")<<PrintVersion_GetVersion()<<toy::NextLine;
-	toy::Logger<<TOY_TEXT("    運行平台  ")<<PrintInformation_GetPlatform()<<toy::NextLine;
+	toy::Logger<<TOY_TEXT("    版本號    ")<<PrintVersion_GetVersion()<<toy::NewLine;
+	toy::Logger<<TOY_TEXT("    運行平台  ")<<PrintInformation_GetPlatform()<<toy::NewLine;
 }
 
 inline void PrintInformation_SimplifiedChinese()
@@ -314,8 +314,8 @@ inline void PrintInformation_SimplifiedChinese()
 	toy::Log(TOY_TEXT("    许可协议  Public Domain\n"));
 	toy::Log(TOY_TEXT("    网站      https://toyauthor.github.io/ToyBoxDoc\n"));
 
-	toy::Logger<<TOY_TEXT("    版本号    ")<<PrintVersion_GetVersion()<<toy::NextLine;
-	toy::Logger<<TOY_TEXT("    运行平台  ")<<PrintInformation_GetPlatform()<<toy::NextLine;
+	toy::Logger<<TOY_TEXT("    版本号    ")<<PrintVersion_GetVersion()<<toy::NewLine;
+	toy::Logger<<TOY_TEXT("    运行平台  ")<<PrintInformation_GetPlatform()<<toy::NewLine;
 }
 
 inline void PrintInformation(const SystemArgs &arg)

@@ -18,19 +18,19 @@ inline static bool LoadImage( const std::string& folder,
 
 	if ( ! dev.open(file) )
 	{
-		toy::Logger << "Image file not find!" << toy::NextLine;
+		toy::Logger << "Image file not find!" << toy::NewLine;
 	}
 	else if ( ! toy::file::loader::Load(&dev,image) )
 	{
-		toy::Logger << "Image load failed!" << toy::NextLine;
+		toy::Logger << "Image load failed!" << toy::NewLine;
 	}
 	else if ( image->data()==nullptr )
 	{
-		toy::Logger << "Image load nothing!" << toy::NextLine;
+		toy::Logger << "Image load nothing!" << toy::NewLine;
 	}
 	else
 	{
-		toy::Logger << "Image load success!" << toy::NextLine;
+		toy::Logger << "Image load success!" << toy::NewLine;
 		return true;
 	}
 

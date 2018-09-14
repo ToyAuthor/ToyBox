@@ -60,7 +60,7 @@ bool Standard::open(std::string filepath)
 		return 1;
 	else
 	{
-		toy::Logger<<path<<" not found"<<toy::NextLine;
+		toy::Logger<<path<<" not found"<<toy::NewLine;
 		toy::Oops(TOY_MARK);
 		return 0;
 	}

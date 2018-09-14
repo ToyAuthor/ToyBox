@@ -39,7 +39,7 @@ static int Log(lua::NativeState L)
 static int LogWithNewLine(lua::NativeState L)
 {
 	PrintString(L);
-	toy::Logger<<toy::NextLine;
+	toy::Logger<<toy::NewLine;
 	return 1;
 }
 

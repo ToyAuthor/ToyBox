@@ -39,13 +39,13 @@ using toy::Logger;
 
 static inline void UpBlank()
 {
-	Logger<<toy::NextLine;
+	Logger<<toy::NewLine;
 }
 
 static inline void DownBlank()
 {
 	#ifndef TOY_WINDOWS
-	Logger<<toy::NextLine;
+	Logger<<toy::NewLine;
 	#endif
 }
 
@@ -96,7 +96,7 @@ static int PrintManual(const SystemArgs &arg)
 
 		if ( str=="--comment"   || str=="-co")
 		{
-			Logger<<"It's not ready yet!"<<toy::NextLine;
+			Logger<<"It's not ready yet!"<<toy::NewLine;
 			return 1;
 		}
 
@@ -158,8 +158,8 @@ static bool ReadConfig( std::string config_file, PlayerConfig *config )
 		return true;
 	}
 
-	Logger<<"Script file \""<<name<<"\" not find."<<toy::NextLine;
-	Logger<<"Wrong information in config file."<<toy::NextLine;
+	Logger<<"Script file \""<<name<<"\" not find."<<toy::NewLine;
+	Logger<<"Wrong information in config file."<<toy::NewLine;
 
 	return false;
 }
@@ -178,8 +178,8 @@ static bool GetConfigData( const SystemArgs &arg, PlayerConfig *config )
 		#ifdef TOY_WINDOWS
 			if ( toy::utf::IsUtf8(config_file) )
 			{
-				Logger<<"Not support file name:"<<config_file<<toy::NextLine;
-				Logger<<"Lua can't take unicode name."<<toy::NextLine;
+				Logger<<"Not support file name:"<<config_file<<toy::NewLine;
+				Logger<<"Lua can't take unicode name."<<toy::NewLine;
 			}
 		#endif
 		return ReadConfig(config_file,config);
@@ -190,8 +190,8 @@ static bool GetConfigData( const SystemArgs &arg, PlayerConfig *config )
 		return true;
 	}
 
-	Logger<<"Configuration file \""<<config_file<<"\" not find."<<toy::NextLine;
-	Logger<<"Type \"player.exe --help\" to get more information"<<toy::NextLine;
+	Logger<<"Configuration file \""<<config_file<<"\" not find."<<toy::NewLine;
+	Logger<<"Type \"player.exe --help\" to get more information"<<toy::NewLine;
 
 	return false;
 }
@@ -241,8 +241,8 @@ static int main2(int argc, char* argv[])
 	#ifdef TOY_WINDOWS
 		if ( toy::utf::IsUtf8(script) )
 		{
-			Logger<<"Not support file name:"<<script<<toy::NextLine;
-			Logger<<"Lua can't take unicode name."<<toy::NextLine;
+			Logger<<"Not support file name:"<<script<<toy::NewLine;
+			Logger<<"Lua can't take unicode name."<<toy::NewLine;
 		}
 	#endif
 
@@ -278,7 +278,7 @@ static void CallBackExit(int signal)
 			str = "unknown ID";
 	}
 
-	Logger<<"std::signal ID:"<<signal<<":"<<str<<toy::NextLine;
+	Logger<<"std::signal ID:"<<signal<<":"<<str<<toy::NewLine;
 }
 
 int main(int argc, char* argv[])

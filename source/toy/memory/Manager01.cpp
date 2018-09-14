@@ -85,7 +85,7 @@ bool Manager01::clean()
 			_usedBlockNumber>0 : Some one didn't return memory.
 			_usedBlockNumber<0 : Manager01 has inside error.
 			*/
-			toy::Logger<<"toy::memory::Manager01::clean() _usedBlockNumber="<<_usedBlockNumber<<toy::NextLine;
+			toy::Logger<<"toy::memory::Manager01::clean() _usedBlockNumber="<<_usedBlockNumber<<toy::NewLine;
 			return false;
 		}
 

@@ -141,19 +141,19 @@ inline static bool IsVersionOK( enum toy::Option maximum,
 
 	if ( expect<toy::GL_1_1 || expect>toy::GL_4_5 )
 	{
-		toy::Logger<<"error:toy::graph::Brush::checkVersion() got a wrong parameter"<<toy::NextLine;
+		toy::Logger<<"error:toy::graph::Brush::checkVersion() got a wrong parameter"<<toy::NewLine;
 		return false;
 	}
 
 	if ( minimum>expect )
 	{
-		toy::Logger<<"error:The OpenGL version doesn't exist!"<<toy::NextLine;
+		toy::Logger<<"error:The OpenGL version doesn't exist!"<<toy::NewLine;
 		return false;
 	}
 
 	if ( maximum<expect )
 	{
-		toy::Logger<<"error:The OpenGL version is older than you want"<<toy::NextLine;
+		toy::Logger<<"error:The OpenGL version is older than you want"<<toy::NewLine;
 		return false;
 	}
 
@@ -164,15 +164,15 @@ inline static bool CheckVersion(enum toy::Option *expectVersion)
 {
 	const std::string   str("OpenGL version supported : ");
 
-	toy::Logger<<str<<glGetString(GL_VERSION)<<R"( (got from "glGetString"))"<<toy::NextLine;
+	toy::Logger<<str<<glGetString(GL_VERSION)<<R"( (got from "glGetString"))"<<toy::NewLine;
 
 	#if TOY_OPTION_USE_GLEW
 	GLenum	err = glewInit();
 
 	if ( GLEW_OK != err )
 	{
-		toy::Logger<<"error:glew initial failed"<<toy::NextLine;
-		toy::Logger<<"error:"<<glewGetErrorString(err)<<toy::NextLine;
+		toy::Logger<<"error:glew initial failed"<<toy::NewLine;
+		toy::Logger<<"error:"<<glewGetErrorString(err)<<toy::NewLine;
 		return false;
 	}
 	#endif
@@ -180,9 +180,9 @@ inline static bool CheckVersion(enum toy::Option *expectVersion)
 	auto   list = GetVersionSupportedList();
 
 	#if TOY_OPTION_USE_GLEW
-	toy::Logger<<str<<list.front().str<<" (got from GLEW)"<<toy::NextLine;
+	toy::Logger<<str<<list.front().str<<" (got from GLEW)"<<toy::NewLine;
 	#else
-	toy::Logger<<str<<list.front().str<<" (assumed)"<<toy::NextLine;
+	toy::Logger<<str<<list.front().str<<" (assumed)"<<toy::NewLine;
 	#endif
 
 	if ( *expectVersion==toy::WHATEVER )

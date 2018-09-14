@@ -19,7 +19,7 @@ static int IsUTF8(lua_State* L)
 	}
 	else
 	{
-		toy::Logger << "warning:toy.logger can't check non-string variable!" << toy::NextLine;
+		toy::Logger << "warning:toy.logger can't check non-string variable!" << toy::NewLine;
 	}
 
 	lua_pop(L,1);
@@ -40,7 +40,7 @@ static inline void PrintString(lua_State* L)
 	}
 	else
 	{
-		toy::Logger << "warning:toy.logger can't print non-string variable!" << toy::NextLine;
+		toy::Logger << "warning:toy.logger can't print non-string variable!" << toy::NewLine;
 	}
 
 	lua_pop(L,1);
@@ -55,7 +55,7 @@ static int Log(lua_State* L)
 static int LogWithNewLine(lua_State* L)
 {
 	PrintString(L);
-	toy::Logger<<toy::NextLine;
+	toy::Logger<<toy::NewLine;
 	return 1;
 }
 
@@ -89,7 +89,7 @@ static int SetOutputLog(lua_State* L)
 	}
 	else
 	{
-		toy::Logger << "warning:toy.logger can't take non-string variable as file name!" << toy::NextLine;
+		toy::Logger << "warning:toy.logger can't take non-string variable as file name!" << toy::NewLine;
 	}
 
 	lua_pop(L,1);
