@@ -18,6 +18,8 @@
 
    examples     Sample code is the best tutorial.
 
+   extlibs      Only tiny size third-party projects are here.
+
    include      The header files of ToyBox.
 
    license      All licenses of third-party projects are here.
@@ -27,8 +29,6 @@
    resource     Something like font file, image file, lua script, etc.
 
    source       The source code of ToyBox.
-
-   third-party  Only tiny size third-party projects are here.
 
    tools        Some useful tools.
 

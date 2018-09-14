@@ -31,8 +31,8 @@ if(TOY_ENABLE_SHARED_LIBS AND WIN32)
 	add_definitions(-DLZ4_DLL_IMPORT=1)
 endif()
 
-include_directories(${TOY_ROOT_SOURCE_DIR}/third-party/lz4)
-link_directories(${TOY_ROOT_BINARY_DIR}/third-party/lz4)
+include_directories(${TOY_include_lz4})
+link_directories(${TOY_library_lz4})
 
 
 toy_BuildLib(toy_file

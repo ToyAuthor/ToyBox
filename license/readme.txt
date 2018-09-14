@@ -1,2 +1,2 @@
 
-The complete list:"ToyBox/third-party/readme.txt"
+The complete list:"ToyBox/extlibs/readme.txt"

@@ -1,5 +1,5 @@
 
-# The complete list of third-party libraries:"ToyBox/third-party/readme.txt"
+# The complete list of third-party libraries:"ToyBox/extlibs/readme.txt"
 macro(toy_SetThirdPartyLibraryPath)
 
 	if(APPLE)
@@ -27,40 +27,45 @@ macro(toy_SetThirdPartyLibraryPath)
 	#---------------------------------------------------------------------------
 
 	set(TOY_include_boost       "${TOY_SDK_INC}" )
-	set(TOY_library_boost       "${TOY_ROOT_BINARY_DIR}/third-party/boost" )
+	set(TOY_library_boost       "${TOY_ROOT_BINARY_DIR}/extlibs/boost" )
 
 
-	set(TOY_include_lua         "${TOY_ROOT_SOURCE_DIR}/third-party/lua" )
-	set(TOY_library_lua         "${TOY_ROOT_BINARY_DIR}/third-party/lua" )
+	set(TOY_include_lua         "${TOY_ROOT_SOURCE_DIR}/extlibs/lua" )
+	set(TOY_library_lua         "${TOY_ROOT_BINARY_DIR}/extlibs/lua" )
 	set(TOY_libname_lua         "lua" )
 
 
-	set(TOY_include_zlib        "${TOY_ROOT_SOURCE_DIR}/third-party/zlib" "${TOY_ROOT_BINARY_DIR}/third-party/zlib" )
-	set(TOY_library_zlib        "${TOY_ROOT_BINARY_DIR}/third-party/zlib" )
+	set(TOY_include_lz4         "${TOY_ROOT_SOURCE_DIR}/extlibs/lz4" )
+	set(TOY_library_lz4         "${TOY_ROOT_BINARY_DIR}/extlibs/lz4" )
+	set(TOY_libname_lz4         "lz4" )
+
+
+	set(TOY_include_zlib        "${TOY_ROOT_SOURCE_DIR}/extlibs/zlib" "${TOY_ROOT_BINARY_DIR}/extlibs/zlib" )
+	set(TOY_library_zlib        "${TOY_ROOT_BINARY_DIR}/extlibs/zlib" )
 	set(TOY_libname_zlib        "zlib" )
 
 
 	if(UNIX)
-	set(TOY_include_7zip        "${TOY_ROOT_SOURCE_DIR}/third-party/p7zip" )
-	set(TOY_library_7zip        "${TOY_ROOT_BINARY_DIR}/third-party/p7zip" )
+	set(TOY_include_7zip        "${TOY_ROOT_SOURCE_DIR}/extlibs/p7zip" )
+	set(TOY_library_7zip        "${TOY_ROOT_BINARY_DIR}/extlibs/p7zip" )
 	set(TOY_libname_7zip        "p7zip" )
 	else()
-	set(TOY_include_7zip        "${TOY_ROOT_SOURCE_DIR}/third-party/7zip" )
-	set(TOY_library_7zip        "${TOY_ROOT_BINARY_DIR}/third-party/7zip" )
+	set(TOY_include_7zip        "${TOY_ROOT_SOURCE_DIR}/extlibs/7zip" )
+	set(TOY_library_7zip        "${TOY_ROOT_BINARY_DIR}/extlibs/7zip" )
 	set(TOY_libname_7zip        "7zip" )
 	endif()
 
 
-	set(TOY_include_glew        "${TOY_ROOT_SOURCE_DIR}/third-party/glew/include" )
-	set(TOY_library_glew        "${TOY_ROOT_BINARY_DIR}/third-party/glew" )
+	set(TOY_include_glew        "${TOY_ROOT_SOURCE_DIR}/extlibs/glew/include" )
+	set(TOY_library_glew        "${TOY_ROOT_BINARY_DIR}/extlibs/glew" )
 	set(TOY_libname_glew        "glew" )
 
 
 	set(TOY_include_asio        "${TOY_SDK_INC}" )
 
-	set(TOY_include_glm         "${TOY_ROOT_SOURCE_DIR}/third-party/glm" )
+	set(TOY_include_glm         "${TOY_ROOT_SOURCE_DIR}/extlibs/glm" )
 
-	set(TOY_include_json        "${TOY_ROOT_SOURCE_DIR}/third-party/json" )
+	set(TOY_include_json        "${TOY_ROOT_SOURCE_DIR}/extlibs/json" )
 
 
 	set(TOY_library_gmp         "${TOY_SDK_LIB}/GMP" )

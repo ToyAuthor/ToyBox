@@ -13,7 +13,7 @@ set(TOY_ROOT_BINARY_DIR ${PROJECT_BINARY_DIR})
 include("${TOY_ROOT_SOURCE_DIR}/cmake/toy_IncludeTools.cmake" REQUIRED)
 toy_IncludeTools()
 
-add_subdirectory(third-party)
+add_subdirectory(extlibs)
 add_subdirectory(source)
 add_subdirectory(source/toy)
 add_subdirectory(examples)
