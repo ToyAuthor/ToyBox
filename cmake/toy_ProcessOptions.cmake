@@ -21,6 +21,18 @@ macro(toy_ProcessOptions)
 		add_definitions(-DTOY_OPTION_DYNAMIC_LIBRARY=0)
 	endif()
 
+	if(TOY_ENABLE_BETA_API)
+		add_definitions(-DTOY_OPTION_ENABLE_BETA_API=1)
+	else()
+		add_definitions(-DTOY_OPTION_ENABLE_BETA_API=0)
+	endif()
+
+	if(TOY_ENABLE_OLD_API)
+		add_definitions(-DTOY_OPTION_ENABLE_OLD_API=1)
+	else()
+		add_definitions(-DTOY_OPTION_ENABLE_OLD_API=0)
+	endif()
+
 	if(TOY_USE_GLEW)
 		add_definitions(-DTOY_OPTION_USE_GLEW=1)
 	else()

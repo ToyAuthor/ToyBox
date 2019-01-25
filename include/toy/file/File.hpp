@@ -57,7 +57,9 @@ class TOY_API_FILE File
 		file::io::Base*     _io   = nullptr;         // Always keep a object when it alive.
 		enum toy::Option    _mode = toy::NOTHING;    // Default mode is STD.
 
+		#if TOY_OPTION_ENABLE_BETA_API
 	public:
+		#endif
 
 		void    changeMode(enum toy::Option);
 };

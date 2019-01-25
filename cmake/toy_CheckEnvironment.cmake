@@ -5,4 +5,10 @@ macro(toy_CheckEnvironment)
 		message(WARNING "ToyBox:Sorry, this compiler haven't been tested.")
 	endif()
 
+	if(CMAKE_BUILD_TYPE MATCHES Release)
+		if(TOY_ENABLE_BETA_API)
+			message(WARNING "ToyBox:Release version shouldn't include beta stuff.")
+		endif()
+	endif()
+
 endmacro(toy_CheckEnvironment)
