@@ -24,7 +24,7 @@
 
 
 #if defined(TOY_MSVC) && defined(TOY_64_BIT) && TOY_OPTION_ENABLE_ASSEMBLY
-	#error "Visual Studio is not support assembly language on 64 bit system."
+	#error "Visual Studio doesn't support assembly language on 64 bit system."
 #endif
 
 

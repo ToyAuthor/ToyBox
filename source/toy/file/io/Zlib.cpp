@@ -4,58 +4,56 @@ using namespace toy;
 using namespace file;
 using namespace io;
 
-
 bool Zlib::openDir(std::string path)
 {
 	_handle = unzOpen(path.c_str());
 
-	if( _handle == NULL )
+	if( _handle == nullptr )
 	{
 		Oops(TOY_MARK);
-		return 0;
+		return false;
 	}
 
 	if( unzGetGlobalInfo( _handle, &_info ) != UNZ_OK )
 	{
 		toy::Oops(TOY_MARK);
 		close();
-		return 0;
+		return false;
 	}
 
-	return 1;
+	return true;
 }
 
 bool Zlib::open(std::string filepath)
 {
 	const uint32_t  MAX_FILENAME = 512;
 	char            filename[ MAX_FILENAME ];
-	std::string     looking_for = filepath;
 	std::string     name;
-	unz_file_info   file_info;
+	unz_file_info   fileInfo;
 
 	for( uLong i = _info.number_entry ; i>0 ; i-- )
 	{
-		if( unzGetCurrentFileInfo( _handle, &file_info, filename, MAX_FILENAME, NULL, 0, NULL, 0 ) != UNZ_OK )
+		if( unzGetCurrentFileInfo( _handle, &fileInfo, filename, MAX_FILENAME, nullptr, 0, nullptr, 0 ) != UNZ_OK )
 		{
 			toy::Oops(TOY_MARK);
 			close();
-			return 0;
+			return false;
 		}
 
 		name = filename;
 
-		if( name==looking_for )
+		if( name==filepath )
 		{
 			if ( unzOpenCurrentFile( _handle ) != UNZ_OK )
 			{
 				toy::Oops(TOY_MARK);
 				close();
-				return 0;
+				return false;
 			}
 
-			_isFileOpened=1;
+			_isFileOpened = true;
 
-			return 1;
+			return true;
 		}
 		else
 		{
@@ -63,18 +61,28 @@ bool Zlib::open(std::string filepath)
 			{
 				toy::Oops(TOY_MARK);
 				close();
-				return 0;
+				return false;
 			}
 		}
 	}
 
 	// Can't find out file.
-	return 0;
+	return false;
 }
 
 uint32_t Zlib::read(void *file, uint32_t size)
 {
-	int   result = unzReadCurrentFile( _handle, file, size );
+	#if TOY_OPTION_CHECK
+		if ( sizeof(uint32_t) > sizeof(unsigned) )
+		{
+			if ( size > static_cast<uint32_t>(std::numeric_limits<unsigned>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	int   result = unzReadCurrentFile( _handle, file, static_cast<unsigned>(size) );
 
 	if ( result < 0 )
 	{
@@ -86,28 +94,28 @@ uint32_t Zlib::read(void *file, uint32_t size)
 	return result;
 }
 
-bool Zlib::write(void *,uint32_t )
+bool Zlib::write(const void *,uint32_t )
 {
 	// Not ready yet
 	Oops(TOY_MARK);
-	return 1;
+	return false;
 }
 
 bool Zlib::seek(int ,int32_t )
 {
 	// Not ready yet
 	Oops(TOY_MARK);
-	return 1;
+	return false;
 }
 
 void Zlib::close()
 {
 	if ( _handle )
 	{
-		if(_isFileOpened)
+		if ( _isFileOpened )
 		{
 			unzCloseCurrentFile( _handle );
-			_isFileOpened=0;
+			_isFileOpened = false;
 		}
 
 		unzClose( _handle );
@@ -115,7 +123,14 @@ void Zlib::close()
 	}
 }
 
+bool Zlib::isEnd()
+{
+	// Not ready yet
+	Oops(TOY_MARK);
+	return false;
+}
+
 bool Zlib::isEmpty()
 {
-	return 1;
+	return ! _isFileOpened;
 }

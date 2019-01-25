@@ -6,8 +6,7 @@
 #include "toy/CompilerConfig.hpp"
 
 #if TOY_OPTION_CHECK_CAREFUL
-#include "toy/Mark.hpp"
-#include "toy/Log.hpp"
+#include "toy/Oops.hpp"
 #endif
 
 namespace toy{

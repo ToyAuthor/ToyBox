@@ -1,14 +1,12 @@
 
 #pragma once
 
-
 #include <cstdlib>
 #include <cstring>
 #include "toy/Math.hpp"
 
 namespace toy{
 
-using math::Exp1;
 namespace memory{
 
 // The memory size of Manager02 always base of 2.
@@ -28,25 +26,29 @@ class Manager02
 
 		Manager02(const Manager02 &other)
 		{
-			copy_mykind(const_cast<Manager02&>(other));
+			_copy(other);
 		}
 
 		Manager02 operator = (const Manager02 &other)
 		{
-			copy_mykind(const_cast<Manager02&>(other));
+			_copy(other);
 			return *this;
 		}
 
 		bool copy(void *p,size_t s)
 		{
-			size(s);
+			if ( ! size(s) )
+			{
+				return false;
+			}
+
 			std::memcpy(_data,p,s);
-			return 1;
+			return true;
 		}
 
 		void free()
 		{
-			if(_data)
+			if ( _data )
 			{
 				std::free(_data);
 				_data = nullptr;
@@ -58,52 +60,71 @@ class Manager02
 		// Allocate memory for user.
 		bool size(size_t s)
 		{
-			_size = s;
-
 			if ( s>_trueSize )
 			{
-				size_t		new_size=Exp1<size_t>(s);
+				void*    ptr     = nullptr;
+				size_t   newSize = ::toy::math::Exp1<size_t>(s);
 
 				if ( _data==nullptr )
 				{
-					_data = std::malloc(new_size);
+					ptr = std::malloc(newSize);
 				}
 				else
 				{
-					_data = std::realloc(_data,new_size);
+					ptr = std::realloc(_data,newSize);
 				}
-				_trueSize = new_size;
+
+				if ( ptr==nullptr )
+				{
+					return false;
+				}
+
+				_data     = ptr;
+				_trueSize = newSize;
 			}
 
-			return 1;
+			_size = s;
+
+			return true;
 		}
 
 		// Allocate memory for user, and release the memory unused.
 		bool fitSize(size_t s)
 		{
-			_size = s;
+			void*    ptr     = nullptr;
+			size_t   newSize = ::toy::math::Exp1<size_t>(s);
 
-			size_t		new_size = Exp1<size_t>(s);
-
-			if ( new_size>_trueSize )
+			if ( newSize>_trueSize )
 			{
-				if(_data==nullptr)
+				if ( _data==nullptr )
 				{
-					_data = std::malloc(new_size);
+					ptr = std::malloc(newSize);
 				}
 				else
 				{
-					_data = std::realloc(_data,new_size);
+					ptr = std::realloc(_data,newSize);
 				}
-				_trueSize = new_size;
 			}
-			else if ( new_size<_trueSize )
+			else if ( newSize<_trueSize )
 			{
-				_data = std::realloc(_data,new_size);
-				_trueSize = new_size;
+				ptr = std::realloc(_data,newSize);
+			}
+			else
+			{
+				_size = s;
+				return true;
 			}
 
-			return 1;
+			if ( ptr==nullptr )
+			{
+				return false;
+			}
+
+			_data     = ptr;
+			_trueSize = newSize;
+			_size     = s;
+
+			return true;
 		}
 
 		void* data() const
@@ -122,7 +143,7 @@ class Manager02
 		size_t  _size = 0;
 		size_t  _trueSize = 0;
 
-		inline void copy_mykind(Manager02 &other)
+		void _copy(const Manager02 &other)
 		{
 			free();
 			_size     = other._size;

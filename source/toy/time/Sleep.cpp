@@ -1,8 +1,7 @@
 #include <cstdint>
 #include <chrono>
 #include <thread>
-#include "toy/Mark.hpp"
-#include "toy/Log.hpp"
+#include "toy/Oops.hpp"
 #include "toy/time/Sleep.hpp"
 
 void toy::time::Sleep(float sec)

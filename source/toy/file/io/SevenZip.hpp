@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include <cstdio>
 #include "toy/file/io/Base.hpp"
 
 //------Come from 7zip------start
@@ -18,7 +17,6 @@ namespace toy{
 namespace file{
 namespace io{
 
-
 class SevenZip : public Base
 {
 	public:
@@ -29,7 +27,7 @@ class SevenZip : public Base
 		virtual bool    openDir(std::string path);
 		virtual bool    open(std::string filepath);
 		virtual auto    read(void *file,uint32_t size)->uint32_t;
-		virtual bool    write(void *file,uint32_t size);   // Not finish yet.
+		virtual bool    write(const void *file,uint32_t size);   // Not finish yet.
 		virtual bool    seek(int option,int32_t offset);
 		virtual void    close();
 		virtual bool    isEnd();
@@ -47,12 +45,9 @@ class SevenZip : public Base
 
 		//-------------------------------------------
 
-		size_t          _fileSize = 0;
-		size_t          _passSize = 0;
+		std::size_t     _fileSize = 0;
+		std::size_t     _passSize = 0;
 		void*           _fileBegin = nullptr;
 };
 
-
-}//namespace io
-}//namespace file
-}//namespace toy
+}}}

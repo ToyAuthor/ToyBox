@@ -2,15 +2,19 @@
 # The complete list of third-party libraries:"ToyBox/extlibs/readme.txt"
 macro(toy_SetThirdPartyLibraryPath)
 
+	# Mac LLVM-GCC
 	if(APPLE)
 		set(TOY_SDK_INC         "$ENV{HOME}/ToyBoxSDK/include" )
 		set(TOY_SDK_LIB         "$ENV{HOME}/ToyBoxSDK/lib/mac_llvmgcc_x64_release" )
+	# Visual Studio
 	elseif(MSVC)
 		set(TOY_SDK_INC         "D:/ToyBoxSDK/include" )
 		set(TOY_SDK_LIB         "D:/ToyBoxSDK/lib/msvc2015_x64_release" )
+	# MinGW
 	elseif(WIN32)
 		set(TOY_SDK_INC         "D:/ToyBoxSDK/include" )
 		set(TOY_SDK_LIB         "D:/ToyBoxSDK/lib/tdm_gcc_x64_release" )
+	# Linux GCC
 	elseif(UNIX)
 		set(TOY_SDK_INC         "$ENV{HOME}/ToyBoxSDK/include" )
 		set(TOY_SDK_LIB         "$ENV{HOME}/ToyBoxSDK/lib/ubuntu_gcc_x64_release" )
@@ -22,6 +26,32 @@ macro(toy_SetThirdPartyLibraryPath)
 		# Take a look!
 		# https://github.com/ToyAuthor/ToyBoxSDK
 		message(FATAL_ERROR "ToyBox:Are you sure you have all the third-party libraries?")
+	else()
+		# Mac
+		if(APPLE)
+		# Visual Studio & MinGW
+		elseif(WIN32)
+			file(GLOB TEMP_DIR
+				${TOY_SDK_LIB}/SFML/*.dll
+				${TOY_SDK_LIB}/GMP/*.dll
+				${TOY_SDK_LIB}/freetype/*.dll
+				${TOY_SDK_LIB}/FLTK/*.dll
+				${TOY_SDK_LIB}/libpng/*.dll
+			)
+			file(COPY ${TEMP_DIR} DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/)
+			unset(TEMP_DIR)
+		# Linux
+		elseif(UNIX)
+			file(GLOB TEMP_DIR
+				${TOY_SDK_LIB}/SFML/*.so
+				${TOY_SDK_LIB}/GMP/*.so
+				${TOY_SDK_LIB}/freetype/*.so
+				${TOY_SDK_LIB}/FLTK/*.so
+				${TOY_SDK_LIB}/libpng/*.so
+			)
+			file(COPY ${TEMP_DIR} DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/)
+			unset(TEMP_DIR)
+		endif()
 	endif()
 
 	#---------------------------------------------------------------------------

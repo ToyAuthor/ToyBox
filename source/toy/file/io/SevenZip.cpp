@@ -1,11 +1,13 @@
-#ifdef TOY_WINDOWS
-#include <windows.h>
-#endif
-
 #include <cstdlib>
 #include <cstring>
+#include "toy/Windows.hpp"
 #include "toy/file/io/SevenZip.hpp"
 
+#ifdef TOY_MSVC
+#ifdef max
+	#undef max      // For std::numeric_limits<std::size_t>::max()
+#endif
+#endif
 
 using namespace toy;
 using namespace file;
@@ -213,7 +215,7 @@ bool SevenZip::openDir(std::string path)
 	if ( InFile_Open(&(_archiveStream.file),path.c_str()) )
 	{
 		toy::Oops(TOY_MARK);
-		return 0;
+		return false;
 	}
 
 	SRes res;
@@ -233,10 +235,10 @@ bool SevenZip::openDir(std::string path)
 		SzArEx_Free(&(_db), &(_allocImp));
 		SzFree(NULL, _temp);
 		File_Close(&(_archiveStream.file));
-		return 0;
+		return false;
 	}
 
-	return 1;
+	return true;
 }
 
 bool SevenZip::open(std::string filepath)
@@ -271,7 +273,7 @@ bool SevenZip::open(std::string filepath)
 			if ( _temp == 0 )
 			{
 				toy::Oops(TOY_MARK);
-				return 0;
+				return false;
 			}
 		}
 
@@ -287,14 +289,14 @@ bool SevenZip::open(std::string filepath)
 			{
 				_fileSize = outSizeProcessed;
 				_fileBegin = (void*)((_outBuffer)+offset);
-				return 1;
+				return true;
 			}
 			else
 			{
 				toy::Oops(TOY_MARK);
 				_fileSize = 0;
 				_fileBegin = nullptr;
-				return 0;
+				return false;
 			}
 		}
 	}
@@ -303,33 +305,44 @@ bool SevenZip::open(std::string filepath)
 
 	_fileSize = 0;
 	_fileBegin = nullptr;
-	return 0;
+	return false;
 }
 
-uint32_t SevenZip::read(void *file, uint32_t size)
+uint32_t SevenZip::read(void *file, uint32_t sizein32)
 {
-	auto   data = static_cast<Byte*>(_fileBegin);
+	#if TOY_OPTION_CHECK
+		if ( sizeof(uint32_t) > sizeof(std::size_t) )
+		{
+			if ( sizein32 > static_cast<uint32_t>(std::numeric_limits<std::size_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	std::size_t size = static_cast<std::size_t>(sizein32);
+	auto        data = static_cast<Byte*>(_fileBegin);
 
 	if ( _fileSize < size+_passSize )
 	{
 		size = _fileSize-_passSize;
 	}
 
-	memcpy(file,data+_passSize,size);
+	std::memcpy(file,data+_passSize,size);
 
-	_passSize+=size;
+	_passSize += size;
 
 	return size;
 }
 
-bool SevenZip::write(void *,uint32_t )
+bool SevenZip::write(const void *,uint32_t )
 {
 	// Not ready yet
 	toy::Oops(TOY_MARK);
-	return 1;
+	return true;
 }
 
-static int32_t SeekSET(int32_t offset,int32_t total)
+static std::size_t SeekSET(int32_t offset,int32_t total)
 {
 	if ( offset > total )
 	{
@@ -344,50 +357,84 @@ static int32_t SeekSET(int32_t offset,int32_t total)
 		offset = 0;          // Move to the beginning of file.
 	}
 
-	return offset;
+	#if TOY_OPTION_CHECK
+		if ( sizeof(int32_t) > sizeof(std::size_t) )
+		{
+			if ( offset > static_cast<int32_t>(std::numeric_limits<std::size_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	return static_cast<std::size_t>(offset);
 }
 
-static int32_t SeekEND(int32_t offset,int32_t total)
+static std::size_t SeekEND(int32_t offset,int32_t total)
 {
 	if ( offset < total*-1 )
 	{
 		// Too big.
 		toy::Oops(TOY_MARK);
-		offset = total*-1;   // Move to the beginning of file.
+		return 0;   // Move to the beginning of file.
 	}
 	else if ( offset>0 )
 	{
-		// It should always bigger than zero.
+		// It shouldn't bigger than zero.
 		toy::Oops(TOY_MARK);
-		offset = 0;          // Move to the end of file.
+		return static_cast<std::size_t>(total);      // Move to the end of file.
 	}
 
-	return total + offset;
+	auto  temp = total + offset;
+
+	#if TOY_OPTION_CHECK
+		if ( sizeof(int32_t) > sizeof(std::size_t) )
+		{
+			if ( temp > static_cast<int32_t>(std::numeric_limits<std::size_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	return static_cast<std::size_t>(temp);
 }
 
-static int32_t SeekCUR(int32_t offset,int32_t total,int32_t pass)
+static std::size_t SeekCUR(int32_t offset,int32_t total,int32_t passed)
 {
 	if ( offset>0 )
 	{
-		if ( offset+pass>total )
+		if ( offset>total-passed )
 		{
-			offset = total - pass;  // Move to the end of file.
+			offset = total - passed;  // Move to the end of file.
 		}
 	}
 	else if ( offset<0 )
 	{
-		if ( offset*-1>pass )
+		if ( offset*-1>passed )
 		{
-			offset = pass*-1;       // Move to the beginning of file.
+			offset = passed*-1;       // Move to the beginning of file.
 		}
 	}
 
-	return pass + offset;
+	auto  temp = passed + offset;
+
+	#if TOY_OPTION_CHECK
+		if ( sizeof(int32_t) > sizeof(std::size_t) )
+		{
+			if ( temp > static_cast<int32_t>(std::numeric_limits<std::size_t>::max()) )
+			{
+				toy::Oops(TOY_MARK);
+			}
+		}
+	#endif
+
+	return static_cast<std::size_t>(temp);
 }
 
 bool SevenZip::seek(int option,int32_t offset)
 {
-	if ( isEmpty() ) return 0;
+	if ( isEmpty() ) return false;
 
 	switch (option)
 	{
@@ -406,7 +453,7 @@ bool SevenZip::seek(int option,int32_t offset)
 			break;
 	}
 
-	return 1;
+	return true;
 }
 
 void SevenZip::close()
@@ -427,15 +474,15 @@ void SevenZip::close()
 
 bool SevenZip::isEmpty()
 {
-	return 1;
+	return true;
 }
 
 bool SevenZip::isEnd()
 {
 	if ( _passSize == _fileSize )
 	{
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }

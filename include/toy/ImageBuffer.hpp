@@ -45,6 +45,8 @@ class TOY_API ImageBuffer
 			return _format;
 		}
 
+		ImageBuffer& operator +=(const ImageBuffer& model);
+
 	private:
 
 		toy::memory::Manager02    _allocator;      // Saving a image data on memory.

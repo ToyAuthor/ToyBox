@@ -78,7 +78,7 @@ uint32_t Android::read(void *file,uint32_t size)
 	return 1;
 }
 
-bool Android::write(void*,uint32_t)
+bool Android::write(const void*,uint32_t)
 {
 	// Not ready yet
 	toy::Oops(TOY_MARK);
@@ -143,7 +143,7 @@ Android::Android()
 bool Android::openDir(std::string)            { return 1; }
 bool Android::open(std::string)               { return 1; }
 auto Android::read(void*,uint32_t)->uint32_t  { return 1; }
-bool Android::write(void*,uint32_t)           { return 1; }
+bool Android::write(const void*,uint32_t)     { return 1; }
 bool Android::isEnd()                         { return 1; }
 bool Android::isEmpty()                       { return 1; }
 bool Android::seek(int,int32_t)               { return 1; }

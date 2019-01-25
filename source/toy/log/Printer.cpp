@@ -11,12 +11,6 @@ const log::Printer& NewLine(const log::Printer& m)
 	return m;
 }
 
-const log::Printer& NextLine(const log::Printer& m)
-{
-	toy::Log("\r\n");
-	return m;
-}
-
 }
 
 using namespace toy;

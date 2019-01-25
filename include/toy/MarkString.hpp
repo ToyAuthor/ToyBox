@@ -7,6 +7,12 @@ namespace toy{
 
 static inline std::string MarkString(const char *file,int line)
 {
+	return std::string(file) + ":" + std::to_string(line);
+}
+
+/*
+static inline std::string MarkString(const char *file,int line)
+{
 	char        buffer[6];
 	const char  ff = '0';
 	int         bu[5];
@@ -27,7 +33,7 @@ static inline std::string MarkString(const char *file,int line)
 	buffer[0] = ff + bu[0];
 
 	return std::string(file) + ":" + buffer;
-}
+}*/
 
 /*
 #include <sstream>

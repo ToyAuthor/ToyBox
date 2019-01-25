@@ -29,10 +29,10 @@ class Writer
 	public:
 
 		Writer(){}
-		Writer(std::string filename){open(filename);}
+		Writer(const std::string &filename){open(filename);}
 		~Writer(){}
 
-		bool open(std::string filename)
+		bool open(const std::string &filename)
 		{
 			if ( boost::filesystem::exists( filename ) )
 			{
@@ -77,7 +77,7 @@ class Writer
 			;
 		}
 
-		Writer(std::string filename)
+		Writer(const std::string &filename)
 		{
 			if ( ! this->open(filename) )
 			{
@@ -96,7 +96,7 @@ class Writer
 			}
 		}
 
-		bool open(std::string filename)
+		bool open(const std::string &filename)
 		{
 			#ifdef TOY_WINDOWS
 			if ( boost::filesystem::exists( toy::utf::UTF8ToWChar(filename) ) )

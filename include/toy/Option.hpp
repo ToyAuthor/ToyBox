@@ -7,19 +7,18 @@ enum Option:int
 {
 	_OPTION_START_OR_BEGIN = 0,
 	NOTHING,
-	WHATEVER,   // Default option.
-
+	DEFAULT,
+	WHATEVER,   // Let system decide.
 	VERTEX_SHADER,
 	FRAGMENT_SHADER,
-
 	GL_1_1,
 	GL_1_2,
 	GL_1_3,
 	GL_1_4,
 	GL_1_5,
-	GL_2_0,
+	GL_2_0,    // toy::graph::Brush supported.
 	GL_2_1,
-	GL_3_0,
+	GL_3_0,    // toy::graph::Brush supported.
 	GL_3_1,
 	GL_3_2,
 	GL_3_3,
@@ -29,11 +28,15 @@ enum Option:int
 	GL_4_3,
 	GL_4_4,
 	GL_4_5,
-
 	GREY,        // 1 byte
 	GREY_ALPHA,  // 2 byte
 	RGB,         // 3 byte
+	BGR,         // 3 byte
 	RGBA,        // 4 byte
+	DIRECTORY,
+	ZIP,
+	SEVEN_ZIP,
+	_OPTION_END,
 };
 
 }

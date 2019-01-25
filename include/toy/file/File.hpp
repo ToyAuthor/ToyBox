@@ -21,25 +21,22 @@ class TOY_API_FILE File
 {
 	public:
 
-		enum Mode:int
-		{
-			NONE,
-			STD,
-			ZIP,
-			SEVEN_ZIP,
-			ANDROID_MGR,
-		};
-
-		File(enum Mode mode=STD);
+		/*
+		 * Options:
+		 *     DEFAULT
+		 *     DIRECTORY
+		 *     ZIP
+		 *     SEVEN_ZIP
+		 */
+		File(enum toy::Option mode=toy::DIRECTORY);
 		~File();
 
 		bool    openDir(std::string path);                     // Open a directory/archive for searching files.
 		bool    open(std::string file);
 		auto    read(void *file,uint32_t size)->uint32_t;      // Return how much data really output.
-		bool    write(void *file,uint32_t size);               // STD mode supported only.
+		bool    write(const void *file,uint32_t size);         // DIRECTORY mode supported only.
 		bool    isEnd();
 		bool    isEmpty();
-		void    changeMode(enum Mode);
 		auto    getFileName()->std::string;
 
 		/*
@@ -57,9 +54,12 @@ class TOY_API_FILE File
 		void    close();
 		void    freeIO();
 
-		file::io::Base*     _io = nullptr;      // Always keep a object when it alive.
-		enum Mode           _mode = NONE;       // Default mode is STD.
+		file::io::Base*     _io   = nullptr;         // Always keep a object when it alive.
+		enum toy::Option    _mode = toy::NOTHING;    // Default mode is STD.
 
+	public:
+
+		void    changeMode(enum toy::Option);
 };
 
 }//namespace toy

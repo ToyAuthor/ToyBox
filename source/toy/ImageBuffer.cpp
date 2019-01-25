@@ -118,3 +118,68 @@ void ImageBuffer::clean()
 {
 	_allocator.free();
 }
+
+static inline uint8_t BlendPixel(uint8_t ac,uint8_t bc,uint8_t aa,uint8_t ba)
+{
+	float  colorA = ac;
+	float  colorB = bc;
+	float  alphaA = aa;
+	float  alphaB = ba;
+
+	colorA /= 255.0f;
+	colorB /= 255.0f;
+	alphaA /= 255.0f;
+	alphaB /= 255.0f;
+
+	float  res = colorA * alphaA + colorB * alphaB;
+
+	if ( res>255.0f )
+	{
+		res = 255.0f;
+	}
+
+	uint8_t   result = res;
+
+	return result;
+}
+
+static inline uint8_t BlendAlpha(uint8_t a,uint8_t b)
+{
+	uint32_t result = a;
+	result += b;
+
+	if ( result>255 )
+	{
+		return 255;
+	}
+
+	return result;
+}
+
+ImageBuffer& ImageBuffer::operator +=(const ImageBuffer& model)
+{
+	if ( (_format!=toy::RGBA) ||
+	     (model.format()!=toy::RGBA) ||
+	     (this->size()!=model.size()) )
+	{
+		toy::Oops(TOY_MARK);
+		return *this;
+	}
+
+	auto    data = model.data();
+	size_t  size = model.size();
+	auto    mydata = this->_data();
+
+	for ( size_t index=0 ; index<size ; index+=4 )
+	{
+		uint8_t  alphaA = mydata[ index+3 ];
+		uint8_t  alphaB = data[ index+3 ];
+
+		mydata[ index   ] = BlendPixel( mydata[index  ], data[index  ], alphaA, alphaB );
+		mydata[ index+1 ] = BlendPixel( mydata[index+1], data[index+1], alphaA, alphaB );
+		mydata[ index+2 ] = BlendPixel( mydata[index+2], data[index+2], alphaA, alphaB );
+		mydata[ index+3 ] = BlendAlpha(alphaA,alphaB);
+	}
+
+	return *this;
+}

@@ -31,7 +31,7 @@ class Reader
 	public:
 
 		Reader(){}
-		Reader(std::string filename)
+		Reader(const std::string &filename)
 		{
 			if ( ! open(filename) )
 			{
@@ -40,7 +40,7 @@ class Reader
 		}
 		~Reader(){}
 
-		inline bool open(std::string filename);
+		inline bool open(const std::string &filename);
 		inline bool nextLine(std::string *str);
 
 	private:
@@ -58,7 +58,7 @@ class Reader
 #if TOY_OPTION_USE_STD_TEXT_INPUT_STREAM
 
 template<typename T>
-bool Reader<T>::open(std::string filename)
+bool Reader<T>::open(const std::string &filename)
 {
 	if ( !boost::filesystem::exists( filename ) )
 	{
@@ -104,7 +104,7 @@ static inline bool _IsFileExist(const std::string &filename)
 }
 
 template<typename T>
-bool Reader<T>::open(std::string filename)
+bool Reader<T>::open(const std::string &filename)
 {
 	if ( ! toy::io::_IsFileExist( filename ) )
 	{

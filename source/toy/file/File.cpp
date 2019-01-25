@@ -5,10 +5,9 @@
 #include "toy/file/io/SevenZip.hpp"
 #include "toy/file/io/Android.hpp"
 
-
 using namespace toy;
 
-File::File(enum Mode mode)
+File::File(enum toy::Option mode)
 {
 	changeMode(mode);
 }
@@ -23,7 +22,7 @@ void File::freeIO()
 	if (_io)
 	{
 		delete _io;
-		_mode = File::NONE;
+		_mode = toy::NOTHING;
 		_io = nullptr;
 	}
 }
@@ -33,7 +32,7 @@ void File::close()
 	_io->close();
 }
 
-void File::changeMode(enum Mode mode)
+void File::changeMode(enum toy::Option mode)
 {
 	if ( _mode==mode )
 	{
@@ -44,29 +43,29 @@ void File::changeMode(enum Mode mode)
 	freeIO();
 	_mode = mode;
 
-	#ifndef TOY_ANDROID
-	if ( mode==ANDROID_MGR )
-	{
-		toy::Oops(TOY_MARK);
-		return;
-	}
-	#endif
+//	#ifndef TOY_ANDROID
+//	if ( mode==ANDROID_MGR )
+//	{
+//		toy::Oops(TOY_MARK);
+//		return;
+//	}
+//	#endif
 
 	switch (mode)
 	{
-		case STD:
+		case toy::DIRECTORY:
 			_io = static_cast<file::io::Base*>(new file::io::Standard);
 			break;
-		case SEVEN_ZIP:
+		case toy::SEVEN_ZIP:
 			_io = static_cast<file::io::Base*>(new file::io::SevenZip);
 			break;
-		case ZIP:
+		case toy::ZIP:
 			_io = static_cast<file::io::Base*>(new file::io::Zlib);
 			break;
-		case ANDROID_MGR:
-			_io = static_cast<file::io::Base*>(new file::io::Android);
-			break;
-		case NONE:
+//		case ANDROID_MGR:
+//			_io = static_cast<file::io::Base*>(new file::io::Android);
+//			break;
+		case toy::NOTHING:
 		default:
 			// NONE is not a option.
 			toy::Oops(TOY_MARK);
@@ -88,7 +87,7 @@ uint32_t File::read(void *file,uint32_t size)
 	return _io->read(file,size);
 }
 
-bool File::write(void *file,uint32_t size)
+bool File::write(const void *file,uint32_t size)
 {
 	return _io->write(file,size);
 }

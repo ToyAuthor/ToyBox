@@ -2,9 +2,6 @@
 #include "toy/file/loader/Bmp.hpp"
 #include "toy/file/File.hpp"
 
-
-
-
 namespace toy{
 namespace file{
 
@@ -22,7 +19,6 @@ BMP_Head and BMP_Info could give you information of image.
 └--------┘
 --------------------------------------------------------
 */
-
 
 #pragma pack(push,2)    // Let memory aligned to a 2-byte boundary.
 struct BMP_Head
@@ -54,15 +50,14 @@ struct BMP_Info
 	uint8_t      rgb_Reserved;
 };
 
-
 static inline bool Compare2Pixel(uint8_t *pix1,uint8_t *pix2)
 {
 	if( pix1[0]==pix2[0] &&
 	    pix1[1]==pix2[1] &&
 	    pix1[2]==pix2[2] )
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 static inline void RGB_to_RGBA( uint8_t* data,   // The address of image.
@@ -105,6 +100,12 @@ static inline void BGR_to_RGB( uint8_t* data,   // The address of image.
 	}
 }
 
+static inline void RGB_to_BGR( uint8_t* data,   // The address of image.
+                               uint32_t size)   // The size of image.
+{
+	BGR_to_RGB(data,size);
+}
+
 static inline void BGR_to_RGBA(toy::ImageBuffer *image)
 {
 	uint32_t    size = image->size()*3;   // 1 pixel == 3 byte.
@@ -140,7 +141,11 @@ static inline void LoadImage( toy::File *pIO, toy::ImageBuffer *image )
 
 	image->_setHeight(height);
 	image->_setWidth(width);
-	image->_getAllocator()->size((size/3)*4);  // Allocate more memory. May be we need it later.
+
+	if ( image->_getAllocator()->size((size/3)*4)==false )  // Allocate more memory. May be we need it later.
+	{
+		throw toy::Exception(TOY_MARK);
+	}
 
 	// I need to checkout memory enough over here.
 
@@ -149,18 +154,31 @@ static inline void LoadImage( toy::File *pIO, toy::ImageBuffer *image )
 
 bool loader::bmp::Load(toy::File *pIO,toy::ImageBuffer *image)
 {
-//	pIO->Seek(File::SET,0);   May be it will crash system. But it's much safe.
+//	pIO->Seek(SEEK_SET,0);   It may make system crashed. But it's much safe.
 
-	LoadImage( pIO, image );
+	try
+	{
+		LoadImage( pIO, image );
+	}
+	catch(std::exception &e)
+	{
+		toy::Log(e);
+		return false;
+	}
 
 	BGR_to_RGBA(image);
 
-	return 1;
+	return true;
 }
 
 // no good
 bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 {
+	if ( map->format()!=toy::RGB && map->format()!=toy::BGR )
+	{
+		return false;
+	}
+
 	struct BMP_Head     head;
 	struct BMP_Info     info;
 	int32_t             width = map->width();
@@ -180,18 +198,71 @@ bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 	head.bfSize = head.bfOffBits + info.biSizeImage;
 	head.bfReserved1 = head.bfReserved2 = 0;
 
-	char *pBuf = (char*)malloc(info.biSizeImage);
-
-	// handle pBuf
+	if ( map->format()==toy::RGB )
+	{
+		RGB_to_BGR(map->_data(),info.biSizeImage);
+		map->_setFormat(toy::BGR);
+	}
 
 	pIO->write(&head, sizeof(struct BMP_Head));
 	pIO->write(&info, sizeof(struct BMP_Info));
 
-	pIO->write(pBuf, info.biSizeImage);
+	pIO->write(map->data(), info.biSizeImage);
 
-	free(pBuf);
+	return true;
+}
 
-	return 1;
+bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
+{
+	if ( map->format()!=toy::RGB && map->format()!=toy::BGR )
+	{
+		return false;
+	}
+
+	struct BMP_Head     head;
+	struct BMP_Info     info;
+	int32_t             width = map->width();
+	int32_t             height= map->height();
+
+	pIO->seek(SEEK_SET,0);
+
+	info.biSize = sizeof(struct BMP_Head);
+	info.biWidth = width;
+	info.biHeight = height;
+	info.biPlanes = 1;
+	info.biSizeImage = width * height * 3;
+	info.biBitCount = 24;
+
+	head.bfType = 0x4d42;
+	head.bfOffBits = sizeof(struct BMP_Head) + sizeof(struct BMP_Info);
+	head.bfSize = head.bfOffBits + info.biSizeImage;
+	head.bfReserved1 = head.bfReserved2 = 0;
+
+	pIO->write(&head, sizeof(struct BMP_Head));
+	pIO->write(&info, sizeof(struct BMP_Info));
+
+	if ( map->format()==toy::RGB )
+	{
+		uint8_t *pBuf = (uint8_t*)malloc(info.biSizeImage);
+
+		std::memcpy(pBuf,map->data(),info.biSizeImage);
+
+		RGB_to_BGR(pBuf,info.biSizeImage);
+
+		pIO->write(pBuf, info.biSizeImage);
+
+		free(pBuf);
+	}
+	else if ( map->format()==toy::BGR )
+	{
+		pIO->write(map->data(), info.biSizeImage);
+	}
+	else
+	{
+		toy::Oops(TOY_MARK);
+	}
+
+	return true;
 }
 
 }//namespace file

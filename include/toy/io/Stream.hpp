@@ -2,8 +2,7 @@
 #pragma once
 
 #include "toy/Environment.hpp"
-#include "toy/Mark.hpp"
-#include "toy/Log.hpp"
+#include "toy/Oops.hpp"
 
 #ifdef TOY_WINDOWS
 	#include <wchar.h>

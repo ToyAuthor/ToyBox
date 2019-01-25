@@ -11,9 +11,8 @@ class TOY_API Text
 {
 	public:
 
-		Text(std::string str);
+		Text(const std::string &str);
 		Text(const char* str);
-
 		~Text();
 
 		auto size() const -> uint32_t;          // Not include null character.

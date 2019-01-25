@@ -8,8 +8,6 @@
 namespace toy{
 namespace memory{
 
-using ::toy::math::Exp1;
-
 // The memory size of Allocator01 always base of 2.
 template<typename T>
 class Allocator01
@@ -75,7 +73,7 @@ class Allocator01
 
 			if ( s>_trueSize )
 			{
-				size_t		new_size=Exp1<size_t>(s);
+				size_t		new_size = ::toy::math::Exp1<size_t>(s);
 
 				if ( _data==nullptr )
 				{
@@ -96,7 +94,7 @@ class Allocator01
 		{
 			_size = s;
 
-			size_t		new_size = Exp1<size_t>(s);
+			size_t		new_size = ::toy::math::Exp1<size_t>(s);
 
 			if ( new_size>_trueSize )
 			{

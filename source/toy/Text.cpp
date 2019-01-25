@@ -11,7 +11,7 @@ struct TextPrivate
 
 using namespace toy;
 
-Text::Text(std::string str):_this(new TextPrivate)
+Text::Text(const std::string &str):_this(new TextPrivate)
 {
 	_this->str = str;
 }

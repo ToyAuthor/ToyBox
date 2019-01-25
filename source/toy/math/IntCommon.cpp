@@ -1,7 +1,6 @@
 
 #include <algorithm>
-#include "toy/Mark.hpp"
-#include "toy/Log.hpp"
+#include "toy/Oops.hpp"
 #include "toy/math/IntCommon.hpp"
 
 namespace toy{

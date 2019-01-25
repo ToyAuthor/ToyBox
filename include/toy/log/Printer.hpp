@@ -57,6 +57,5 @@ class TOY_API Printer
 
 namespace toy{
 TOY_API extern const log::Printer& NewLine(const log::Printer& m);
-TOY_API extern const log::Printer& NextLine(const log::Printer& m);  // deprecated soon
 TOY_API extern log::Printer Logger;
 }

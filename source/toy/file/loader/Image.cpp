@@ -3,14 +3,14 @@
 #include "toy/file/loader/Image.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "toy/file/loader/stb/stb_image.h"
+#undef  STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "toy/file/loader/stb/stb_image_write.h"
-
+#undef  STB_IMAGE_WRITE_IMPLEMENTATION
 
 namespace toy{
 namespace file{
-
 
 static int ReadImage(void *user,char *data,int size)
 {
@@ -81,8 +81,24 @@ bool loader::Load(toy::File *f,toy::ImageBuffer *map)
 
 bool loader::Save(std::string filename,toy::ImageBuffer *map)
 {
-	stbi_write_tga(filename.c_str(), map->width(), map->height(), 4, map->data());
-	return 1;
+	if ( stbi_write_tga(filename.c_str(), map->width(), map->height(), 4, map->data())==1 )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+namespace loader{
+bool _SavePng(const std::string &filename,toy::ImageBuffer *map)
+{
+	if ( stbi_write_png(filename.c_str(), map->width(), map->height(), 4, map->data(), 0)==1 )
+	{
+		return true;
+	}
+
+	return false;
+}
 }
 
 }//namespace file

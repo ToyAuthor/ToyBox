@@ -2,8 +2,7 @@
 #include "toy/time/Timer.hpp"
 
 #if defined(TOY_WINDOWS)
-	#include "toy/Mark.hpp"
-	#include "toy/Log.hpp"
+	#include "toy/Oops.hpp"
 	#include "toy/Windows.hpp"
 #elif defined(TOY_MAC)
 	#include <mach/mach_time.h>
