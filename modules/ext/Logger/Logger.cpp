@@ -33,14 +33,14 @@ static inline void PrintString(lua::NativeState L)
 static int Log(lua::NativeState L)
 {
 	PrintString(L);
-	return 1;
+	return 0;
 }
 
 static int LogWithNewLine(lua::NativeState L)
 {
 	PrintString(L);
 	toy::Logger<<toy::NewLine;
-	return 1;
+	return 0;
 }
 
 static int Version(lua::NativeState L)
@@ -60,7 +60,7 @@ static int CleanOutputLog(lua::NativeState)
 {
 	toy::log::BackDefaultDevice();
 
-	return 1;
+	return 0;
 }
 
 static int SetOutputLog(lua::NativeState L)
@@ -87,7 +87,7 @@ static int SetOutputLog(lua::NativeState L)
 
 	toy::log::PushDevice(func,funcw);
 
-	return 1;
+	return 0;
 }
 
 }}}
@@ -104,12 +104,12 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua::NativeState L)
 
 	lua::State<>    lua(L);
 
-	lua.setFunc( "printf", module::Log );
-	lua.setFunc( "print",  module::LogWithNewLine );
-	lua.setFunc( "isUTF8", module::IsUTF8 );
-	lua.setFunc( "asFile", module::SetOutputLog );
-	lua.setFunc( "reset",  module::CleanOutputLog );
-	lua.setFunc( "version",module::Version );
+	lua.setFunc( "printf",      module::Log );
+	lua.setFunc( "print",       module::LogWithNewLine );
+	lua.setFunc( "is_utf8",     module::IsUTF8 );
+	lua.setFunc( "as_file",     module::SetOutputLog );
+	lua.setFunc( "reset",       module::CleanOutputLog );
+	lua.setFunc( "version",     module::Version );
 
 	return 1;
 }

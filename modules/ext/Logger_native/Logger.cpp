@@ -49,14 +49,14 @@ static inline void PrintString(lua_State* L)
 static int Log(lua_State* L)
 {
 	PrintString(L);
-	return 1;
+	return 0;
 }
 
 static int LogWithNewLine(lua_State* L)
 {
 	PrintString(L);
 	toy::Logger<<toy::NewLine;
-	return 1;
+	return 0;
 }
 
 static int Version(lua_State* L)
@@ -109,7 +109,7 @@ static int SetOutputLog(lua_State* L)
 
 	toy::log::PushDevice(func,funcw);
 
-	return 1;
+	return 0;
 }
 
 static int CleanOutputLog(lua_State*)
@@ -136,11 +136,11 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua_State* L)
 	reg[0].func = module::Log;
 	reg[1].name = "print";
 	reg[1].func = module::LogWithNewLine;
-	reg[2].name = "isUTF8";
+	reg[2].name = "is_utf8";
 	reg[2].func = module::IsUTF8;
 	reg[3].name = "version";
 	reg[3].func = module::Version;
-	reg[4].name = "asFile";
+	reg[4].name = "as_file";
 	reg[4].func = module::SetOutputLog;
 	reg[5].name = "reset";
 	reg[5].func = module::CleanOutputLog;

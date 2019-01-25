@@ -1,9 +1,10 @@
 
-if(TOY_RELEASE)
-	add_subdirectory(Logger_native)
-else()
-	add_subdirectory(Logger)
+# Copy "ToyBox/modules/*.lua" to "ToyBox/build/bin/toy".
+file(GLOB MY_TOY_LUA_AUXILIARY "${CMAKE_CURRENT_SOURCE_DIR}/*.lua" )
+file(COPY ${MY_TOY_LUA_AUXILIARY} DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/toy/)
+
+if(TOY_ENABLE_BETA_API)
+	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/beta DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/toy/)
 endif()
 
-add_subdirectory(Env)
-add_subdirectory(Window)
+add_subdirectory(ext)

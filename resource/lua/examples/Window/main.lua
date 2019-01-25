@@ -1,7 +1,7 @@
 
 local  msg = require "toy.logger"
 
-local function CreateWindow()
+local function create_window()
 
 	local  config =
 	{
@@ -10,16 +10,16 @@ local function CreateWindow()
 		height = 600,
 	}
 
-	return require("toy.window").createWindow(config)
+	return require("toy.window").create_window(config)
 end
 
 msg.print("Starting")
 
-local  window = CreateWindow()
+local  window = create_window()
 
 if window:good() then
 	-- handleEvent:Mouse event, keyboard event, system event, etc.
-	while window:handleEvent() do
+	while window:handle_event() do
 		window:display()           -- Refresh screen.
 	end
 else

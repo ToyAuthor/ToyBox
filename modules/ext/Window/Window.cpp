@@ -3,14 +3,14 @@
 
 static void BindSimpleWindow(lua::State<> *lua)
 {
-	lua->bindMethod( "handleEvent", &ToySimpleWindow::handleEvent );
-	lua->bindMethod( "isOpen",      &ToySimpleWindow::isOpen );
+	lua->bindMethod( "handle_event", &ToySimpleWindow::handleEvent );
+	lua->bindMethod( "is_open",      &ToySimpleWindow::isOpen );
 	lua->bindMethod( "display",     &ToySimpleWindow::display );
 	lua->bindMethod( "fullscreen",  &ToySimpleWindow::fullscreen );
 	lua->bindMethod( "good",        &ToySimpleWindow::good );
 	lua->bindMethod( "error",       &ToySimpleWindow::error );
 
-	lua->bindClass1ArgEx<ToySimpleWindow,lua::Var>("createWindow");
+	lua->bindClass1ArgEx<ToySimpleWindow,lua::Var>("create_window");
 }
 
 #ifdef TOY_WINDOWS
