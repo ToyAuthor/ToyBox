@@ -7,7 +7,7 @@ namespace graph{
 
 struct ImagePrivate
 {
-	toy::graph::_detail::Image*  detail = nullptr;
+	std::unique_ptr<toy::graph::_detail::Image> detail;
 };
 
 }}
@@ -20,14 +20,12 @@ Image::Image(std::shared_ptr<::toy::graph::Brush> brush):
 	_brush(brush)
 {
 	_brush->_add(this);
-	_this->detail = _brush->_getFactory()->createImage(_brush);
+	_this->detail.reset(_brush->_getFactory()->createImage(_brush));
 }
 
 Image::~Image()
 {
 	_brush->_del(this);
-	delete _this->detail;
-	delete _this;
 }
 
 void Image::visible(bool show)

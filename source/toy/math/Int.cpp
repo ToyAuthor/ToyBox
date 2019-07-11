@@ -25,7 +25,7 @@ using namespace math;
 
 Int::~Int()
 {
-	delete _this;
+	;
 }
 
 void Int::setRawData(const uint8_t* ptr, uint32_t size, bool isNegative)
@@ -377,7 +377,7 @@ static void StringToIntClass(const std::string &number,struct IntPrivate *obj)
 
 Int::Int(std::string number):_this(new struct IntPrivate)
 {
-	StringToIntClass(number,_this);
+	StringToIntClass(number,_this.get());
 }
 
 bool Int::get(int8_t *number) const
@@ -834,7 +834,7 @@ void Int::operator = (uint64_t number){ (*_this) = *(Int(number)._this); }
 void Int::operator = (std::string number)
 {
 	_this->data.clear();
-	StringToIntClass(number,_this);
+	StringToIntClass(number,_this.get());
 }
 
 bool Int::isAbsoluteValueBiggerThan(const Int &number)
@@ -1235,7 +1235,7 @@ static int CompareWithInt32(const struct IntPrivate *_this,const int32_t num)
 
 bool Int::operator ==(int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)==0 )
+	if ( CompareWithInt32(_this.get(),num)==0 )
 	{
 		return true;
 	}
@@ -1245,7 +1245,7 @@ bool Int::operator ==(int32_t num) const
 
 bool Int::operator !=(int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)==0 )
+	if ( CompareWithInt32(_this.get(),num)==0 )
 	{
 		return false;
 	}
@@ -1255,7 +1255,7 @@ bool Int::operator !=(int32_t num) const
 
 bool Int::operator >(int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)==1 )
+	if ( CompareWithInt32(_this.get(),num)==1 )
 	{
 		return true;
 	}
@@ -1265,7 +1265,7 @@ bool Int::operator >(int32_t num) const
 
 bool Int::operator <(int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)==-1 )
+	if ( CompareWithInt32(_this.get(),num)==-1 )
 	{
 		return true;
 	}
@@ -1275,7 +1275,7 @@ bool Int::operator <(int32_t num) const
 
 bool Int::operator >=(int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)>-1 )
+	if ( CompareWithInt32(_this.get(),num)>-1 )
 	{
 		return true;
 	}
@@ -1285,7 +1285,7 @@ bool Int::operator >=(int32_t num) const
 
 bool Int::operator <=(int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)<1 )
+	if ( CompareWithInt32(_this.get(),num)<1 )
 	{
 		return true;
 	}

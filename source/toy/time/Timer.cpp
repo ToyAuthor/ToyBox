@@ -163,18 +163,14 @@ Timer::Timer():_this(new TimerPrivate)
 
 Timer::~Timer()
 {
-	delete _this;
+	;
 }
 
 float Timer::restart()
 {
-	auto   now = GetSystemCurrentTime();
+	auto  oldTimerStart = _this->timerStart;
 
-	float  elapsedTime = RawTimeDataToSeconds(now - (_this->timerStart));
-
-	_this->timerStart = now;
-
-	return elapsedTime;
+	return RawTimeDataToSeconds((_this->timerStart = GetSystemCurrentTime()) - oldTimerStart);
 }
 
 float Timer::elapsed() const

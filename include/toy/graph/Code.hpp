@@ -11,7 +11,7 @@ struct CodePrivate;
 }}
 
 #define TYPE_001 std::shared_ptr<::toy::graph::Brush>
-#define TYPE_002 struct ::toy::graph::CodePrivate*
+#define TYPE_002 std::unique_ptr<::toy::graph::CodePrivate>
 
 namespace toy{
 namespace graph{
@@ -37,8 +37,8 @@ class TOY_API_GRAPH Code
 
 		void drop();
 
-		TYPE_002  _this  = nullptr;
-		TYPE_001  _brush = nullptr;
+		TYPE_002  _this;
+		TYPE_001  _brush;
 
 	public:
 

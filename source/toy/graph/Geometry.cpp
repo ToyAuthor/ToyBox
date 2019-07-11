@@ -8,7 +8,7 @@ namespace graph{
 
 struct GeometryPrivate
 {
-	toy::graph::_detail::Geometry*  detail = nullptr;
+	std::unique_ptr<toy::graph::_detail::Geometry> detail;
 };
 
 }}
@@ -21,14 +21,12 @@ Geometry::Geometry(std::shared_ptr<toy::graph::Brush> ptr):
 	_brush(ptr)
 {
 	_brush->_add(this);
-	_this->detail = _brush->_getFactory()->createGeometry();
+	_this->detail.reset(_brush->_getFactory()->createGeometry());
 }
 
 Geometry::~Geometry()
 {
 	_brush->_del(this);
-	delete _this->detail;
-	delete _this;
 }
 
 void Geometry::visible(bool show)

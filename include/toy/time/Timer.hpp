@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <memory>
 #include "toy/time/Export.hpp"
 
 namespace toy{
@@ -20,7 +21,7 @@ class TOY_API_TIME Timer
 
 	private:
 
-		TimerPrivate *_this = nullptr;
+		std::unique_ptr<TimerPrivate>   _this;
 };
 
 }}

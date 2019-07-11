@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include "toy/bignum/Export.hpp"
 
@@ -52,7 +53,7 @@ class TOY_API_BIGNUM Int
 
 	private:
 
-		struct IntPrivate *_this = nullptr;
+		std::unique_ptr<IntPrivate> _this;
 };
 
 }}

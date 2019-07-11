@@ -23,7 +23,7 @@ UniformBase::UniformBase(std::shared_ptr<Program> ptr,const std::string &name):
 
 UniformBase::~UniformBase()
 {
-	delete _this;
+	;
 }
 
 void Uniform1i::set(int x)

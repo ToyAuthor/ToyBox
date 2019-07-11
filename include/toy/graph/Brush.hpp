@@ -8,8 +8,6 @@
 #include "toy/graph/Export.hpp"
 #include "toy/graph/Texture.hpp"
 
-
-
 namespace toy
 {
 	namespace graph
@@ -21,8 +19,6 @@ namespace toy
 		struct BrushPrivate;
 	}
 }
-
-
 
 namespace toy{
 namespace graph{
@@ -38,16 +34,15 @@ class TOY_API_GRAPH Brush
 	public:
 
 		/*
-		 * Make sure the OpenGL version not too old to you.
+		 * 1.Create a render device,
+		 * 2.Make sure the OpenGL version not too old to your expectation.(optional)
 		 *
 		 * Options:
-		 *     toy::GL_4_5
-		 *     toy::GL_4_4
-		 *     ...
+		 *     toy::GL_3_0
 		 *     toy::GL_2_0
-		 *     toy::WHATEVER
+		 *     toy::WHATEVER    Let toy::graph::Brush choose OpenGL version by itself.
 		 */
-		Brush(enum toy::Option version,bool *isOK);
+		Brush(enum toy::Option expectVersion,bool *isOK);
 		~Brush();
 
 		void viewport(int width, int height);
@@ -71,7 +66,7 @@ class TOY_API_GRAPH Brush
 
 	private:
 
-		toy::graph::BrushPrivate*       _this = nullptr;
+		std::unique_ptr<toy::graph::BrushPrivate>       _this;
 
 	public:
 

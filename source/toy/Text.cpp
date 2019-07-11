@@ -23,7 +23,7 @@ Text::Text(const char* str):_this(new TextPrivate)
 
 Text::~Text()
 {
-	delete _this;
+	;
 }
 
 uint32_t Text::size() const

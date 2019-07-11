@@ -24,7 +24,7 @@ class TOY_API_GRAPH ModelBuffer
 
 	private:
 
-		ModelBufferPrivate*     _this = nullptr;
+		std::unique_ptr<ModelBufferPrivate>    _this;
 
 	public:
 

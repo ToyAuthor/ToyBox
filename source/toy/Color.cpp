@@ -7,7 +7,7 @@ struct ColorPrivate
 	float r = float(0);
 	float g = float(0);
 	float b = float(0);
-	float a = float(0);
+	float a = float(1);
 };
 
 static inline float IntToFloat(uint8_t num)
@@ -86,7 +86,7 @@ Color::Color(float r,float g,float b,float a):_this(new ::toy::ColorPrivate)
 
 Color::~Color()
 {
-	delete _this;
+	;
 }
 
 void Color::data(uint8_t r,uint8_t g,uint8_t b,uint8_t a)

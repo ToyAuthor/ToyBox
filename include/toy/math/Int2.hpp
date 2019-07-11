@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <string>
+#include <memory>
 #include "toy/math/Export.hpp"
 
 namespace toy{
@@ -64,7 +65,7 @@ class TOY_API_MATH Int2
 
 	private:
 
-		Int2Private* _this = nullptr;
+		std::unique_ptr<Int2Private> _this;
 };
 
 }}

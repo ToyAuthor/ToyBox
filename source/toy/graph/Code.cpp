@@ -6,7 +6,7 @@ namespace toy{
 namespace graph{
 struct CodePrivate
 {
-	toy::graph::_detail::Code*   detail = nullptr;
+	std::unique_ptr<toy::graph::_detail::Code>   detail;
 };
 }}
 
@@ -17,20 +17,19 @@ Code::Code(std::shared_ptr<Brush> brush,std::string filename, enum toy::Option t
 	_this(new CodePrivate),
 	_brush(brush)
 {
-	_this->detail = brush->_getFactory()->createCode02(filename,type);
+	_this->detail.reset(brush->_getFactory()->createCode02(filename,type));
 }
 
 Code::Code(std::shared_ptr<Brush> brush,toy::Text &code, enum toy::Option type):
 	_this(new CodePrivate),
 	_brush(brush)
 {
-	_this->detail = brush->_getFactory()->createCode01(code,type);
+	_this->detail.reset(brush->_getFactory()->createCode01(code,type));
 }
 
 Code::~Code()
 {
-	delete _this->detail;
-	delete _this;
+	;
 }
 
 bool Code::isExist()

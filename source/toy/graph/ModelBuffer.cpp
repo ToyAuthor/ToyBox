@@ -8,7 +8,7 @@ namespace graph{
 
 struct ModelBufferPrivate
 {
-	toy::graph::_detail::ModelBuffer*   detail = nullptr;
+	std::unique_ptr<toy::graph::_detail::ModelBuffer>   detail;
 };
 
 }}
@@ -20,13 +20,12 @@ using namespace graph;
 
 ModelBuffer::ModelBuffer(std::shared_ptr<toy::graph::Brush> brush):_this(new ModelBufferPrivate)
 {
-	_this->detail = brush->_getFactory()->createModelBuffer();
+	_this->detail.reset(brush->_getFactory()->createModelBuffer());
 }
 
 ModelBuffer::~ModelBuffer()
 {
-	delete _this->detail;
-	delete _this;
+	;
 }
 
 const void* ModelBuffer::_data() const

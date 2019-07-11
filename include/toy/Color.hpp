@@ -58,7 +58,7 @@ class TOY_API Color
 
 	private:
 
-		struct ColorPrivate* _this;
+		std::unique_ptr<ColorPrivate> _this;
 };
 
 }

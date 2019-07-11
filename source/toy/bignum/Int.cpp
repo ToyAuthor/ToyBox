@@ -33,7 +33,7 @@ Int::Int():_this(new IntPrivate)
 
 Int::~Int()
 {
-	delete _this;
+	;
 }
 
 Int::Int(const Int& number):_this(new IntPrivate)
@@ -80,12 +80,12 @@ static void StringToIntClass(IntPrivate *obj,const std::string& str)
 
 Int::Int(const std::string& str):_this(new IntPrivate)
 {
-	StringToIntClass(_this,str);
+	StringToIntClass(_this.get(),str);
 }
 
 void Int::operator = (std::string number)
 {
-	StringToIntClass(_this,number);
+	StringToIntClass(_this.get(),number);
 }
 
 void Int::operator = (int32_t number)

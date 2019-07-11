@@ -27,7 +27,7 @@ class TOY_API_GRAPH VertexBuffer
 
 	private:
 
-		::toy::graph::VertexBufferPrivate*     _this = nullptr;
+		std::unique_ptr<::toy::graph::VertexBufferPrivate>     _this;
 
 	public:
 

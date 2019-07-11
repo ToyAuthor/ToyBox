@@ -17,7 +17,7 @@ struct ImagePrivate;
 
 #define TYPE_001 std::shared_ptr<::toy::graph::Brush>
 #define TYPE_002 std::shared_ptr<::toy::graph::Program>
-#define TYPE_003 struct ::toy::graph::ImagePrivate*
+#define TYPE_003 std::unique_ptr<::toy::graph::ImagePrivate>
 #define TYPE_004 std::shared_ptr<::toy::graph::Array3<float>>
 #define TYPE_005 ::toy::graph::Texture
 
@@ -48,8 +48,8 @@ class TOY_API_GRAPH Image
 
 	private:
 
-		TYPE_003    _this  = nullptr;
-		TYPE_001    _brush = nullptr;
+		TYPE_003    _this;
+		TYPE_001    _brush;
 
 	public:
 

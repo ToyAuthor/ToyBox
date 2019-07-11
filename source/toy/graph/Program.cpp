@@ -7,7 +7,7 @@ namespace graph{
 
 struct ProgramPrivate
 {
-	toy::graph::_detail::Program*   detail = nullptr;
+	std::unique_ptr<toy::graph::_detail::Program>   detail;
 };
 
 }}
@@ -27,15 +27,12 @@ Program::Program(std::shared_ptr<Code> vs,std::shared_ptr<Code> fs):
 		toy::Oops(TOY_MARK);
 	}
 
-	_this->detail = _brush->_getFactory()->createProgram(vs,fs);
+	_this->detail.reset(_brush->_getFactory()->createProgram(vs,fs));
 }
 
 Program::~Program()
 {
 	this->disuse();
-
-	delete _this->detail;
-	delete _this;
 }
 
 auto Program::brush()->std::shared_ptr<Brush>

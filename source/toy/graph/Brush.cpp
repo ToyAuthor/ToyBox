@@ -16,22 +16,13 @@ static void MakeSureOnlyOneBrushExist()
 	}
 }
 
-template <typename T>
-inline static void SafeDelete(T *ptr)
-{
-	if ( ptr!=nullptr )
-	{
-		delete ptr;
-	}
-}
-
 namespace toy{
 namespace graph{
 
 struct BrushPrivate
 {
-	toy::graph::Factory*         factory = nullptr;
-	toy::graph::_detail::Brush*  detail  = nullptr;
+	std::unique_ptr<toy::graph::Factory>         factory;
+	std::unique_ptr<toy::graph::_detail::Brush>  detail;
 };
 
 }}
@@ -44,23 +35,23 @@ Brush::Brush(enum toy::Option option,bool *result):_this(new BrushPrivate)
 	MakeSureOnlyOneBrushExist();
 	*result = true;
 
-	if ( ! toy::graph::CreateFactory(option,&(_this->factory)) )
+	toy::graph::Factory*         factory = nullptr;
+
+	if ( ! toy::graph::CreateFactory(option,&factory) )
 	{
 		toy::Oops(TOY_MARK);
 		*result = false;
 	}
 	else
 	{
-		_this->detail = _this->factory->createBrush();
+		_this->factory.reset(factory);
+		_this->detail.reset(_this->factory->createBrush());
 	}
 }
 
 Brush::~Brush()
 {
-	SafeDelete(_this->detail);
-	SafeDelete(_this->factory);
-
-	delete _this;
+	;
 }
 
 void Brush::render(float diff)
@@ -167,5 +158,5 @@ void Brush::_del(toy::graph::Image* ptr)
 
 auto Brush::_getFactory()->toy::graph::Factory*
 {
-	return _this->factory;
+	return _this->factory.get();
 }

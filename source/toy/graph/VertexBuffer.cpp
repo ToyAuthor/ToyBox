@@ -26,7 +26,7 @@ VertexBuffer::VertexBuffer(const VertexBuffer &mykind):_this(new VertexBufferPri
 
 VertexBuffer::~VertexBuffer()
 {
-	delete _this;
+	;
 }
 
 const void* VertexBuffer::_data() const

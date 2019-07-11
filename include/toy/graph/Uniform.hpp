@@ -18,8 +18,8 @@ class TOY_API_GRAPH UniformBase
 
 	protected:
 
-		UniformBasePrivate*       _this = nullptr;
-		std::shared_ptr<Program>  _program = nullptr;
+		std::unique_ptr<UniformBasePrivate>   _this;
+		std::shared_ptr<Program>              _program;
 };
 
 class TOY_API_GRAPH Uniform1i : public UniformBase

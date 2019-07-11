@@ -23,7 +23,7 @@ using namespace math;
 
 Int2::~Int2()
 {
-	delete _this;
+	;
 }
 
 Int2::Int2():_this(new struct Int2Private)
@@ -164,7 +164,7 @@ static void SetSignedNumberToInt2(struct Int2Private *_this,int32_t num)
 
 Int2::Int2(int32_t num):_this(new struct Int2Private)
 {
-	SetSignedNumberToInt2(_this,num);
+	SetSignedNumberToInt2(_this.get(),num);
 }
 
 static uint8_t TwoCharStringToNumber(const char *str)
@@ -222,7 +222,7 @@ static void StringToIntClass(const std::string &number,struct Int2Private *obj)
 
 Int2::Int2(std::string number):_this(new struct Int2Private)
 {
-	StringToIntClass(number,_this);
+	StringToIntClass(number,_this.get());
 }
 
 bool Int2::get(int8_t *number) const
@@ -666,12 +666,12 @@ void Int2::operator = (const Int2 &number)
 void Int2::operator = (std::string number)
 {
 	_this->data.clear();
-	StringToIntClass(number,_this);
+	StringToIntClass(number,_this.get());
 }
 
 void Int2::operator = (int32_t number)
 {
-	SetSignedNumberToInt2(_this,number);
+	SetSignedNumberToInt2(_this.get(),number);
 }
 
 static int CompareWithInt32(const struct Int2Private *_this,int32_t num)
@@ -775,7 +775,7 @@ static int CompareWithInt32(const struct Int2Private *_this,int32_t num)
 
 bool Int2::operator > (int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)==1 )
+	if ( CompareWithInt32(_this.get(),num)==1 )
 	{
 		return true;
 	}
@@ -785,7 +785,7 @@ bool Int2::operator > (int32_t num) const
 
 bool Int2::operator < (int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)==-1 )
+	if ( CompareWithInt32(_this.get(),num)==-1 )
 	{
 		return true;
 	}
@@ -795,7 +795,7 @@ bool Int2::operator < (int32_t num) const
 
 bool Int2::operator == (int32_t num) const
 {
-	if ( CompareWithInt32(_this,num)==0 )
+	if ( CompareWithInt32(_this.get(),num)==0 )
 	{
 		return true;
 	}
