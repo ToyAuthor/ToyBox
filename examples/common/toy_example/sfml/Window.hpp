@@ -25,5 +25,19 @@ static inline auto CreateWindow( std::string title, uint32_t width, uint32_t hei
 			settings );
 }
 
+static inline auto CreateWindow( std::wstring title, uint32_t width, uint32_t height )->std::shared_ptr<sf::Window>
+{
+	sf::ContextSettings  settings(24);
+
+	#if defined(TOY_WINDOWS)
+		settings.antialiasingLevel = 8;
+	#endif
+
+	return std::make_shared<sf::Window>(
+			sf::VideoMode(width, height),
+			sf::String(title),
+			sf::Style::Default,
+			settings );
+}
 
 }}

@@ -1,0 +1,12 @@
+
+Linux
+	GCC
+
+
+Mac OS
+	LLVM-GCC
+
+
+Windows 7
+	TDM-GCC 5.1.0
+	Visual Studio 2015

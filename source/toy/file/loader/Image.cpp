@@ -37,9 +37,9 @@ bool loader::Load(toy::File *f,toy::ImageBuffer *map)
 {
 	auto   io = static_cast<void*>(f);
 
-	int32_t      width  = 0;
-	int32_t      height = 0;
-	int32_t      pixel  = 0;
+	int      width  = 0;
+	int      height = 0;
+	int      pixel  = 0;
 
 	stbi_io_callbacks    callback;
 
@@ -47,7 +47,7 @@ bool loader::Load(toy::File *f,toy::ImageBuffer *map)
 	callback.skip = SkipImage;
 	callback.eof  = EndOfFile;
 
-	stbi_set_flip_vertically_on_load(1);    //upside down
+//	stbi_set_flip_vertically_on_load(1);    //upside down
 
 	auto   data = stbi_load_from_callbacks( &callback, io, &width, &height, &pixel, STBI_default );
 
@@ -81,7 +81,13 @@ bool loader::Load(toy::File *f,toy::ImageBuffer *map)
 
 bool loader::Save(std::string filename,toy::ImageBuffer *map)
 {
-	if ( stbi_write_tga(filename.c_str(), map->width(), map->height(), 4, map->data())==1 )
+	int   width  = map->width();
+	int   height = map->height();
+
+	if ( static_cast<uint32_t>( width)!=map->width()  ) return false;
+	if ( static_cast<uint32_t>(height)!=map->height() ) return false;
+
+	if ( stbi_write_tga(filename.c_str(), width, height, 4, map->data())==1 )
 	{
 		return true;
 	}
@@ -103,6 +109,3 @@ bool _SavePng(const std::string &filename,toy::ImageBuffer *map)
 
 }//namespace file
 }//namespace toy
-
-#undef STB_IMAGE_IMPLEMENTATION
-#undef STB_IMAGE_WRITE_IMPLEMENTATION

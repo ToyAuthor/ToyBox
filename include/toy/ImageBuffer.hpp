@@ -25,17 +25,17 @@ class TOY_API ImageBuffer
 			return (uint8_t*)(_allocator.data());
 		}
 
-		int32_t height() const
+		uint32_t height() const
 		{
 			return _height;
 		}
 
-		int32_t width() const
+		uint32_t width() const
 		{
 			return _width;
 		}
 
-		int32_t size() const
+		uint32_t size() const
 		{
 			return _width * _height;
 		}
@@ -50,8 +50,8 @@ class TOY_API ImageBuffer
 	private:
 
 		toy::memory::Manager02    _allocator;      // Saving a image data on memory.
-		int32_t                   _height = 0;
-		int32_t                   _width  = 0;
+		uint32_t                  _height = 0;
+		uint32_t                  _width  = 0;
 		enum ::toy::Option        _format = ::toy::RGBA;
 
 	public:
@@ -61,12 +61,12 @@ class TOY_API ImageBuffer
 			return (uint8_t*)(_allocator.data());
 		}
 
-		void _setHeight(int32_t n)
+		void _setHeight(uint32_t n)
 		{
 			_height=n;
 		}
 
-		void _setWidth(int32_t n)
+		void _setWidth(uint32_t n)
 		{
 			_width=n;
 		}
@@ -82,7 +82,7 @@ class TOY_API ImageBuffer
 		}
 };
 
-TOY_API extern bool CreateImageBuffer(toy::ImageBuffer *output,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA);
-TOY_API extern auto CreateImageBuffer(                         const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA)->toy::ImageBuffer;
+TOY_API extern bool CreateImageBuffer(toy::ImageBuffer *output,const uint32_t width,const uint32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA);
+TOY_API extern auto CreateImageBuffer(                         const uint32_t width,const uint32_t height,const uint8_t *data,enum ::toy::Option option = ::toy::RGBA)->toy::ImageBuffer;
 
 }

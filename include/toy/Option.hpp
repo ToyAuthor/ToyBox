@@ -9,6 +9,7 @@ enum Option:int
 	NOTHING,
 	DEFAULT,
 	WHATEVER,   // Let system decide.
+	SPECIAL,
 	VERTEX_SHADER,
 	FRAGMENT_SHADER,
 	GL_1_1,

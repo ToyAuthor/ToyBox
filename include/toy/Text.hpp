@@ -21,7 +21,7 @@ class TOY_API Text
 
 	private:
 
-		struct TextPrivate*   _this = nullptr;
+		std::unique_ptr<TextPrivate>   _this;
 };
 
 }

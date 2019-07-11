@@ -16,6 +16,8 @@
 
    cmake        CMake configuration files.
 
+   doc          For beginners.
+
    examples     Sample code is the best tutorial.
 
    extlibs      Only tiny size third-party projects are here.
@@ -30,12 +32,6 @@
 
    source       The source code of ToyBox.
 
+   test         Test code.
+
    tools        Some useful tools.
-
-   usage        About ToyBox API.
-
-
-
-------------Document------------
-
-   https://toyauthor.github.io/ToyBoxDoc

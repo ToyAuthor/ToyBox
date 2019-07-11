@@ -19,6 +19,7 @@ macro(toy_BuildLib _name)
 		set(TOY_OUTPUT_PATH ${TOY_ROOT_BINARY_DIR}/lib)
 	endif()
 
+	# ToyBox/doc/cmake/binary_output.html
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TOY_ROOT_BINARY_DIR}/bin)
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${TOY_OUTPUT_PATH})
 	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${TOY_OUTPUT_PATH})

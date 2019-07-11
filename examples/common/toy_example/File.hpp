@@ -7,10 +7,10 @@
 namespace toy{
 namespace example{
 
-inline static bool LoadImage( const std::string& folder,
+static inline bool LoadImage( const std::string& folder,
                               const std::string& file,
                               toy::ImageBuffer*  image,
-                              enum toy::Option mode = toy::DIRECTORY)
+                              enum toy::Option   mode = toy::DIRECTORY)
 {
 	toy::File       dev(mode);
 

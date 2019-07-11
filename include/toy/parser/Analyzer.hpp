@@ -8,7 +8,7 @@ namespace toy{
 namespace parser{
 
 
-// Take string apart by given rule. You can call it analyzer.
+// Take string apart by given rule.
 class TOY_API_PARSER Analyzer
 {
 	public:

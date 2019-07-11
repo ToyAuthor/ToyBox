@@ -8,7 +8,6 @@ include_directories(${TOY_include_lua})
 link_directories(${TOY_library_lua})
 
 set(LIBS
-	toy
 	${TOY_libname_lua}
 )
 

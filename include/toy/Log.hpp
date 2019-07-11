@@ -23,3 +23,16 @@ TOY_API extern void BackDefaultDevice();
 #endif
 
 }
+
+//-----------------Uage-----------------start
+#if 0
+toy::io::Writer<>   writer("note.txt");
+
+toy::log::PushDevice( [&writer](const char* str){writer.printf(str);},
+					  [&writer](const wchar_t* str){writer.printf(toy::utf::WCharToUTF8(str).c_str());});
+
+toy::Logger<<"Say something"<<toy::NewLine;
+
+toy::log::PopDevice();
+#endif
+//-----------------Uage-----------------end

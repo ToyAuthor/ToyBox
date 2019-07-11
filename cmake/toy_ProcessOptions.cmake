@@ -27,10 +27,10 @@ macro(toy_ProcessOptions)
 		add_definitions(-DTOY_OPTION_ENABLE_BETA_API=0)
 	endif()
 
-	if(TOY_ENABLE_OLD_API)
-		add_definitions(-DTOY_OPTION_ENABLE_OLD_API=1)
+	if(TOY_ENABLE_MAY_REMOVED)
+		add_definitions(-DTOY_OPTION_ENABLE_MAY_REMOVED=1)
 	else()
-		add_definitions(-DTOY_OPTION_ENABLE_OLD_API=0)
+		add_definitions(-DTOY_OPTION_ENABLE_MAY_REMOVED=0)
 	endif()
 
 	if(TOY_USE_GLEW)

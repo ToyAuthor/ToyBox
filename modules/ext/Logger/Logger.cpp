@@ -14,8 +14,7 @@ static int IsUTF8(lua::NativeState L)
 	lua::Str   str;
 	lua::CheckVarFromLua(L,&str,-1);
 	lua::Pop(L,1);
-	lua::Bool  result = toy::utf::IsUtf8(str);
-	lua::PushVarToLua( L, result );
+	lua::PushVarToLua( L, static_cast<lua::Bool>(toy::utf::IsUtf8(str)) );
 	return 1;
 }
 

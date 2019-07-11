@@ -22,7 +22,7 @@ macro(toy_SetThirdPartyLibraryPath)
 
 	if(NOT EXISTS ${TOY_SDK_INC} AND NOT EXISTS ${TOY_SDK_LIB})
 		# TOY_SDK_INC and TOY_SDK_LIB is not necessary.
-		# You can just modify the following paths and ignore this error.
+		# You can just modify those paths and ignore this error.
 		# Take a look!
 		# https://github.com/ToyAuthor/ToyBoxSDK
 		message(FATAL_ERROR "ToyBox:Are you sure you have all the third-party libraries?")

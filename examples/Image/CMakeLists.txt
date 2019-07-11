@@ -16,6 +16,10 @@ set(LIBS
 include_directories(${TOY_ROOT_SOURCE_DIR}/examples/common)
 
 if(TOY_USE_GLEW)
+	if(NOT TOY_ENABLE_SHARED_LIBS)
+		add_definitions(-DGLEW_STATIC)
+	endif()
+
 	include_directories(${TOY_include_glew})
 	link_directories(${TOY_library_glew})
 	list(APPEND LIBS ${TOY_libname_glew})

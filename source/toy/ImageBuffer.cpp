@@ -80,7 +80,7 @@ static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::
 	}
 }
 
-bool CreateImageBuffer(toy::ImageBuffer *image,const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
+bool CreateImageBuffer(toy::ImageBuffer *image,const uint32_t width,const uint32_t height,const uint8_t *data,enum ::toy::Option option)
 {
 	image->_setWidth(width);
 	image->_setHeight(height);
@@ -92,7 +92,7 @@ bool CreateImageBuffer(toy::ImageBuffer *image,const int32_t width,const int32_t
 	return true;
 }
 
-toy::ImageBuffer CreateImageBuffer(const int32_t width,const int32_t height,const uint8_t *data,enum ::toy::Option option)
+toy::ImageBuffer CreateImageBuffer(const uint32_t width,const uint32_t height,const uint8_t *data,enum ::toy::Option option)
 {
 	toy::ImageBuffer        result;
 	CreateImageBuffer(&result,width,height,data,option);

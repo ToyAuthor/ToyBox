@@ -130,10 +130,10 @@ static inline void LoadImage( toy::File *pIO, toy::ImageBuffer *image )
 	ReadInfo(pIO,&info);
 
 	uint32_t     size   = info.biSizeImage;
-	int32_t      width  = info.biWidth;
-	int32_t      height = info.biHeight;
+	uint32_t     width  = info.biWidth;
+	uint32_t     height = info.biHeight;
 
-	if( (width*height*3) != (int32_t)size )
+	if( (width*height*3) != size )
 	{
 		// May be BMP file not correct.
 		Oops(TOY_MARK);
@@ -184,6 +184,9 @@ bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 	int32_t             width = map->width();
 	int32_t             height= map->height();
 
+	if ( static_cast<uint32_t>( width)!=map->width()  ) return false;
+	if ( static_cast<uint32_t>(height)!=map->height() ) return false;
+
 	pIO->seek(SEEK_SET,0);
 
 	info.biSize = sizeof(struct BMP_Head);
@@ -223,6 +226,9 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 	struct BMP_Info     info;
 	int32_t             width = map->width();
 	int32_t             height= map->height();
+
+	if ( static_cast<uint32_t>( width)!=map->width()  ) return false;
+	if ( static_cast<uint32_t>(height)!=map->height() ) return false;
 
 	pIO->seek(SEEK_SET,0);
 

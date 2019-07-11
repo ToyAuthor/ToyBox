@@ -152,14 +152,14 @@ bool loader::tga::Load(File *pIO,ImageBuffer *image)
 
 			width*=4;
 
-			for( int32_t k=0,j=size-width ; j>=0 ; j-=width,k+=width)
+			for( uint32_t k=0,j=size ; j>=width ; j-=width,k+=width)
 			{
 				for( decltype(width) i=0 ; i<width ; i+=4)
 				{
-					data[i+k]  =temp[i+j+2];
-					data[i+k+1]=temp[i+j+1];
-					data[i+k+2]=temp[i+j];
-					data[i+k+3]=temp[i+j+3];
+					data[i+k]  =temp[i+j+2-width];
+					data[i+k+1]=temp[i+j+1-width];
+					data[i+k+2]=temp[i+j  -width];
+					data[i+k+3]=temp[i+j+3-width];
 				}
 			}
 
@@ -226,6 +226,9 @@ bool loader::tga::Save(toy::File *pIO,toy::ImageBuffer *map)
 	header.bitsperpixel=32;
 	header.imagedescriptor=8;
 
+	if ( static_cast<uint32_t>(header.width )!=width  ) return false;
+	if ( static_cast<uint32_t>(header.height)!=height ) return false;
+
 	uint32_t   size = width * height * 4;
 
 	uint8_t*   data=(uint8_t*)malloc(size);
@@ -247,7 +250,7 @@ bool loader::tga::Save(toy::File *pIO,toy::ImageBuffer *map)
 
 	free(data);
 
-	return 1;
+	return true;
 }
 
 }//namespace file
