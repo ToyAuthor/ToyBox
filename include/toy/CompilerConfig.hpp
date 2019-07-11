@@ -14,7 +14,7 @@
 #define TOY_OPTION_RELEASE              1   // Set it to 0, if you want to debug.
 #define TOY_OPTION_DYNAMIC_LIBRARY      1   // It's only work on Windows, To build dynamic link library.
 #define TOY_OPTION_ENABLE_BETA_API      0   // Enable unstable API.
-#define TOY_OPTION_ENABLE_OLD_API       1   // Those old API may removed in next release. Just maybe.
+#define TOY_OPTION_ENABLE_MAY_REMOVED   1   // Those old API may removed in next release. Just maybe.
 #define TOY_OPTION_USE_GLEW             1
 */
 
