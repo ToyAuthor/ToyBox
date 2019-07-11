@@ -177,3 +177,20 @@ float Timer::elapsed() const
 {
 	return RawTimeDataToSeconds(GetSystemCurrentTime() - (_this->timerStart));
 }
+
+void Timer::restart(Timer::RawType *num)
+{
+	auto  oldTimerStart = _this->timerStart;
+
+	*num = (_this->timerStart = GetSystemCurrentTime()) - oldTimerStart;
+}
+
+void Timer::elapsed(Timer::RawType *num) const
+{
+	*num = GetSystemCurrentTime() - (_this->timerStart);
+}
+
+float Timer::ToSeconds(const Timer::RawType &num)
+{
+	return RawTimeDataToSeconds(num);
+}
