@@ -13,7 +13,7 @@ class ProcArg
 {
 	public:
 
-		ProcArg(int argc, char** argv, char tagHead='-')
+		ProcArg(int argc, char** argv, std::string tag1="-",std::string tag2=std::string(),std::string tag3=std::string())
 		{
 			if ( argc==0 )
 			{
@@ -32,12 +32,15 @@ class ProcArg
 			{
 				str = argv[i];
 
-				if ( str[0]==tagHead )
+				if ( (                  str.substr(0,tag1.size())==tag1 ) ||
+				     ( !tag2.empty() && str.substr(0,tag2.size())==tag2 ) ||
+				     ( !tag3.empty() && str.substr(0,tag3.size())==tag3 ) )
 				{
 					group = str;
 
 					if ( _data.find(group) == _data.end() )
 					{
+						_tags.push_back(group);
 						_data[group] = std::make_shared<std::vector<std::string>>();
 					}
 					continue;
@@ -45,7 +48,8 @@ class ProcArg
 
 				if ( _data.find(group) == _data.end() )
 				{
-					_data[group] = std::make_shared<std::vector<std::string>>();
+					_tags.push_back("");
+					_data[""] = std::make_shared<std::vector<std::string>>();
 				}
 
 				_data[group]->push_back(str);
@@ -66,8 +70,14 @@ class ProcArg
 			return it->second;
 		}
 
+		auto tags() const -> const std::vector<std::string> &
+		{
+			return _tags;
+		}
+
 	private:
 
+		std::vector<std::string>                                         _tags;
 		std::map<std::string,std::shared_ptr<std::vector<std::string>>>  _data;
 };
 

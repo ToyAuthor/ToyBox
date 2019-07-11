@@ -1,6 +1,7 @@
 ﻿#include <cstdio>
 #include <cstdlib>
 #include <csignal>
+#include <toy/ProcArg.hpp>
 #include <toy/io/Writer.hpp>
 #include "MyType.hpp"
 #include "PrintInfo.hpp"
@@ -54,7 +55,7 @@ static void ResetDefaultConfig()
 	std::string   config = TOYBOX_PLAYER_CONFIG_NAME;
 
 	std::string   text;
-	text += R"(
+	text += R"===(
 -- This config file is created by player.
 -- Type "./player --reset" to reset config to default content.
 
@@ -62,15 +63,15 @@ static void ResetDefaultConfig()
 main_path = "."
 --main_path = "/opt/configs"
 
--- Path of the other modules.
+-- Path of the other modules. It's optional.
 --search_path = "."
 --search_path = "d:configs/libs"
 
 -- The name of main script. Now loading itself to show a simple demo.
-script = ")" + config + R"("
+script = ")===" + config + R"===("
 
 print("This message just for demo")
-)";
+)===";
 
 	if ( IsFileExist( config ) )
 	{
@@ -80,42 +81,6 @@ print("This message just for demo")
 	toy::io::Writer<>   writer;
 	writer.open(config);
 	writer.print(text);
-}
-
-static int PrintManual(const SystemArgs &arg)
-{
-	if ( arg.num > 1 )
-	{
-		std::string   str = arg[1];
-
-		if ( str=="--help"      || str=="-h" ) { UpBlank(); PrintHelp(       arg); DownBlank(); return (int)1; }
-		if ( str=="--version"   || str=="-v" ) {            PrintVersion(    arg);              return (int)1; }
-		if ( str=="--example"   || str=="-e" ) { UpBlank(); PrintExample(    arg); DownBlank(); return (int)1; }
-		if ( str=="--copyright" || str=="-c" ) { UpBlank(); PrintCopyright(  arg); DownBlank(); return (int)1; }
-		if ( str=="--info"      || str=="-i" ) { UpBlank(); PrintInformation(arg); DownBlank(); return (int)1; }
-
-		if ( str=="--comment"   || str=="-co")
-		{
-			Logger<<"It's not ready yet!"<<toy::NewLine;
-			return 1;
-		}
-
-		if ( str=="--reset"     || str=="-r" )
-		{
-			ResetDefaultConfig();
-			return 1;
-		}
-
-		if ( str.c_str()[0] == '-' )
-		{
-			UpBlank();
-			PrintPrompt(arg);
-			DownBlank();
-			return 1;
-		}
-	}
-
-	return 0;      // No message output. User didn't asking for message.
 }
 
 static inline int IsHere(std::string file)
@@ -133,110 +98,161 @@ static inline std::string CompleteScriptName( const std::string &main_path, cons
 	return main_path + "/" + main_script;
 }
 
-static bool ReadConfig( std::string config_file, PlayerConfig *config )
+static void ReadConfig( const std::string &configFile, PlayerConfig *config )
 {
 	lua::State<>   reader;
 
 	#if !TOY_OPTION_RELEASE
 		// Binary release doesn't need it. That's why resource path only exist in debug mode.
-		reader.setGlobal(GetPrefix()+"ResourcePathForDemo",std::string(TOY_RESOURCE_PATH));
+		reader.setGlobal(GetConstPrefix()+"RESOURCE_PATH_FOR_DEMO",std::string(TOY_RESOURCE_PATH));
 	#endif
 
-	reader.runScriptFile(config_file);
-	lua::Var  a;
-	lua::Var  b;
-	lua::Var  c;
-	reader.getGlobal("main_path",&a);   lua::CopyVar<lua::Str>(config->main_path,a);
-	reader.getGlobal("script",&c);      lua::CopyVar<lua::Str>(config->main_script,c);
-//	reader.getGlobal("search_path",&b); lua::CopyVar<lua::Str>(config->search_path,b);
-	reader.getGlobal("search_path",&b); lua::TryCopyVar<lua::Str>(config->search_path,b);
-
-	auto   name = CompleteScriptName( config->main_path, config->main_script );
-
-	if ( IsHere( name ) )
-	{
-		return true;
-	}
-
-	Logger<<"Script file \""<<name<<"\" not find."<<toy::NewLine;
-	Logger<<"Wrong information in config file."<<toy::NewLine;
-
-	return false;
+	reader.runScriptFile(configFile);
+	lua::Var  temp;
+	reader.getGlobal("main_path",&temp);   lua::CopyVar<lua::Str>(config->main_path,temp);
+	reader.getGlobal("script",&temp);      lua::CopyVar<lua::Str>(config->main_script,temp);
+//	reader.getGlobal("search_path",&temp); lua::CopyVar<lua::Str>(config->search_path,temp);
+	reader.getGlobal("search_path",&temp); lua::TryCopyVar<lua::Str>(config->search_path,temp);
 }
 
-static bool GetConfigData( const SystemArgs &arg, PlayerConfig *config )
+static bool GetConfigData( PlayerConfig *config, const std::string &configFile )
 {
-	std::string    config_file(TOYBOX_PLAYER_CONFIG_NAME);
-
-	if ( arg.num>1 )
-	{
-		config_file = arg[1];
-	}
-
-	if ( IsHere(config_file) )
+	if ( IsHere(configFile) )
 	{
 		#ifdef TOY_WINDOWS
-			if ( toy::utf::IsUtf8(config_file) )
+			if ( toy::utf::IsUtf8(configFile) )
 			{
-				Logger<<"Not support file name:"<<config_file<<toy::NewLine;
+				Logger<<"Not support file name:"<<configFile<<toy::NewLine;
 				Logger<<"Lua can't take unicode name."<<toy::NewLine;
 			}
 		#endif
-		return ReadConfig(config_file,config);
+
+		ReadConfig(configFile,config);
+
+		return true;
 	}
 
-	if ( IsHere(TOYBOX_PLAYER_DEFAULT_MAIN_SCRIPT_NAME) && arg.num==1 )
+	if ( IsHere(TOYBOX_PLAYER_DEFAULT_MAIN_SCRIPT_NAME) )
 	{
 		return true;
 	}
 
-	Logger<<"Configuration file \""<<config_file<<"\" not find."<<toy::NewLine;
-	Logger<<"Type \"player.exe --help\" to get more information"<<toy::NewLine;
+	Logger<<"Configuration file \""<<configFile<<"\" not find."<<toy::NewLine;
 
 	return false;
 }
 
-static void SetLuaEnvPath(MainLuaState *lua, std::string path, std::string globalName)
+static void SetLuaEnvPath(MainLuaState *lua, const std::string &path,const std::string &name, lua::Table &table)
 {
 	if ( ! path.empty() )
 	{
 		lua->path( path );
-		lua->setGlobal( GetPrefix() + globalName, path );
+		table[name] = path;
 	}
 }
 
 static void InitLuaEnvironment( const PlayerConfig &config, MainLuaState *lua )
 {
-	SetLuaEnvPath( lua, config.main_path,   "ProjectPath" );
-	SetLuaEnvPath( lua, config.search_path, "ResourcePath" );
+	lua::Table    table;
+
+	SetLuaEnvPath( lua, config.main_path,   "project_path" , table);
+	SetLuaEnvPath( lua, config.search_path, "resource_path", table);
+
+	lua->setGlobal( GetConstPrefixPrivate() + "SYSTEM_MESSAGE", table );
 }
 
-static std::string GetReady( const SystemArgs &arg, MainLuaState *lua )
+static bool GetReady( const toy::ProcArg &arg, MainLuaState *lua, std::string *script )
 {
 	PlayerConfig   config;
 
-	if ( !GetConfigData( arg, &config ) )
+	if ( arg.tags().size() > 0 )
 	{
-		throw std::runtime_error("Config file can't provide message to player");
+		std::shared_ptr<const std::vector<std::string>>   ptr = nullptr;
+
+		ptr = arg[""];
+		if ( ptr )
+		{
+			if ( !GetConfigData( &config, ptr->front() ) )
+			{
+				throw toy::Exception(TOY_MARK);
+			}
+
+			InitLuaEnvironment(config,lua);
+			*script = CompleteScriptName( config.main_path, config.main_script );
+
+			return false;
+		}
+		if ( arg["--help"]      || arg["-h"] ) { UpBlank(); PrintHelp(       arg); DownBlank(); return true; }
+		if ( arg["--version"]   || arg["-v"] ) {            PrintVersion(    arg);              return true; }
+		if ( arg["--example"]   || arg["-e"] ) { UpBlank(); PrintExample(    arg); DownBlank(); return true; }
+		if ( arg["--copyright"] || arg["-c"] ) { UpBlank(); PrintCopyright(  arg); DownBlank(); return true; }
+		if ( arg["--info"]      || arg["-i"] ) { UpBlank(); PrintInformation(arg); DownBlank(); return true; }
+		if ( arg["--reset"]     || arg["-r"] )
+		{
+			ResetDefaultConfig();
+			return true;
+		}
+		ptr = arg["--project"];
+		if ( ptr && ptr->size()>0 )
+		{
+			config.main_path = ptr->front();
+
+			auto temp = arg["--main-script"];
+
+			if ( temp && temp->size()>0 )
+			{
+				config.main_script = temp->front();
+			}
+			else
+			{
+				config.main_script = TOYBOX_PLAYER_DEFAULT_MAIN_SCRIPT_NAME;
+			}
+
+			InitLuaEnvironment(config,lua);
+			*script = CompleteScriptName( config.main_path, config.main_script );
+
+			return false;
+		}
+		if ( (arg.tags().size()-((arg[""]==nullptr)?0:1))>0 )
+		{
+			UpBlank();
+			PrintPrompt(arg);
+			DownBlank();
+			return true;
+		}
+	}
+
+	if ( !GetConfigData( &config, std::string(TOYBOX_PLAYER_CONFIG_NAME) ) )
+	{
+		throw toy::Exception(TOY_MARK);
 	}
 
 	InitLuaEnvironment(config,lua);
+	*script = CompleteScriptName( config.main_path, config.main_script );
 
-	return CompleteScriptName( config.main_path, config.main_script );
+	return false;
 }
 
 static int main2(int argc, char* argv[])
 {
-	SystemArgs     arg(argc,argv);
+	MainLuaState   lua;
+	std::string    script;
 
-	if ( PrintManual(arg) )
 	{
-		return EXIT_SUCCESS;
+		toy::ProcArg     arg(argc,argv,"-","--");
+
+		if ( GetReady(arg,&lua,&script) )
+		{
+			return EXIT_SUCCESS;
+		}
 	}
 
-	MainLuaState    lua;
+	if ( false == IsHere( script ) )
+	{
+		Logger<<"Script file \""<<script<<"\" not find."<<toy::NewLine;
+		return EXIT_FAILURE;
+	}
 
-	auto  script = GetReady(arg,&lua);
 
 	#ifdef TOY_WINDOWS
 		if ( toy::utf::IsUtf8(script) )
@@ -246,7 +262,7 @@ static int main2(int argc, char* argv[])
 		}
 	#endif
 
-	if( ! lua.runScriptFile(script) )
+	if( false == lua.runScriptFile(script) )
 	{
 		return EXIT_FAILURE;
 	}

@@ -4,7 +4,7 @@
 #include <sstream>
 #include <toy/Environment.hpp>
 #include <toy/Version.hpp>
-#include "SystemArgs.hpp"
+#include <toy/ProcArg.hpp>
 
 #ifdef TOY_TEXT
 	#error "Need another name"
@@ -20,7 +20,7 @@ inline void PrintOptionList_English()
 {
 	toy::Log(TOY_TEXT("    player.exe               # Read default-config.lua in current directory\n"));
 	toy::Log(TOY_TEXT("    player.exe --copyright   # Show copyright of ToyBox\n"));
-	toy::Log(TOY_TEXT("    player.exe --example     # Example for reading config file\n"));
+	toy::Log(TOY_TEXT("    player.exe --example     # Examples for reading config file\n"));
 	toy::Log(TOY_TEXT("    player.exe --help        # English\n"));
 	toy::Log(TOY_TEXT("    player.exe --help -sc    # 简体中文\n"));
 	toy::Log(TOY_TEXT("    player.exe --help -tc    # 繁體中文\n"));
@@ -69,15 +69,10 @@ inline void PrintHelp_SimplifiedChinese()
 	PrintOptionList_SimplifiedChinese();
 }
 
-inline void PrintHelp(const SystemArgs &arg)
+inline void PrintHelp(const toy::ProcArg &arg)
 {
-	if(arg.num>2)
-	{
-		std::string     param=arg[2];
-
-		if(param=="-tc") { PrintHelp_TraditionalChinese();  return; }
-		if(param=="-sc") { PrintHelp_SimplifiedChinese();   return; }
-	}
+	if ( arg["-tc"] ) { PrintHelp_TraditionalChinese(); return; }
+	if ( arg["-sc"] ) { PrintHelp_SimplifiedChinese();  return; }
 
 	PrintHelp_English();
 }
@@ -113,48 +108,37 @@ inline void PrintVersion_SimplifiedChinese()
 	toy::Logger<<TOY_TEXT("ToyBox 当前版本为 ")<<PrintVersion_GetVersion()<<toy::NewLine;
 }
 
-inline void PrintVersion(const SystemArgs &arg)
+inline void PrintVersion(const toy::ProcArg &arg)
 {
-	if(arg.num>2)
-	{
-		std::string     param=arg[2];
-
-		if(param=="-tc") { PrintVersion_TraditionalChinese();  return; }
-		if(param=="-sc") { PrintVersion_SimplifiedChinese();   return; }
-	}
+	if(arg["-tc"]) { PrintVersion_TraditionalChinese();  return; }
+	if(arg["-sc"]) { PrintVersion_SimplifiedChinese();   return; }
 
 	PrintVersion_English();
 }
 
-inline void PrintPrompt(const SystemArgs &arg)
+inline void PrintPrompt(const toy::ProcArg &arg)
 {
-	std::string     cmd=arg[1];
-
-	if(arg.num>2)
+	if(arg["-tc"])
 	{
-		std::string     param=arg[2];
-
-		if(param=="-tc")
-		{
-			toy::Logger<<TOY_TEXT("沒有 \"")<<cmd<<TOY_TEXT("\" 這個指令，只有提供下列選項:")<<toy::NewLine<<toy::NewLine;
-			PrintOptionList_TraditionalChinese();
-			return;
-		}
-		if(param=="-sc")
-		{
-			toy::Logger<<TOY_TEXT("没有 \"")<<cmd<<TOY_TEXT("\" 这个指令，只有提供下列选项:")<<toy::NewLine<<toy::NewLine;
-			PrintOptionList_SimplifiedChinese();
-			return;
-		}
+		toy::Logger<<TOY_TEXT("沒有這個指令，只有提供下列選項:")<<toy::NewLine<<toy::NewLine;
+		PrintOptionList_TraditionalChinese();
+		return;
 	}
 
-	toy::Logger<<TOY_TEXT("Command \"")<<cmd<<TOY_TEXT("\" doesn't exist! You just only have following options:")<<toy::NewLine<<toy::NewLine;
+	if(arg["-sc"])
+	{
+		toy::Logger<<TOY_TEXT("没有个指令，只有提供下列选项:")<<toy::NewLine<<toy::NewLine;
+		PrintOptionList_SimplifiedChinese();
+		return;
+	}
+
+	toy::Logger<<TOY_TEXT("Command doesn't exist! You just only have following options:")<<toy::NewLine<<toy::NewLine;
 	PrintOptionList_English();
 }
 
 inline void PrintExample_English()
 {
-	toy::Log(TOY_TEXT("For examples:\n"));
+	toy::Log(TOY_TEXT("For example:\n"));
 	toy::Log(TOY_TEXT("    player.exe d:configs/default-config.lua    # General usage\n"));
 	toy::Log(TOY_TEXT("    player.exe                                 # Read \"default-config.lua\" in the working directory\n"));
 }
@@ -173,37 +157,26 @@ inline void PrintExample_SimplifiedChinese()
 	toy::Log(TOY_TEXT("    player.exe                                 # 读当前资料夹的\"default-config.lua\"设定档\n"));
 }
 
-inline void PrintExample(const SystemArgs &arg)
+inline void PrintExample(const toy::ProcArg &arg)
 {
-	if(arg.num>2)
-	{
-		std::string     param=arg[2];
-
-		if(param=="-tc")   { PrintExample_TraditionalChinese();  return; }
-		if(param=="-sc")   { PrintExample_SimplifiedChinese();   return; }
-	}
+	if(arg["-tc"])   { PrintExample_TraditionalChinese();  return; }
+	if(arg["-sc"])   { PrintExample_SimplifiedChinese();   return; }
 
 	PrintExample_English();
 }
 
 inline void PrintCopyright_English()
 {
-	toy::Log(TOY_TEXT("    Copyright (c) 2014-2017 ToyAuthor\n"));
-	toy::Log(TOY_TEXT("\n"));
-
 	toy::Log(TOY_TEXT("    This software is a part of ToyBox.\n"));
 	toy::Log(TOY_TEXT("    ToyBox is release into public domain.\n"));
 	toy::Log(TOY_TEXT("    Be careful, those third party libraries have their own license.\n"));
 	toy::Log(TOY_TEXT("    The font files have their own license too.\n"));
 	toy::Log(TOY_TEXT("    The others resources are belong to public domain.(scripts,art asset,etc.)\n"));
-	toy::Log(TOY_TEXT("    I recommand you keep the license folder.\n"));
+	toy::Log(TOY_TEXT("    I recommend you keep the license folder.\n"));
 }
 
 inline void PrintCopyright_TraditionalChinese()
 {
-	toy::Log(TOY_TEXT("    Copyright (c) 2014-2017 ToyAuthor\n"));
-	toy::Log(TOY_TEXT("\n"));
-
 	toy::Log(TOY_TEXT("    本程式屬於 ToyBox 的一部份\n"));
 	toy::Log(TOY_TEXT("    ToyBox 本身是以 Public Domain 形式發佈的軟體\n"));
 	toy::Log(TOY_TEXT("    但是要注意內部所引用的第三方工具有著各自的授權條款\n"));
@@ -214,9 +187,6 @@ inline void PrintCopyright_TraditionalChinese()
 
 inline void PrintCopyright_SimplifiedChinese()
 {
-	toy::Log(TOY_TEXT("    Copyright (c) 2014-2017 ToyAuthor\n"));
-	toy::Log(TOY_TEXT("\n"));
-
 	toy::Log(TOY_TEXT("    本软件属于 ToyBox 的一部份\n"));
 	toy::Log(TOY_TEXT("    ToyBox 本身是以 Public Domain 形式发布的软件\n"));
 	toy::Log(TOY_TEXT("    但是要注意内部所引用的第三方工具有着各自的许可协议\n"));
@@ -225,15 +195,10 @@ inline void PrintCopyright_SimplifiedChinese()
 	toy::Log(TOY_TEXT("    建议别删掉用来做版权声明的 license 资料夹\n"));
 }
 
-inline void PrintCopyright(const SystemArgs &arg)
+inline void PrintCopyright(const toy::ProcArg &arg)
 {
-	if(arg.num>2)
-	{
-		std::string     param=arg[2];
-
-		if(param=="-tc")   { PrintCopyright_TraditionalChinese();  return; }
-		if(param=="-sc")   { PrintCopyright_SimplifiedChinese();   return; }
-	}
+	if(arg["-tc"])   { PrintCopyright_TraditionalChinese();  return; }
+	if(arg["-sc"])   { PrintCopyright_SimplifiedChinese();   return; }
 
 	PrintCopyright_English();
 }
@@ -287,46 +252,41 @@ inline std::string PrintInformation_GetPlatform()
 
 inline void PrintInformation_English()
 {
-	toy::Log(TOY_TEXT("Information:\n"));
-	toy::Log(TOY_TEXT("    Author    ToyAuthor\n"));
-	toy::Log(TOY_TEXT("    License   Public Domain\n"));
-	toy::Log(TOY_TEXT("    Website   https://toyauthor.github.io/ToyBoxDoc\n"));
-
+	toy::Log(TOY_TEXT(    "Information:\n"));
+	toy::Log(TOY_TEXT(    "    Author    ToyAuthor\n"));
+	toy::Log(TOY_TEXT(    "    License   Public Domain\n"));
+	toy::Log(TOY_TEXT(    "    Website   https://toyauthor.github.io/ToyBoxDoc\n"));
 	toy::Logger<<TOY_TEXT("    Version   ")<<PrintVersion_GetVersion()<<toy::NewLine;
+	toy::Log(TOY_TEXT(    "    Duration  2012-2019\n"));
 	toy::Logger<<TOY_TEXT("    Platform  ")<<PrintInformation_GetPlatform()<<toy::NewLine;
 }
 
 inline void PrintInformation_TraditionalChinese()
 {
-	toy::Log(TOY_TEXT("程式資訊:\n"));
-	toy::Log(TOY_TEXT("    作者      ToyAuthor\n"));
-	toy::Log(TOY_TEXT("    授權條款  Public Domain\n"));
-	toy::Log(TOY_TEXT("    網站      https://toyauthor.github.io/ToyBoxDoc\n"));
-
+	toy::Log(TOY_TEXT(    "程式資訊:\n"));
+	toy::Log(TOY_TEXT(    "    作者      ToyAuthor\n"));
+	toy::Log(TOY_TEXT(    "    授權條款  Public Domain\n"));
+	toy::Log(TOY_TEXT(    "    網站      https://toyauthor.github.io/ToyBoxDoc\n"));
 	toy::Logger<<TOY_TEXT("    版本號    ")<<PrintVersion_GetVersion()<<toy::NewLine;
+	toy::Log(TOY_TEXT(    "    年份      2012-2019\n"));
 	toy::Logger<<TOY_TEXT("    運行平台  ")<<PrintInformation_GetPlatform()<<toy::NewLine;
 }
 
 inline void PrintInformation_SimplifiedChinese()
 {
-	toy::Log(TOY_TEXT("软件资讯:\n"));
-	toy::Log(TOY_TEXT("    作者      ToyAuthor\n"));
-	toy::Log(TOY_TEXT("    许可协议  Public Domain\n"));
-	toy::Log(TOY_TEXT("    网站      https://toyauthor.github.io/ToyBoxDoc\n"));
-
+	toy::Log(TOY_TEXT(    "软件资讯:\n"));
+	toy::Log(TOY_TEXT(    "    作者      ToyAuthor\n"));
+	toy::Log(TOY_TEXT(    "    许可协议  Public Domain\n"));
+	toy::Log(TOY_TEXT(    "    网站      https://toyauthor.github.io/ToyBoxDoc\n"));
 	toy::Logger<<TOY_TEXT("    版本号    ")<<PrintVersion_GetVersion()<<toy::NewLine;
+	toy::Log(TOY_TEXT(    "    年份      2012-2019\n"));
 	toy::Logger<<TOY_TEXT("    运行平台  ")<<PrintInformation_GetPlatform()<<toy::NewLine;
 }
 
-inline void PrintInformation(const SystemArgs &arg)
+inline void PrintInformation(const toy::ProcArg &arg)
 {
-	if(arg.num>2)
-	{
-		std::string     param=arg[2];
-
-		if(param=="-tc")   { PrintInformation_TraditionalChinese();  return; }
-		if(param=="-sc")   { PrintInformation_SimplifiedChinese();   return; }
-	}
+	if(arg["-tc"])   { PrintInformation_TraditionalChinese();  return; }
+	if(arg["-sc"])   { PrintInformation_SimplifiedChinese();   return; }
 
 	PrintInformation_English();
 }

@@ -3,12 +3,22 @@
 
 #include <string>
 
-inline std::string GetPrefix()
+static inline std::string GetPrefix()
 {
-	return std::string("Toy_");
+	return std::string("toy_");
 }
 
-inline std::string GetPrefixPrivate()
+static inline std::string GetPrefixPrivate()
 {
-	return std::string("__toy__");
+	return std::string("_toy_");
+}
+
+static inline std::string GetConstPrefix()
+{
+	return std::string("TOY_");
+}
+
+static inline std::string GetConstPrefixPrivate()
+{
+	return std::string("_TOY_");
 }
