@@ -5,22 +5,18 @@
 #include <string>
 #include <memory>
 #include <SFML/Window.hpp>
-
-// Remove Microsoft macro
-#if defined(_WIN32) && defined(CreateWindow)
-	#undef CreateWindow
-#endif
-
+#include <toy/Environment.hpp>
 
 namespace toy{
 namespace example{
 
-
-inline static auto CreateWindow( std::string title, uint32_t width, uint32_t height )->std::shared_ptr<sf::Window>
+static inline auto CreateWindow( std::string title, uint32_t width, uint32_t height )->std::shared_ptr<sf::Window>
 {
 	sf::ContextSettings  settings(24);
 
-	settings.antialiasingLevel = 8;  // 0,2,4,8
+	#if defined(TOY_WINDOWS)
+		settings.antialiasingLevel = 8;
+	#endif
 
 	return std::make_shared<sf::Window>(
 			sf::VideoMode(width, height),
