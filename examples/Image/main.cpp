@@ -2,12 +2,11 @@
  * Load a image file and display it at default position.
  */
 
-#include <toy/Graph.hpp>
-#include <toy/Scene.hpp>
+#include <toy/Canvas.hpp>
 #include <toy_example/File.hpp>
 #include <toy_example/sfml/Window.hpp>
 
-static void HandleEvent( std::shared_ptr<sf::Window> window )
+static bool HandleEvent( std::shared_ptr<sf::Window> window )
 {
 	sf::Event event;
 
@@ -18,13 +17,14 @@ static void HandleEvent( std::shared_ptr<sf::Window> window )
 			case sf::Event::Closed:
 
 				window->close();
-				break;
+				return false;
 
 			case sf::Event::KeyPressed:
 
 				if ( event.key.code == sf::Keyboard::Escape )
 				{
 					window->close();
+					return false;
 				}
 				break;
 
@@ -32,9 +32,11 @@ static void HandleEvent( std::shared_ptr<sf::Window> window )
 				break;
 		}
 	}
+
+	return true;
 }
 
-static auto CreateImage(std::shared_ptr<toy::Scene> scene)->std::shared_ptr<toy::scene::object::Image>
+static auto CreateImage(std::shared_ptr<toy::canvas::Brush> brush)->std::shared_ptr<toy::canvas::Image>
 {
 	toy::ImageBuffer   image;
 
@@ -44,43 +46,36 @@ static auto CreateImage(std::shared_ptr<toy::Scene> scene)->std::shared_ptr<toy:
 		throw std::runtime_error("Oops");
 	}
 
-	return scene->newObject(toy::scene::IMAGE,image);
+	auto    texture = brush->newTexture(image);
+
+	return std::make_shared<toy::canvas::Image>(brush,0, 0,image.width(),image.height(),texture);
 }
 
-static void SetCamera(std::shared_ptr<toy::Scene> scene,uint32_t width,uint32_t height)
+static void SetCamera(std::shared_ptr<toy::canvas::Brush> brush,uint32_t width,uint32_t height)
 {
-	toy::scene::CameraConfig   camera;
+	auto   projection = toy::math::MakeOrtho<float>( width, height, 100, -100);
+	auto   modelview  = toy::math::LookAt( toy::math::Vector3<float>( 0.0, 0.0, 3.0 ),
+	                                       toy::math::Vector3<float>( 0.0, 0.0, 0.0 ),
+	                                       toy::math::Vector3<float>( 0.0, 1.0, 0.0 ) );
 
-	camera.ortho( width, height, 100, -100);
-
-	camera.lookat( toy::math::Vector3<float>( 0, 0, 3 ),
-	               toy::math::Vector3<float>( 0, 0, 0 ),
-	               toy::math::Vector3<float>( 0, 1, 0 ) );
-
-	scene->setCamera( camera );
+	brush->setProjection( projection );
+	brush->setModelview( modelview );
 }
 
-static void InitScene(std::shared_ptr<toy::Scene> scene,uint32_t width,uint32_t height)
+static void InitScene(std::shared_ptr<toy::canvas::Brush> brush,uint32_t width,uint32_t height)
 {
-	auto   brush = scene->brush();
-
-	brush->viewport(0,0,width,height);
+	brush->viewport(width,height);
 	brush->setClearColor(0.5, 0.5, 0.5, 0);
 
-	SetCamera(scene,width,height);
+	SetCamera(brush,width,height);
 }
 
-static void MainLoop( std::shared_ptr<sf::Window> window,
-                      std::shared_ptr<toy::Scene> scene )
+static void MainLoop( std::shared_ptr<sf::Window>         window,
+                      std::shared_ptr<toy::canvas::Brush> brush )
 {
-	auto   brush = scene->brush();
-
-	while ( window->isOpen() )
+	while ( HandleEvent( window ) && window->isOpen() )
 	{
-		HandleEvent( window );
-
 		brush->clear();
-		brush->sorting();
 		brush->render();
 		window->display();
 	}
@@ -92,15 +87,15 @@ static int main2()
 	const uint32_t  height = 768;
 
 	auto   window = toy::example::CreateWindow("example:Image",width,height);
-	auto   scene  = std::make_shared<toy::Scene>();
+	auto   brush  = std::make_shared<toy::canvas::Brush>();
 
-	InitScene(scene,width,height);
+	InitScene(brush,width,height);
 
-	auto   image = CreateImage(scene);
+	auto   image = CreateImage(brush);
 
 	image->visible(true);
 
-	MainLoop(window,scene);
+	MainLoop(window,brush);
 
 	return EXIT_SUCCESS;
 }

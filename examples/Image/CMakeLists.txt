@@ -7,8 +7,7 @@ add_definitions(-DTOY_RESOURCE_PATH="${TOY_RESOURCE_PATH}")
 set(LIBS
 	toy
 	toy_file
-	toy_graph
-	toy_scene
+	toy_canvas
 	${TOY_libname_sfml_system}
 	${TOY_libname_sfml_window}
 )
