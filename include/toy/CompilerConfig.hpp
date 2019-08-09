@@ -14,7 +14,7 @@
 */
 
 #define TOY_OPTION_ENABLE_ASSEMBLY      0
-#define TOY_OPTION_CHECK                1   // Test and check error.
+#define TOY_OPTION_CHECK                1   // Test and check error. It would be very dangerous if turn it off.
 #define TOY_OPTION_CHECK_CAREFUL        1   // It spent more time to check error.
 
 //------------------------------------------------------------------------------

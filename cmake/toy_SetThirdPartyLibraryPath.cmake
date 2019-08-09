@@ -54,15 +54,16 @@ macro(toy_SetThirdPartyLibraryPath)
 			unset(TEMP_DIR)
 		# Linux
 		elseif(UNIX)
-			file(GLOB TEMP_DIR
-				${TOY_SDK_LIB}/SFML/*.so
-				${TOY_SDK_LIB}/GMP/*.so
-				${TOY_SDK_LIB}/freetype/*.so
-				${TOY_SDK_LIB}/FLTK/*.so
-				${TOY_SDK_LIB}/libpng/*.so
-			)
-			file(COPY ${TEMP_DIR} DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/)
-			unset(TEMP_DIR)
+			# Comment out this part for now, because CMake could not copy symbolic link.
+			#file(GLOB TEMP_DIR
+			#	${TOY_SDK_LIB}/SFML/*.so
+			#	${TOY_SDK_LIB}/GMP/*.so
+			#	${TOY_SDK_LIB}/freetype/*.so
+			#	${TOY_SDK_LIB}/FLTK/*.so
+			#	${TOY_SDK_LIB}/libpng/*.so
+			#)
+			#file(COPY ${TEMP_DIR} DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/)
+			#unset(TEMP_DIR)
 		endif()
 	endif()
 

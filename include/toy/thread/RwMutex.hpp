@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <memory>
 #include "toy/thread/Export.hpp"
 
 namespace toy{

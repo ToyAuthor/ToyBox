@@ -1,7 +1,12 @@
 
 project(p7zip)
 
-add_definitions(-O2 -g)
+if( TOY_RELEASE )
+	set(CMAKE_C_FLAGS "-O2")
+else()
+	set(CMAKE_C_FLAGS "-O2 -g")
+endif()
+
 include_directories(/usr/include)
 link_directories(/usr/lib)
 

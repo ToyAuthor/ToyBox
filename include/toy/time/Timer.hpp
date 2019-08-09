@@ -2,6 +2,7 @@
 #pragma once
 
 #include <memory>
+#include <cstdint>
 #include "toy/time/Export.hpp"
 
 namespace toy{

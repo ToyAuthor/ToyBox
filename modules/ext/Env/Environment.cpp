@@ -1,4 +1,5 @@
 #include <lua.hpp>
+#include <boost/config.hpp>
 #include <toy/Environment.hpp>
 
 namespace toy{
@@ -22,6 +23,8 @@ static int GetOS(lua_State* L)
 
 static int GetCompiler(lua_State* L)
 {
+	lua_pushstring(L,BOOST_COMPILER);
+/*
 	#if defined(TOY_GCC)
 		lua_pushstring(L, "GCC");
 	#elif defined(TOY_MINGW)
@@ -35,7 +38,7 @@ static int GetCompiler(lua_State* L)
 	#else
 		lua_pushstring(L, "unknown");
 	#endif
-
+*/
 	return 1;
 }
 

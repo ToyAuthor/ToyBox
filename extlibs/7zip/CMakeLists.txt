@@ -3,10 +3,13 @@ project(7zip)
 
 set(VERSION "9.20")
 
-if(MINGW)
-	add_definitions(-O2 -g -Wall)
+if(NOT MSVC)
+if( TOY_RELEASE )
+	set(CMAKE_C_FLAGS "-O2")
+else()
+	set(CMAKE_C_FLAGS "-O2 -g")
 endif()
-
+endif()
 
 set(SOURCE
 	C/BraIA64.c
