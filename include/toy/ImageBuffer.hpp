@@ -25,6 +25,16 @@ class TOY_API ImageBuffer
 			return (uint8_t*)(_allocator.data());
 		}
 
+		bool empty()
+		{
+			if ( this->data()==nullptr )
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		uint32_t height() const
 		{
 			return _height;
@@ -39,6 +49,8 @@ class TOY_API ImageBuffer
 		{
 			return _width * _height;
 		}
+
+		bool toRGBA();
 
 		enum ::toy::Option format() const
 		{

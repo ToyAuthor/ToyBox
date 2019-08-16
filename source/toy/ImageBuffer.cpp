@@ -18,10 +18,10 @@ static inline void GREY_to_RGBA( uint8_t* data, uint32_t size )
 
 		color = *pp2==0 ? 0 : 255;
 
+		pp1[3] = *pp2;
 		pp1[2] = color;
 		pp1[1] = color;
 		pp1[0] = color;
-		pp1[3] = *pp2;
 	}
 	while( pp2 != data );
 }
@@ -36,12 +36,72 @@ static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 		pp1 -= 4;
 		pp2 -= 2;
 
+		pp1[3] = pp2[1];
 		pp1[2] = pp2[0];
 		pp1[1] = pp2[0];
 		pp1[0] = pp2[0];
-		pp1[3] = pp2[1];
 	}
 	while ( pp2 != data );
+}
+
+static inline void RGB_to_RGBA( uint8_t* data, uint32_t size )
+{
+	uint32_t   nsize = size/3;
+
+	if ( (nsize*3)!=size )
+	{
+		toy::Oops(TOY_MARK);
+	}
+
+	uint8_t  *pp1 = data + size + nsize;
+	uint8_t  *pp2 = data + size;
+
+	do
+	{
+		pp1 -= 4;
+		pp2 -= 3;
+
+		pp1[3] = 255;
+		pp1[2] = pp2[2];
+		pp1[1] = pp2[1];
+		pp1[0] = pp2[0];
+	}
+	while ( pp2 != data );
+}
+
+bool ImageBuffer::toRGBA()
+{
+	if ( _format== toy::RGBA)
+	{
+		return true;
+	}
+
+	auto  mapSize = _width * _height;
+
+	_allocator.size( mapSize * 4 );
+
+	switch( _format )
+	{
+		case toy::RGB:
+			RGB_to_RGBA( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::GREY:
+			GREY_to_RGBA( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::GREY_ALPHA:
+			GREY_ALPHA_to_RGBA( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		default:
+			toy::Oops(TOY_MARK);
+			return false;
+	}
+
+	_format = toy::RGBA;
+
+	return true;
 }
 
 static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::Option option)
@@ -56,8 +116,7 @@ static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::
 	{
 		case toy::GREY:
 			std::memcpy(target,data, width * height);
-			GREY_to_RGBA( target, width * height);
-			image->_setFormat(toy::RGBA);
+			image->_setFormat(toy::GREY);
 			break;
 
 		case toy::GREY_ALPHA:
@@ -119,7 +178,7 @@ void ImageBuffer::clean()
 	_allocator.free();
 }
 
-static inline uint8_t BlendPixel(uint8_t ac,uint8_t bc,uint8_t aa,uint8_t ba)
+static inline uint8_t BlendColor(uint8_t ac,uint8_t bc,uint8_t aa,uint8_t ba)
 {
 	float  colorA = ac;
 	float  colorB = bc;
@@ -175,9 +234,9 @@ ImageBuffer& ImageBuffer::operator +=(const ImageBuffer& model)
 		uint8_t  alphaA = mydata[ index+3 ];
 		uint8_t  alphaB = data[ index+3 ];
 
-		mydata[ index   ] = BlendPixel( mydata[index  ], data[index  ], alphaA, alphaB );
-		mydata[ index+1 ] = BlendPixel( mydata[index+1], data[index+1], alphaA, alphaB );
-		mydata[ index+2 ] = BlendPixel( mydata[index+2], data[index+2], alphaA, alphaB );
+		mydata[ index   ] = BlendColor( mydata[index  ], data[index  ], alphaA, alphaB );
+		mydata[ index+1 ] = BlendColor( mydata[index+1], data[index+1], alphaA, alphaB );
+		mydata[ index+2 ] = BlendColor( mydata[index+2], data[index+2], alphaA, alphaB );
 		mydata[ index+3 ] = BlendAlpha(alphaA,alphaB);
 	}
 
