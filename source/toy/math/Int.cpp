@@ -1,13 +1,14 @@
 #include <vector>
 #include <memory>
 #include <cstring>
-#include <limits>
 #include "toy/Exception.hpp"
 #include "toy/Oops.hpp"
+#include "toy/gadget/HexCharToInt.hpp"
 #include "toy/math/Int.hpp"
 #include "toy/math/Int2.hpp"
 #include "toy/math/NumberFormat.hpp"
 #include "toy/math/IntCommon.hpp"
+#include "toy/math/SafeInt.hpp"
 
 namespace toy{
 namespace math{
@@ -48,16 +49,10 @@ const uint8_t* Int::data() const
 uint32_t Int::size() const
 {
 	#if TOY_OPTION_CHECK
-		if ( sizeof(std::vector<uint8_t>::size_type)>sizeof(uint32_t) )
-		{
-			if ( _this->data.size() > static_cast<std::vector<uint8_t>::size_type>(std::numeric_limits<uint32_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
+		return toy::math::SafeInt<uint32_t>(_this->data.size(),TOY_MARK);
+	#else
+		return _this->data.size();
 	#endif
-
-	return _this->data.size();
 }
 
 Int::Int():_this(new struct IntPrivate)
@@ -235,16 +230,10 @@ static void StringToNumber(const char *str,int size,std::vector<uint8_t> *data)
 	Int2      temp1;
 
 	#if TOY_OPTION_CHECK
-		if ( sizeof(std::vector<Int2>::size_type)>=sizeof(int) )
-		{
-			if ( baseList->size() > static_cast<std::vector<Int2>::size_type>(std::numeric_limits<int>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
+	for ( auto i = toy::math::SafeInt<int>(baseList->size()-1,TOY_MARK) ; i>=0 ; i-- )
+	#else
 	for ( int i = baseList->size()-1 ; i>=0 ; i-- )
+	#endif
 	{
 		bb = (*baseList)[i];
 		temp1 = num;
@@ -260,56 +249,15 @@ static void StringToNumber(const char *str,int size,std::vector<uint8_t> *data)
 	}
 
 	#if TOY_OPTION_CHECK
-		if ( sizeof(std::vector<uint8_t>::size_type)>=sizeof(int) )
-		{
-			if ( buffer.size() > static_cast<std::vector<uint8_t>::size_type>(std::numeric_limits<int>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
+	for ( auto i = toy::math::SafeInt<int>(buffer.size()-1,TOY_MARK) ; i>=0 ; i-- )
+	#else
 	for ( int i = buffer.size()-1 ; i>=0 ; i-- )
+	#endif
 	{
 		data->push_back(buffer[i]);
 	}
 
 	CleanZeroEnd(data);
-}
-
-static inline uint8_t CharToNumber(const char ch)
-{
-	return ch-'0';
-}
-
-static uint8_t HexCharToNumber(const char ch)
-{
-	if ( ch>'9' )
-	{
-		switch ( ch )
-		{
-			case 'a': return 10;
-			case 'A': return 10;
-			case 'b': return 11;
-			case 'B': return 11;
-			case 'c': return 12;
-			case 'C': return 12;
-			case 'd': return 13;
-			case 'D': return 13;
-			case 'e': return 14;
-			case 'E': return 14;
-			case 'f': return 15;
-			case 'F': return 15;
-			default:
-				toy::Oops(TOY_MARK);
-		}
-	}
-	else
-	{
-		return CharToNumber(ch);
-	}
-
-	return 0;
 }
 
 static void HexStringToNumber(const char *str,int size,std::vector<uint8_t> *data)
@@ -322,13 +270,13 @@ static void HexStringToNumber(const char *str,int size,std::vector<uint8_t> *dat
 		if ( isFull )
 		{
 			isFull = false;
-			data->push_back(HexCharToNumber(*num));
+			data->push_back(uint8_t(::toy::gadget::HexCharToInt(*num)));
 		}
 		else
 		{
 			isFull = true;
 			uint8_t  temp = data->back();
-			temp += (HexCharToNumber(*num)<<4);
+			temp += (uint8_t(::toy::gadget::HexCharToInt(*num))<<4);
 			(*data)[data->size()-1] = temp;
 		}
 	}
@@ -575,16 +523,10 @@ static inline void AddNumberTo32bitArray(std::vector<uint32_t> *nbuffer,uint32_t
 	(*nbuffer)[0] += num;
 
 	#if TOY_OPTION_CHECK
-		if ( sizeof(std::vector<uint32_t>::size_type)>=sizeof(int) )
-		{
-			if ( nbuffer->size() > static_cast<std::vector<uint32_t>::size_type>(std::numeric_limits<int>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
+	auto size = toy::math::SafeInt<int>(nbuffer->size(),TOY_MARK);
+	#else
 	int size = nbuffer->size();
+	#endif
 
 	for ( int i=0 ; i<size-1 ; i++ )
 	{
@@ -687,16 +629,10 @@ bool Int::get(std::string *number) const
 	}
 
 	#if TOY_OPTION_CHECK
-		if ( sizeof(std::vector<uint8_t>::size_type)>sizeof(uint32_t) )
-		{
-			if ( _this->data.size() > static_cast<std::vector<uint8_t>::size_type>(std::numeric_limits<uint32_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
+	auto size = toy::math::SafeInt<uint32_t>(_this->data.size(),TOY_MARK);
+	#else
 	uint32_t size = _this->data.size();
+	#endif
 
 	for ( uint32_t i=1 ; i<size ; i++ )
 	{
@@ -718,16 +654,10 @@ bool Int::get(std::string *number) const
 	str += (cbuffer + GetNotZeroIndex(cbuffer));
 
 	#if TOY_OPTION_CHECK
-		if ( sizeof(std::vector<uint32_t>::size_type)>sizeof(int32_t) )
-		{
-			if ( nbuffer.size() > static_cast<std::vector<uint32_t>::size_type>(std::numeric_limits<int32_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
+	for ( int32_t i=toy::math::SafeInt<int32_t>(nbuffer.size()-2,TOY_MARK) ; i>=0 ; i-- )
+	#else
 	for ( int32_t i=nbuffer.size()-2 ; i>=0 ; i-- )
+	#endif
 	{
 		NumberToString(cbuffer,nbuffer[i]);
 		str += cbuffer;
@@ -1409,4 +1339,85 @@ bool Int::operator == (const Int &number) const
 bool Int::operator !=(const Int &number) const
 {
 	return (*this)==number ? false : true;
+}
+
+void Int::operator >>=(uint32_t number)
+{
+	uint32_t   quotient = number/8;
+	uint32_t   residue  = number-(quotient*8);
+
+	if ( residue!=0 )
+	{
+		uint32_t  ee = 1;
+
+		for (uint32_t i=0;i<residue;++i)
+		{
+			ee *= 2;
+		}
+
+		Int  temp(ee);
+
+		this->divide(temp);
+	}
+
+	if ( quotient==0 ) return;
+
+	if ( _this->data.size()<quotient )
+	{
+		_this->data.resize(1);
+		(_this->data)[0] = 0;
+		_this->negative = false;
+		return;
+	}
+
+	uint32_t   times = this->size() - quotient;
+
+	for ( uint32_t i=0;i<times;++i )
+	{
+		(_this->data)[i] = (_this->data)[i+quotient];
+	}
+
+	_this->data.resize(_this->data.size()-quotient);
+}
+
+void Int::operator <<=(uint32_t number)
+{
+	uint32_t   quotient = number/8;
+	uint32_t   residue  = number-(quotient*8);
+
+	if ( residue!=0 )
+	{
+		uint32_t  ee = 1;
+
+		for (uint32_t i=0;i<residue;++i)
+		{
+			ee *= 2;
+		}
+
+		Int  temp(ee);
+
+		(*this) *= temp;
+	}
+
+	auto size = _this->data.size();
+
+	if ( ( std::numeric_limits<decltype(size)>::max()-size ) < static_cast<decltype(size)>(quotient) )
+	{
+		toy::Oops(TOY_MARK);
+		return;
+	}
+
+	_this->data.resize(_this->data.size()+quotient);
+
+	for ( auto i=size-1;i>0;--i )
+	{
+		(_this->data)[i+quotient] = (_this->data)[i];
+	}
+
+	(_this->data)[quotient] = (_this->data)[0];
+
+	for ( auto i=quotient ; i>0 ; --i )
+	{
+		(_this->data)[i-1] = 0;
+	}
 }

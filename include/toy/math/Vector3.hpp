@@ -61,6 +61,13 @@ class Vector3
 			                      z-v.z );
 		}
 
+		Vector3<Type> operator *(Type num) const
+		{
+			return Vector3<Type>( x*num,
+			                      y*num,
+			                      z*num );
+		}
+
 		Vector3<Type> operator +=(const Vector3<Type>& v)
 		{
 			x += v.x;

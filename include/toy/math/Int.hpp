@@ -28,6 +28,7 @@ class TOY_API_MATH Int
 		Int(uint64_t    number);
 		Int(std::string number);
 
+		bool negative() const;
 		auto str() const -> const std::string;
 
 		bool get( int8_t     *number) const;
@@ -66,6 +67,8 @@ class TOY_API_MATH Int
 		void operator /=(const Int &number);
 		void operator %=(const Int &number);
 		void operator ^=(const Int &number);
+		void operator >>=(uint32_t number);
+		void operator <<=(uint32_t number);
 
 		bool operator > (const Int &number) const;
 		bool operator < (const Int &number) const;
@@ -86,7 +89,6 @@ class TOY_API_MATH Int
 
 		auto size() const -> uint32_t;
 		auto data() const -> const uint8_t*;
-		bool negative() const;
 
 	private:
 

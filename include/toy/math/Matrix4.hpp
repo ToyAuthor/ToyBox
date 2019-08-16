@@ -149,6 +149,13 @@ public:
 		return (*this)*(Matrix4<Type>(q));
 	}
 
+	Vector3<Type> operator *(const Vector3<Type>& v) const
+	{
+		return Vector3<Type>( m11*v.x + m12*v.y + m13*v.z ,
+		                      m21*v.x + m22*v.y + m23*v.z ,
+		                      m31*v.x + m32*v.y + m33*v.z );
+	}
+
 	void operator *=(const Matrix4<Type>& model)
 	{
 		*this = (*this)*model;
