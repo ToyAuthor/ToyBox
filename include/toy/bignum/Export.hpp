@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "toy/Environment.hpp"
+#include "toy/CompilerConfig.hpp"
 
 #if defined(TOY_WINDOWS) && TOY_OPTION_DYNAMIC_LIBRARY
 
