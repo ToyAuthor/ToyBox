@@ -37,6 +37,7 @@ macro(toy_SetThirdPartyLibraryPath)
 		# You can just modify those paths and ignore this error.
 		# Take a look!
 		# https://github.com/ToyAuthor/ToyBoxSDK
+		# ToyBox/doc/usage/build/extlibs.txt
 		message(FATAL_ERROR "ToyBox:Are you sure you have all the third-party libraries?")
 	else()
 		# Mac

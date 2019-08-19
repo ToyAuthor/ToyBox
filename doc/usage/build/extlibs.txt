@@ -1,0 +1,18 @@
+
+The easy way to setup third-party libraries:
+
+	1. Visit "https://github.com/ToyAuthor/ToyBoxSDK" and check
+	   "ToyBoxSDK/lib/readme.txt" and make sure your environment is supported.
+	   You need "the hard way", if your environment is not supported.
+
+	2. Download "https://github.com/ToyAuthor/ToyBoxSDK".
+	3. Read SFML wiki to setup environment.(optional)
+	4. Edit "ToyBox/cmake/toy_SetThirdPartyLibraryPath.cmake".
+	   And write down the path you put down ToyBoxSDK.
+
+
+The hard way to do the same job:
+
+	1. Download and build those third-party libraries by yourself.
+	2. Edit "ToyBox/cmake/toy_SetThirdPartyLibraryPath.cmake".
+	   Edit every each third-party project's path.
