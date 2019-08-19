@@ -5,6 +5,162 @@
 
 namespace toy{
 
+static inline void GREY_ALPHA_to_GREY( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data;
+	uint8_t  *pp2 = data;
+
+	const uint8_t  *end = data + (size*2);
+
+	do
+	{
+		pp1[0] = pp2[0];
+
+		pp1 += 1;
+		pp2 += 2;
+	}
+	while( pp2 != end );
+}
+
+static inline void RGB_to_GREY( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data;
+	uint8_t  *pp2 = data;
+
+	const uint8_t  *end = data + (size*3);
+
+	do
+	{
+		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+
+		pp1 += 1;
+		pp2 += 3;
+	}
+	while( pp2 != end );
+}
+
+static inline void RGBA_to_GREY( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data;
+	uint8_t  *pp2 = data;
+
+	const uint8_t  *end = data + (size<<2);
+
+	do
+	{
+		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+
+		pp1 += 1;
+		pp2 += 4;
+	}
+	while( pp2 != end );
+}
+
+static inline void GREY_to_GREY_ALPHA( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data + size * 2;
+	uint8_t  *pp2 = data + size;
+
+	do
+	{
+		pp1 -= 2;
+		pp2 -= 1;
+
+		pp1[1] = 255;
+		pp1[0] = pp2[0];
+	}
+	while( pp2 != data );
+}
+
+static inline void RGB_to_GREY_ALPHA( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data;
+	uint8_t  *pp2 = data;
+
+	const uint8_t  *end = data + (size*3);
+
+	do
+	{
+		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+		pp1[1] = 255;
+
+		pp1 += 2;
+		pp2 += 3;
+	}
+	while( pp2 != end );
+}
+
+static inline void RGBA_to_GREY_ALPHA( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data;
+	uint8_t  *pp2 = data;
+
+	const uint8_t  *end = data + (size<<2);
+
+	do
+	{
+		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+		pp1[1] = pp2[3];
+
+		pp1 += 2;
+		pp2 += 4;
+	}
+	while( pp2 != end );
+}
+
+static inline void GREY_to_RGB( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data + size * 3;
+	uint8_t  *pp2 = data + size;
+
+	do
+	{
+		pp1 -= 3;
+		pp2 -= 1;
+
+		pp1[2] = pp2[0];
+		pp1[1] = pp2[0];
+		pp1[0] = pp2[0];
+	}
+	while( pp2 != data );
+}
+
+static inline void GREY_ALPHA_to_RGB( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data + size * 3;
+	uint8_t  *pp2 = data + size * 2;
+
+	do
+	{
+		pp1 -= 3;
+		pp2 -= 2;
+
+		pp1[2] = pp2[0];
+		pp1[1] = pp2[0];
+		pp1[0] = pp2[0];
+	}
+	while ( pp2 != data );
+}
+
+static inline void RGBA_to_RGB( uint8_t* data, uint32_t size )
+{
+	uint8_t  *pp1 = data;
+	uint8_t  *pp2 = data;
+
+	const uint8_t  *end = data + (size<<2);
+
+	do
+	{
+		pp1[0] = pp2[0];
+		pp1[1] = pp2[1];
+		pp1[2] = pp2[2];
+
+		pp1 += 3;
+		pp2 += 4;
+	}
+	while ( pp2 != end );
+}
+
 static inline void GREY_to_RGBA( uint8_t* data, uint32_t size )
 {
 	uint8_t  *pp1 = data + size * 4;
@@ -28,8 +184,8 @@ static inline void GREY_to_RGBA( uint8_t* data, uint32_t size )
 
 static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 {
-	uint8_t  *pp1 = data + size * 2;
-	uint8_t  *pp2 = data + size;
+	uint8_t  *pp1 = data + size * 4;
+	uint8_t  *pp2 = data + size * 2;
 
 	do
 	{
@@ -46,15 +202,8 @@ static inline void GREY_ALPHA_to_RGBA( uint8_t* data, uint32_t size )
 
 static inline void RGB_to_RGBA( uint8_t* data, uint32_t size )
 {
-	uint32_t   nsize = size/3;
-
-	if ( (nsize*3)!=size )
-	{
-		toy::Oops(TOY_MARK);
-	}
-
-	uint8_t  *pp1 = data + size + nsize;
-	uint8_t  *pp2 = data + size;
+	uint8_t  *pp1 = data + size * 4;
+	uint8_t  *pp2 = data + size * 3;
 
 	do
 	{
@@ -67,6 +216,111 @@ static inline void RGB_to_RGBA( uint8_t* data, uint32_t size )
 		pp1[0] = pp2[0];
 	}
 	while ( pp2 != data );
+}
+
+bool ImageBuffer::toGREY()
+{
+	if ( _format== toy::GREY)
+	{
+		return true;
+	}
+
+	auto  mapSize = _width * _height;
+
+	_allocator.size( mapSize );
+
+	switch( _format )
+	{
+		case toy::RGBA:
+			RGBA_to_GREY( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::RGB:
+			RGB_to_GREY( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::GREY_ALPHA:
+			GREY_ALPHA_to_GREY( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		default:
+			toy::Oops(TOY_MARK);
+			return false;
+	}
+
+	_format = toy::RGBA;
+
+	return true;
+}
+
+bool ImageBuffer::toGREY_ALPHA()
+{
+	if ( _format== toy::GREY_ALPHA)
+	{
+		return true;
+	}
+
+	auto  mapSize = _width * _height;
+
+	_allocator.size( mapSize * 2 );
+
+	switch( _format )
+	{
+		case toy::RGBA:
+			RGBA_to_GREY_ALPHA( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::RGB:
+			RGB_to_GREY_ALPHA( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::GREY:
+			GREY_to_GREY_ALPHA( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		default:
+			toy::Oops(TOY_MARK);
+			return false;
+	}
+
+	_format = toy::RGBA;
+
+	return true;
+}
+
+bool ImageBuffer::toRGB()
+{
+	if ( _format== toy::RGB)
+	{
+		return true;
+	}
+
+	auto  mapSize = _width * _height;
+
+	_allocator.size( mapSize * 3 );
+
+	switch( _format )
+	{
+		case toy::RGBA:
+			RGBA_to_RGB( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::GREY:
+			GREY_to_RGB( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		case toy::GREY_ALPHA:
+			GREY_ALPHA_to_RGB( (uint8_t*)(_allocator.data()), mapSize);
+			break;
+
+		default:
+			toy::Oops(TOY_MARK);
+			return false;
+	}
+
+	_format = toy::RGBA;
+
+	return true;
 }
 
 bool ImageBuffer::toRGBA()
@@ -116,13 +370,10 @@ static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::
 	{
 		case toy::GREY:
 			std::memcpy(target,data, width * height);
-			image->_setFormat(toy::GREY);
 			break;
 
 		case toy::GREY_ALPHA:
 			std::memcpy(target,data, width * height * 2);
-			GREY_ALPHA_to_RGBA( target, width * height * 2);
-			image->_setFormat(toy::RGBA);
 			break;
 
 		case toy::RGB:

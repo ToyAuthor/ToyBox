@@ -50,7 +50,10 @@ class TOY_API ImageBuffer
 			return _width * _height;
 		}
 
+		bool toRGB();
 		bool toRGBA();
+		bool toGREY();
+		bool toGREY_ALPHA();
 
 		enum ::toy::Option format() const
 		{
