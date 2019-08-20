@@ -9,6 +9,8 @@ Libraries by ToyBox
 
    toy_file.lib     It's a file system. ZIP an 7zip format supported.
 
+   toy_font.lib     It's a factory for creating font image.
+
    toy_gadget.lib   Common tool for some others components.
 
    toy_math.lib     Linear algebra, trigonometric functions, etc.

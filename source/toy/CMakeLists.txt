@@ -9,6 +9,7 @@ add_subdirectory(file)
 add_subdirectory(parser)
 add_subdirectory(thread)
 add_subdirectory(canvas)
+add_subdirectory(font)
 
 if(TOY_ENABLE_BETA_API)
 add_subdirectory(graph)
