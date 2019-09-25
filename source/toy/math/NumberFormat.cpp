@@ -76,7 +76,16 @@ NumberFormat::NumberFormat(const std::string &num):_this(new NumberFormatPrivate
 
 	if ( num[index]=='0' )
 	{
-		if ( size<index+2 ) return;
+		if ( size<index+2 )
+		{
+			if ( _this->isNegative==0 )
+			{
+				_this->isGood = 1;
+				_this->isDecimal = 1;
+				_this->isInteger = 1;
+			}
+			return;   // 0
+		}
 
 		if ( num[index+1]=='x' )
 		{
@@ -90,6 +99,12 @@ NumberFormat::NumberFormat(const std::string &num):_this(new NumberFormatPrivate
 			{
 				if ( size<index+2 )
 				{
+					if ( _this->isNegative==0 )
+					{
+						_this->isGood = 1;
+						_this->isHexadecimal = 1;
+						_this->isInteger = 1;
+					}
 					return;   // 0x0
 				}
 				else
