@@ -134,4 +134,8 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_library_fltk        "${TOY_SDK_LIB}/FLTK" )
 	set(TOY_libname_fltk        "fltk_SHARED" )
 
+
+	set(TOY_include_webp        "${TOY_SDK_INC}" )
+	set(TOY_library_webp        "${TOY_SDK_LIB}/webp" )
+
 endmacro(toy_SetThirdPartyLibraryPath)

@@ -17,3 +17,4 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
     MPIR-3.0.0              GNU LGPL
     SFML-2.3.2              zlib License
     FLTK-1.3.4              GNU LGPL v2
+    libwebp-1.0.2           BSD License
