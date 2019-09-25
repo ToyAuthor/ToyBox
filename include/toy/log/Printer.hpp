@@ -24,13 +24,6 @@ class TOY_API Printer
 		const Printer& operator << (const int64_t) const;
 		const Printer& operator << (const uint64_t) const;
 
-//		const Printer& operator << (const int) const;
-//		const Printer& operator << (const long int) const;
-//		const Printer& operator << (const long long) const;
-//		const Printer& operator << (const unsigned int) const;
-//		const Printer& operator << (const unsigned long int) const;
-//		const Printer& operator << (const unsigned long long) const;
-
 		const Printer& operator << (const float) const;
 		const Printer& operator << (const double) const;
 		const Printer& operator << (const unsigned char *str) const;
@@ -51,6 +44,25 @@ class TOY_API Printer
 			(*this)<<obj.str();
 			return *this;
 		}
+
+	#if !defined(TOY_WINDOWS) && !defined(TOY_LINUX) && !defined(TOY_MAC)
+		const Printer& operator << (const int) const;
+	#endif
+	#if !defined(TOY_LINUX)
+		const Printer& operator << (const long int) const;
+	#endif
+	#if !defined(TOY_WINDOWS) && !defined(TOY_MAC)
+		const Printer& operator << (const long long) const;
+	#endif
+	#if !defined(TOY_WINDOWS) && !defined(TOY_LINUX) && !defined(TOY_MAC)
+		const Printer& operator << (const unsigned int) const;
+	#endif
+	#if !defined(TOY_LINUX)
+		const Printer& operator << (const unsigned long int) const;
+	#endif
+	#if !defined(TOY_WINDOWS) && !defined(TOY_MAC)
+		const Printer& operator << (const unsigned long long) const;
+	#endif
 };
 
 }}

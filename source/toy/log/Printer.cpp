@@ -15,55 +15,7 @@ const log::Printer& NewLine(const log::Printer& m)
 
 using namespace toy;
 using namespace log;
-/*
-const Printer& Printer:: operator << (const int num) const
-{
-	toy::Log("%d",num);
-	return *this;
-}
 
-const Printer& Printer:: operator << (const long int num) const
-{
-	toy::Log("%ld",num);
-	return *this;
-}
-
-const Printer& Printer:: operator << (const long long num) const
-{
-	#ifdef TOY_WIN64
-	toy::Log("%lld",num);
-	#elif defined(TOY_WIN32)
-	toy::Log("%I64d",num);
-	#else
-	toy::Log("%lld",num);
-	#endif
-	return *this;
-}
-
-const Printer& Printer:: operator << (const unsigned int num) const
-{
-	toy::Log("%u",num);
-	return *this;
-}
-
-const Printer& Printer:: operator << (const unsigned long int num) const
-{
-	toy::Log("%lu",num);
-	return *this;
-}
-
-const Printer& Printer:: operator << (const unsigned long long num) const
-{
-	#ifdef TOY_WIN64
-	toy::Log("%llu",num);
-	#elif defined(TOY_WIN32)
-	toy::Log("%I64u",num);
-	#else
-	toy::Log("%llu",num);
-	#endif
-	return *this;
-}
-*/
 const Printer& Printer:: operator << (const int8_t num) const
 {
 	toy::Log("%d",num);
@@ -201,3 +153,60 @@ const Printer& Printer:: operator << (const std::exception &e) const
 	(*this)<<"ToyBox Exception:"<<e.what();
 	return *this;
 }
+
+//------------------------------------------------------------------------------
+
+#if !defined(TOY_WINDOWS) && !defined(TOY_LINUX) && !defined(TOY_MAC)
+const Printer& Printer:: operator << (const int num) const
+{
+	toy::Log("%d",num);
+	return *this;
+}
+#endif
+#if !defined(TOY_LINUX)
+const Printer& Printer:: operator << (const long int num) const
+{
+	toy::Log("%ld",num);
+	return *this;
+}
+#endif
+#if !defined(TOY_WINDOWS) && !defined(TOY_MAC)
+const Printer& Printer:: operator << (const long long num) const
+{
+	#ifdef TOY_WIN64
+	toy::Log("%lld",num);
+	#elif defined(TOY_WIN32)
+	toy::Log("%I64d",num);
+	#else
+	toy::Log("%lld",num);
+	#endif
+	return *this;
+}
+#endif
+#if !defined(TOY_WINDOWS) && !defined(TOY_LINUX) && !defined(TOY_MAC)
+const Printer& Printer:: operator << (const unsigned int num) const
+{
+	toy::Log("%u",num);
+	return *this;
+}
+#endif
+#if !defined(TOY_LINUX)
+const Printer& Printer:: operator << (const unsigned long int num) const
+{
+	toy::Log("%lu",num);
+	return *this;
+}
+#endif
+#if !defined(TOY_WINDOWS) && !defined(TOY_MAC)
+const Printer& Printer:: operator << (const unsigned long long num) const
+{
+	#ifdef TOY_WIN64
+	toy::Log("%llu",num);
+	#elif defined(TOY_WIN32)
+	toy::Log("%I64u",num);
+	#else
+	toy::Log("%llu",num);
+	#endif
+	return *this;
+}
+#endif
