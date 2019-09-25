@@ -35,6 +35,7 @@ class Node
 
 		virtual void _bind(){}
 		virtual void _unbind(){}
+		virtual void _render(){};
 		virtual void _render(::toy::canvas::Brush*,float){}
 		virtual void _update(float){}
 };

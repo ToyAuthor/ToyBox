@@ -29,7 +29,7 @@ class TOY_API_CANVAS Geometry : public ::toy::canvas::Node
 		~Geometry();
 
 		void visible(bool show=true);
-		bool isVisible() const;
+		virtual bool isVisible() const;
 
 		void setModel(TYPE_004 data);
 		void setProgram(TYPE_002 program);
@@ -42,8 +42,8 @@ class TOY_API_CANVAS Geometry : public ::toy::canvas::Node
 
 	public:
 
-		void _bind();
-		void _render();
+		virtual void _bind();
+		virtual void _render();
 };
 
 }}
