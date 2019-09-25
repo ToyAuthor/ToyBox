@@ -16,3 +16,4 @@ Some of those third-party projects in ToyBox have been modified or reduce size.
     GMP-6.1.2               GNU LGPL
     MPIR-3.0.0              GNU LGPL
     SFML-2.3.2              zlib License
+    FLTK-1.3.4              GNU LGPL v2

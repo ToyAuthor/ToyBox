@@ -10,3 +10,6 @@ Mac OS
 Windows 7
 	TDM-GCC 5.1.0
 	Visual Studio 2015
+
+
+¡° Not plan to make Android/iOS version.

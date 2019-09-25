@@ -49,7 +49,6 @@ macro(toy_SetThirdPartyLibraryPath)
 				${TOY_SDK_LIB}/GMP/*.dll
 				${TOY_SDK_LIB}/freetype/*.dll
 				${TOY_SDK_LIB}/FLTK/*.dll
-				${TOY_SDK_LIB}/libpng/*.dll
 			)
 			file(COPY ${TEMP_DIR} DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/)
 			unset(TEMP_DIR)
@@ -61,7 +60,6 @@ macro(toy_SetThirdPartyLibraryPath)
 			#	${TOY_SDK_LIB}/GMP/*.so
 			#	${TOY_SDK_LIB}/freetype/*.so
 			#	${TOY_SDK_LIB}/FLTK/*.so
-			#	${TOY_SDK_LIB}/libpng/*.so
 			#)
 			#file(COPY ${TEMP_DIR} DESTINATION ${TOY_ROOT_BINARY_DIR}/bin/)
 			#unset(TEMP_DIR)
@@ -105,11 +103,7 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_libname_glew        "glew" )
 
 
-	set(TOY_include_asio        "${TOY_SDK_INC}" )
-
 	set(TOY_include_glm         "${TOY_ROOT_SOURCE_DIR}/extlibs/glm" )
-
-	set(TOY_include_json        "${TOY_ROOT_SOURCE_DIR}/extlibs/json" )
 
 
 	set(TOY_library_gmp         "${TOY_SDK_LIB}/GMP" )
@@ -124,15 +118,6 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_include_freetype    "${TOY_SDK_INC}/freetype" )
 	set(TOY_library_freetype    "${TOY_SDK_LIB}/freetype" )
 	set(TOY_libname_freetype    "freetype" )
-
-
-	set(TOY_include_libpng      "${TOY_SDK_INC}/libpng" "${TOY_SDK_LIB}/libpng" )
-	set(TOY_library_libpng      "${TOY_SDK_LIB}/libpng" )
-	if(MSVC)
-	set(TOY_libname_libpng      "libpng" )
-	else()
-	set(TOY_libname_libpng      "png" )
-	endif()
 
 
 	set(TOY_include_sfml        "${TOY_SDK_INC}" )
