@@ -26,6 +26,11 @@ struct IntPrivate
 using namespace toy;
 using namespace bignum;
 
+const void* Int::_getCore() const
+{
+	return static_cast<const void*>(&(_this->number));
+}
+
 Int::Int():_this(new IntPrivate)
 {
 	mpz_set_ui(_this->number, 0);

@@ -54,6 +54,10 @@ class TOY_API_BIGNUM Int
 	private:
 
 		std::unique_ptr<IntPrivate> _this;
+
+	public:
+
+		const void* _getCore() const;
 };
 
 }}
