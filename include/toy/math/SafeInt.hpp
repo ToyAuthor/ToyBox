@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <cmath>
+#include <cstdlib>     // Include it but <cmath>, because std::abs has ambiguous issue at <cmath>.
 #include <limits>
 #include <toy/Exception.hpp>
 
