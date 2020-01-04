@@ -654,7 +654,7 @@ bool Int::get(std::string *number) const
 	str += (cbuffer + GetNotZeroIndex(cbuffer));
 
 	#if TOY_OPTION_CHECK
-	for ( int32_t i=toy::math::SafeInt<int32_t>(nbuffer.size()-2,TOY_MARK) ; i>=0 ; i-- )
+	for ( int32_t i=toy::math::SafeInt<int32_t>(nbuffer.size(),TOY_MARK)-2 ; i>=0 ; i-- )
 	#else
 	for ( int32_t i=nbuffer.size()-2 ; i>=0 ; i-- )
 	#endif
