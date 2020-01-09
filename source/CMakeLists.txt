@@ -12,25 +12,24 @@ file(GLOB SOURCE
 	toy/*.cpp
 	toy/utf/*.cpp
 	toy/log/*.cpp
+	toy/path/*.cpp
+)
+
+set(LIB
+	boost_filesystem
+	boost_system
 )
 
 if(TOY_ANDROID)
-	set(LIB log android)
-	toy_BuildLib(toy
-		SOURCES     ${SOURCE}
-		LINKLIBS    ${LIB}
-	)
+	list(APPEND LIBS log android)
 elseif(UNIX)
-	set(LIB pthread)
-	toy_BuildLib(toy
-		SOURCES     ${SOURCE}
-		LINKLIBS    ${LIB}
-	)
-else()
-	toy_BuildLib(toy
-		SOURCES     ${SOURCE}
-	)
+	list(APPEND LIB pthread)
 endif()
+
+toy_BuildLib(toy
+	SOURCES     ${SOURCE}
+	LINKLIBS    ${LIB}
+)
 
 # No, it doesn't work on Visual Studio 2015.
 #add_subdirectory(toy)

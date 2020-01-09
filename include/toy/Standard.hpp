@@ -8,6 +8,7 @@
 #include "toy/Version.hpp"
 #include "toy/Option.hpp"
 #include "toy/Boost.hpp"
+#include "toy/Path.hpp"
 #include "toy/CompilerConfig.hpp"
 #include "toy/Oops.hpp"
 #include "toy/Log.hpp"
