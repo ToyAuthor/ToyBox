@@ -10,6 +10,7 @@
 #include "luapp/Wrapper.hpp"
 #include "luapp/GlobalFunction.hpp"
 #include "luapp/Searcher.hpp"
+#include "luapp/PointerTypeFilter.hpp"
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 #include "luapp/Func.hpp"
@@ -17,64 +18,6 @@
 #endif
 
 namespace lua{
-
-
-//-----------------ClassTypeFilter-----------------start
-template<typename F>
-struct ClassTypeFilter{};
-
-template<typename R,typename C>
-struct ClassTypeFilter<R (C::*)()>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1>
-struct ClassTypeFilter<R (C::*)(A1)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2>
-struct ClassTypeFilter<R (C::*)(A1,A2)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>
-{
-	typedef C ClassType;
-};
-//-----------------ClassTypeFilter-----------------end
-
 
 /// The main interface of luapp.
 template<int N=0>
@@ -138,7 +81,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua));
 			}
 			else
 			{
@@ -163,7 +106,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructorEx(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructorEx(_lua));
 			}
 			else
 			{
@@ -181,8 +124,7 @@ class State
 			#endif
 			#endif
 
-			lua::Str  name = lua::CreateUserType<C>();
-			return adapter::Adapter<C,N>::getConstructorEx(_lua,name);
+			return adapter::Adapter<C,N>::getConstructorEx(_lua);
 		}
 
 		template<typename C,typename A1>
@@ -197,7 +139,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,class_name,(A1*)0));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,(A1*)0));
 			}
 			else
 			{
@@ -215,8 +157,40 @@ class State
 			#endif
 			#endif
 
-			lua::Str  name = lua::CreateUserType<C>();
-			return adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,name,(A1*)0);
+			return adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,(A1*)0);
+		}
+
+		template<typename C,typename A1,typename A2>
+		void bindClass2ArgEx(lua::Str class_name)
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			if ( _moduleMode )
+			{
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,(A1*)0,(A2*)0));
+			}
+			else
+			{
+				adapter::Adapter<C,N>::registerClass2ArgEx(_lua,class_name,(A1*)0,(A2*)0);
+			}
+		}
+
+		template<typename C,typename A1,typename A2>
+		lua::CFunction bindClass2ArgEx()
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			return adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,(A1*)0,(A2*)0);
 		}
 
 		/**
@@ -226,7 +200,7 @@ class State
 		template<typename F>
 		void bindMethod(lua::Str name,F fn)
 		{
-			typedef typename ClassTypeFilter<F>::ClassType C;
+			typedef typename lua::PointerTypeFilter<F>::ClassType C;
 
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 			adapter::Adapter<C,N>::_lua = this->_lua;
@@ -235,8 +209,7 @@ class State
 			#endif
 			#endif
 
-			struct adapter::Adapter<C,N>::Pack     myF( name,adapter::GetProxy(fn));
-			adapter::Adapter<C,N>::pushPack(myF);
+			adapter::Adapter<C,N>::pushPack( name,adapter::GetProxy(fn));
 		}
 
 		template<typename C>
@@ -330,6 +303,12 @@ class State
 			#endif
 
 			_lua = NULL;
+		}
+
+		template<typename C>
+		void cleanUnusedResource()
+		{
+			adapter::Adapter<C,N>::cleanUpUnusedResource();
 		}
 
 		int load(lua::Str name,lua::Str& code)
