@@ -3,6 +3,8 @@ Libraries by ToyBox
 
    toy.lib          Common tool for others components. Log system, unicode converter, etc.
 
+   toy_archive.lib  Provide a custom archive format.
+
    toy_bignum.lib   A wrapper of GMP.
 
    toy_canvas.lib   A wrapper of OpenGL.
@@ -20,6 +22,8 @@ Libraries by ToyBox
    toy_parser.lib   Analyze text file(boost.regex is much better than this).
 
    toy_photo.lib    Picture editor.
+
+   toy_sql.lib      A wrapper of SQLite.
 
    toy_thread.lib   The help of multiple threads.
 

@@ -138,4 +138,9 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_include_webp        "${TOY_SDK_INC}" )
 	set(TOY_library_webp        "${TOY_SDK_LIB}/webp" )
 
+
+	set(TOY_include_sqlite      "${TOY_ROOT_SOURCE_DIR}/extlibs/sqlite" )
+	set(TOY_library_sqlite      "${TOY_ROOT_BINARY_DIR}/extlibs/sqlite" )
+	set(TOY_libname_sqlite      "sqlite3" )
+
 endmacro(toy_SetThirdPartyLibraryPath)

@@ -13,6 +13,7 @@ add_subdirectory(lua)
 add_subdirectory(boost)
 add_subdirectory(zlib)
 add_subdirectory(lz4)
+add_subdirectory(sqlite)
 
 
 if(UNIX)
