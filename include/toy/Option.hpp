@@ -37,6 +37,7 @@ enum Option:int
 	DIRECTORY,
 	ZIP,
 	SEVEN_ZIP,
+	READ_ONLY,
 	_OPTION_END,
 };
 

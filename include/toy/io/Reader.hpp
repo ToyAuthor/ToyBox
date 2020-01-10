@@ -114,7 +114,7 @@ bool Reader<T>::open(const std::string &filename)
 	}
 
 	_file.close();
-	return _file.open(filename,"rb+");
+	return _file.open(filename,toy::READ_ONLY);
 }
 
 /*

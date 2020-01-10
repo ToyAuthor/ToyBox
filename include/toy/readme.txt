@@ -24,11 +24,3 @@ Libraries by ToyBox
    toy_thread.lib   The help of multiple threads.
 
    toy_time.lib     Require system time.
-
-
-
-Header-only libraries
-
-   <toy/io/Stream.hpp>    A simple file stream. Unicode file name supported.
-   <toy/io/Reader.hpp>    Read text file.
-   <toy/io/Writer.hpp>    Create text file.

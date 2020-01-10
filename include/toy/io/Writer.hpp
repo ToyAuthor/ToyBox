@@ -111,7 +111,7 @@ class Writer
 
 			_haveNewLine = false;
 			_file.close();
-			return _file.open(filename,"wb+");
+			return _file.open(filename);
 		}
 
 		void newLine()

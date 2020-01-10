@@ -1,8 +1,6 @@
 project(Toy)
 
-
 toy_StdReady()
-
 
 if(TOY_ENABLE_SHARED_LIBS)
 	add_definitions(-DTOY_EXPORT)
@@ -13,6 +11,7 @@ file(GLOB SOURCE
 	toy/utf/*.cpp
 	toy/log/*.cpp
 	toy/path/*.cpp
+	toy/io/*.cpp
 )
 
 set(LIB
