@@ -24,6 +24,7 @@ class Block
 
 	//	virtual const uint8_t* data() = 0;   // Doesn't need it. Allow write memory.
 		virtual uint8_t* data() = 0;
+		virtual const uint8_t* cdata() const = 0;
 
 		virtual uint32_t size() const = 0;
 

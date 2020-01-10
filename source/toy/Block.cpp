@@ -33,6 +33,11 @@ class _BasicBlock : public ::toy::Block
 			return _data;
 		}
 
+		const uint8_t* cdata() const
+		{
+			return _data;
+		}
+
 		uint32_t size() const
 		{
 			return _size;

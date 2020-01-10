@@ -1,13 +1,14 @@
 
 add_subdirectory(gadget)
 add_subdirectory(memory)
+add_subdirectory(thread)
 add_subdirectory(math)
 add_subdirectory(bignum)
 add_subdirectory(photo)
 add_subdirectory(time)
 add_subdirectory(file)
 add_subdirectory(parser)
-add_subdirectory(thread)
+add_subdirectory(archive)
 add_subdirectory(canvas)
 add_subdirectory(font)
 
