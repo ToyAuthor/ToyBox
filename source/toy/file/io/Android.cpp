@@ -44,6 +44,11 @@ bool Android::openDir(std::string path)
 	return 1;
 }
 
+void Android::closeDir()
+{
+	;
+}
+
 bool Android::open(std::string filepath)
 {
 	AAssetDir_rewind(_dir);
@@ -131,6 +136,16 @@ bool Android::isEmpty()
 	return 1;
 }
 
+std::string Android::getFileName()
+{
+	return std::string();
+}
+
+std::string Android::getDirName()
+{
+	return std::string();
+}
+
 #else
 
 Android::Android()
@@ -141,12 +156,15 @@ Android::Android()
 	(void)_passSize;
 }
 bool Android::openDir(std::string)            { return 1; }
+void Android::closeDir(){}
 bool Android::open(std::string)               { return 1; }
+void Android::close(){}
 auto Android::read(void*,uint32_t)->uint32_t  { return 1; }
 bool Android::write(const void*,uint32_t)     { return 1; }
 bool Android::isEnd()                         { return 1; }
 bool Android::isEmpty()                       { return 1; }
 bool Android::seek(int,int32_t)               { return 1; }
-void Android::close(){}
+auto Android::getFileName()->std::string{return std::string();}
+auto Android::getDirName()->std::string{return std::string();}
 
-#endif//TOY_ANDROID
+#endif //TOY_ANDROID

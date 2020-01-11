@@ -1,11 +1,19 @@
+#include "toy/math/SafeInt.hpp"
 #include "toy/file/io/Zlib.hpp"
 
 using namespace toy;
 using namespace file;
 using namespace io;
 
+Zlib::~Zlib()
+{
+	closeDir();
+}
+
 bool Zlib::openDir(std::string path)
 {
+	closeDir();
+
 	_handle = unzOpen(path.c_str());
 
 	if( _handle == nullptr )
@@ -24,8 +32,21 @@ bool Zlib::openDir(std::string path)
 	return true;
 }
 
+void Zlib::closeDir()
+{
+	if ( _handle )
+	{
+		close();
+
+		unzClose( _handle );
+		_handle = nullptr;
+	}
+}
+
 bool Zlib::open(std::string filepath)
 {
+	close();
+
 	const uint32_t  MAX_FILENAME = 512;
 	char            filename[ MAX_FILENAME ];
 	std::string     name;
@@ -72,17 +93,7 @@ bool Zlib::open(std::string filepath)
 
 uint32_t Zlib::read(void *file, uint32_t size)
 {
-	#if TOY_OPTION_CHECK
-		if ( sizeof(uint32_t) > sizeof(unsigned) )
-		{
-			if ( size > static_cast<uint32_t>(std::numeric_limits<unsigned>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
-	int   result = unzReadCurrentFile( _handle, file, static_cast<unsigned>(size) );
+	int   result = unzReadCurrentFile( _handle, file, toy::math::SafeInt<unsigned>(size,TOY_MARK) );
 
 	if ( result < 0 )
 	{
@@ -96,7 +107,7 @@ uint32_t Zlib::read(void *file, uint32_t size)
 
 bool Zlib::write(const void *,uint32_t )
 {
-	// Not ready yet
+	// No support.
 	Oops(TOY_MARK);
 	return false;
 }
@@ -117,9 +128,6 @@ void Zlib::close()
 			unzCloseCurrentFile( _handle );
 			_isFileOpened = false;
 		}
-
-		unzClose( _handle );
-		_handle = nullptr;
 	}
 }
 
@@ -133,4 +141,14 @@ bool Zlib::isEnd()
 bool Zlib::isEmpty()
 {
 	return ! _isFileOpened;
+}
+
+std::string Zlib::getFileName()
+{
+	return std::string();
+}
+
+std::string Zlib::getDirName()
+{
+	return std::string();
 }

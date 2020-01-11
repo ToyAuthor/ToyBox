@@ -4,12 +4,12 @@ toy_StdReady()
 
 file(GLOB SOURCE *.cpp */*.cpp)
 
-set(LIBS toy
+set(LIBS
+	toy
 	boost_filesystem
 	boost_system
 	${TOY_libname_zlib}
 	${TOY_libname_7zip}
-	lz4
 )
 
 set(INC_DIR
@@ -22,6 +22,10 @@ set(LIB_DIR
 	${TOY_library_7zip}
 )
 
+#if (APPLE)
+if (UNIX)
+	add_definitions(-D_FILE_OFFSET_BITS=64)
+endif()
 
 if(TOY_ENABLE_SHARED_LIBS)
 	add_definitions(-DTOY_EXPORT_FILE)

@@ -1,17 +1,10 @@
 #include <cstdlib>
 #include <cstring>
+#include "toy/Oops.hpp"
+#include "toy/math/SafeInt.hpp"
+#include "toy/io/Stream.hpp"
 #include "toy/Windows.hpp"
 #include "toy/file/io/SevenZip.hpp"
-
-#ifdef TOY_MSVC
-#ifdef max
-	#undef max      // For std::numeric_limits<std::size_t>::max()
-#endif
-#endif
-
-using namespace toy;
-using namespace file;
-using namespace io;
 
 //---------------------------Come from 7zip example---------------------------start
 
@@ -22,6 +15,7 @@ static void *SzAlloc(void *p, size_t size)
 	(void)p;
 	return MyAlloc(size);
 }
+
 static void SzFree(void *p, void *address)
 {
 	(void)p;
@@ -71,6 +65,7 @@ static int Buf_EnsureSize(CBuf *dest, size_t size)
 }
 
 #if defined(TOY_LINUX) || defined(TOY_MAC) || defined(TOY_ANDROID)
+
 static Byte kUtf8Limits[5] = { 0xC0, 0xE0, 0xF0, 0xF8, 0xFC };
 
 static Bool Utf16_To_Utf8(Byte *dest, size_t *destLen, const UInt16 *src, size_t srcLen)
@@ -121,6 +116,7 @@ static Bool Utf16_To_Utf8(Byte *dest, size_t *destLen, const UInt16 *src, size_t
 	*destLen = destPos;
 	return False;
 }
+
 static SRes Utf16_To_Utf8Buf(CBuf *dest, const UInt16 *src, size_t srcLen)
 {
 	size_t destLen = 0;
@@ -133,7 +129,9 @@ static SRes Utf16_To_Utf8Buf(CBuf *dest, const UInt16 *src, size_t srcLen)
 	dest->data[destLen] = 0;
 	return res ? SZ_OK : SZ_ERROR_FAIL;
 }
+
 #endif
+
 static SRes Utf16_To_Char(CBuf *buf, const UInt16 *s, int fileMode)
 {
 	int len = 0;
@@ -194,24 +192,51 @@ static int SzCheckName(const char *name1,UInt16 *name2)
 
 //---------------------------Come from 7zip example---------------------------end
 
+#ifdef TOY_WINDOWS
+	static inline boost::filesystem::path StrToPath(std::string str)
+	{
+		return boost::filesystem::path(toy::utf::UTF8ToWChar(str));
+	}
 
+	static inline std::string PathToStr(const boost::filesystem::path &str)
+	{
+		return toy::utf::WCharToUTF8(str.wstring());
+	}
+#else
+	static inline boost::filesystem::path StrToPath(std::string str)
+	{
+		return boost::filesystem::path(str);
+	}
+/*
+	static inline std::string PathToStr(const boost::filesystem::path &str)
+	{
+		return str.string();
+	}*/
+#endif
 
+namespace temp = ::toy::file::io;
 
-
-SevenZip::SevenZip()
+temp::SevenZip::SevenZip()
 {
 	_allocImp.Alloc = SzAlloc;
 	_allocImp.Free = SzFree;
 	_allocTempImp.Alloc = SzAllocTemp;
 	_allocTempImp.Free = SzFreeTemp;
-	_temp = NULL;
-	_outBuffer=0;
 
 	SzArEx_Init(&(_db));
 }
 
-bool SevenZip::openDir(std::string path)
+temp::SevenZip::~SevenZip()
 {
+	closeDir();
+}
+
+bool temp::SevenZip::openDir(std::string path)
+{
+	closeDir();
+
+	_outBuffer = nullptr;
+
 	if ( InFile_Open(&(_archiveStream.file),path.c_str()) )
 	{
 		toy::Oops(TOY_MARK);
@@ -233,26 +258,64 @@ bool SevenZip::openDir(std::string path)
 	{
 		Oops(TOY_MARK);
 		SzArEx_Free(&(_db), &(_allocImp));
-		SzFree(NULL, _temp);
+		SzFree(nullptr, _temp);
 		File_Close(&(_archiveStream.file));
 		return false;
 	}
 
+	_isArchiveOpen = true;
+
 	return true;
 }
 
-bool SevenZip::open(std::string filepath)
+void temp::SevenZip::closeDir()
 {
-	size_t	len;
-	size_t	tempSize = 0;
-	SRes	res;
-	UInt32	blockIndex = 0xFFFFFFFF;
-	size_t	outBufferSize = 0;
-	size_t	offset = 0;
-	size_t	outSizeProcessed = 0;
+	if ( _isArchiveOpen )
+	{
+		IAlloc_Free(&(_allocImp), _outBuffer);
 
-	UInt32	i=0;
-	UInt32	number_of_files=_db.db.NumFiles;
+		SzArEx_Free(&(_db), &(_allocImp));
+
+		close();
+
+		File_Close(&(_archiveStream.file));
+
+		_passSize = 0;
+
+		_isArchiveOpen = false;
+	}
+}
+
+void temp::SevenZip::close()
+{
+	if ( _isFileOpen )
+	{
+		SzFree(nullptr, _temp);
+		_temp = nullptr;
+		_isFileOpen = false;
+	}
+}
+
+bool temp::SevenZip::open(std::string filepath)
+{
+	if ( ! _isArchiveOpen )
+	{
+		toy::Oops(TOY_MARK);
+		return false;
+	}
+
+	close();
+
+	size_t  len;
+	size_t  tempSize = 0;
+	SRes    res;
+	UInt32  blockIndex = 0xFFFFFFFF;
+	size_t  outBufferSize = 0;
+	size_t  offset = 0;
+	size_t  outSizeProcessed = 0;
+
+	UInt32  i = 0;
+	UInt32  number_of_files=_db.db.NumFiles;
 
 	for ( ; i<number_of_files ; i++ )
 	{
@@ -263,14 +326,14 @@ bool SevenZip::open(std::string filepath)
 			continue;
 		}
 
-		len = SzArEx_GetFileNameUtf16(&(_db), i, NULL);
+		len = SzArEx_GetFileNameUtf16(&(_db), i, nullptr);
 
 		if ( len > tempSize )
 		{
-			SzFree(NULL, _temp);
+			SzFree(nullptr, _temp);
 			tempSize = len;
-			_temp = (UInt16 *)SzAlloc(NULL, tempSize * sizeof(_temp[0]));
-			if ( _temp == 0 )
+			_temp = (UInt16 *)SzAlloc(nullptr, tempSize * sizeof(_temp[0]));
+			if ( _temp == nullptr )
 			{
 				toy::Oops(TOY_MARK);
 				return false;
@@ -289,6 +352,8 @@ bool SevenZip::open(std::string filepath)
 			{
 				_fileSize = outSizeProcessed;
 				_fileBegin = (void*)((_outBuffer)+offset);
+				_isFileOpen = true;
+
 				return true;
 			}
 			else
@@ -305,22 +370,19 @@ bool SevenZip::open(std::string filepath)
 
 	_fileSize = 0;
 	_fileBegin = nullptr;
+
 	return false;
 }
 
-uint32_t SevenZip::read(void *file, uint32_t sizein32)
+uint32_t temp::SevenZip::read(void *file, uint32_t sizein32)
 {
-	#if TOY_OPTION_CHECK
-		if ( sizeof(uint32_t) > sizeof(std::size_t) )
-		{
-			if ( sizein32 > static_cast<uint32_t>(std::numeric_limits<std::size_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
+	if ( isEmpty() )
+	{
+		toy::Oops(TOY_MARK);
+		return 0;
+	}
 
-	std::size_t size = static_cast<std::size_t>(sizein32);
+	std::size_t size = toy::math::SafeInt<std::size_t>(sizein32,TOY_MARK);
 	auto        data = static_cast<Byte*>(_fileBegin);
 
 	if ( _fileSize < size+_passSize )
@@ -335,7 +397,7 @@ uint32_t SevenZip::read(void *file, uint32_t sizein32)
 	return size;
 }
 
-bool SevenZip::write(const void *,uint32_t )
+bool temp::SevenZip::write(const void *,uint32_t )
 {
 	// Not ready yet
 	toy::Oops(TOY_MARK);
@@ -357,17 +419,7 @@ static std::size_t SeekSET(int32_t offset,int32_t total)
 		offset = 0;          // Move to the beginning of file.
 	}
 
-	#if TOY_OPTION_CHECK
-		if ( sizeof(int32_t) > sizeof(std::size_t) )
-		{
-			if ( offset > static_cast<int32_t>(std::numeric_limits<std::size_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
-	return static_cast<std::size_t>(offset);
+	return toy::math::SafeInt<std::size_t>(offset,TOY_MARK);
 }
 
 static std::size_t SeekEND(int32_t offset,int32_t total)
@@ -387,17 +439,7 @@ static std::size_t SeekEND(int32_t offset,int32_t total)
 
 	auto  temp = total + offset;
 
-	#if TOY_OPTION_CHECK
-		if ( sizeof(int32_t) > sizeof(std::size_t) )
-		{
-			if ( temp > static_cast<int32_t>(std::numeric_limits<std::size_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
-	return static_cast<std::size_t>(temp);
+	return toy::math::SafeInt<std::size_t>(temp,TOY_MARK);
 }
 
 static std::size_t SeekCUR(int32_t offset,int32_t total,int32_t passed)
@@ -406,6 +448,7 @@ static std::size_t SeekCUR(int32_t offset,int32_t total,int32_t passed)
 	{
 		if ( offset>total-passed )
 		{
+			toy::Oops(TOY_MARK);
 			offset = total - passed;  // Move to the end of file.
 		}
 	}
@@ -413,26 +456,17 @@ static std::size_t SeekCUR(int32_t offset,int32_t total,int32_t passed)
 	{
 		if ( offset*-1>passed )
 		{
+			toy::Oops(TOY_MARK);
 			offset = passed*-1;       // Move to the beginning of file.
 		}
 	}
 
 	auto  temp = passed + offset;
 
-	#if TOY_OPTION_CHECK
-		if ( sizeof(int32_t) > sizeof(std::size_t) )
-		{
-			if ( temp > static_cast<int32_t>(std::numeric_limits<std::size_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
-	return static_cast<std::size_t>(temp);
+	return toy::math::SafeInt<std::size_t>(temp,TOY_MARK);
 }
 
-bool SevenZip::seek(int option,int32_t offset)
+bool temp::SevenZip::seek(int option,int32_t offset)
 {
 	if ( isEmpty() ) return false;
 
@@ -456,28 +490,12 @@ bool SevenZip::seek(int option,int32_t offset)
 	return true;
 }
 
-void SevenZip::close()
+bool temp::SevenZip::isEmpty()
 {
-	IAlloc_Free(&(_allocImp), _outBuffer);
-
-	SzArEx_Free(&(_db), &(_allocImp));
-
-	if ( _temp )
-	{
-		SzFree(NULL, _temp);
-		_temp=NULL;
-	}
-	File_Close(&(_archiveStream.file));
-
-	_passSize = 0;
+	return ! _isFileOpen;
 }
 
-bool SevenZip::isEmpty()
-{
-	return true;
-}
-
-bool SevenZip::isEnd()
+bool temp::SevenZip::isEnd()
 {
 	if ( _passSize == _fileSize )
 	{
@@ -485,4 +503,87 @@ bool SevenZip::isEnd()
 	}
 
 	return false;
+}
+
+std::string temp::SevenZip::getFileName()
+{
+	return std::string();
+}
+
+std::string temp::SevenZip::getDirName()
+{
+	return std::string();
+}
+
+void temp::SevenZip::extractFileOut(const std::string &input,const std::string &output)
+{
+	if ( ! openDir(input) )
+	{
+		throw toy::Exception(TOY_MARK);
+	}
+
+	size_t  len;
+	size_t  tempSize = 0;
+	SRes    res;
+	UInt32  blockIndex = 0xFFFFFFFF;
+	size_t  outBufferSize = 0;
+	size_t  offset = 0;
+	size_t  outSizeProcessed = 0;
+
+	UInt32  i = 0;
+	UInt32  number_of_files=_db.db.NumFiles;
+
+	::toy::io::Stream          dev;
+	std::string                partpath;
+
+	for ( ; i<number_of_files ; i++ )
+	{
+		len = SzArEx_GetFileNameUtf16(&(_db), i, nullptr);
+
+		if ( len > tempSize )
+		{
+			SzFree(nullptr, _temp);
+			tempSize = len;
+			_temp = (UInt16 *)SzAlloc(nullptr, tempSize * sizeof(_temp[0]));
+			if ( _temp == nullptr )
+			{
+				throw toy::Exception(TOY_MARK);
+			}
+		}
+
+		SzArEx_GetFileNameUtf16(&(_db), i, _temp);
+
+		partpath = output + "/" + toy::utf::UTF16ToUTF8(_temp);
+
+		if ( ((CSzFileItem*)(_db.db.Files + i))->IsDir )
+		{
+			boost::filesystem::create_directories(StrToPath(partpath));
+			continue;
+		}
+
+		res = SzArEx_Extract(&(_db), &(_lookStream.s), i,
+		&blockIndex, &(_outBuffer), &outBufferSize,
+		&offset, &outSizeProcessed,
+		&(_allocImp), &(_allocTempImp));
+
+		if(res == SZ_OK)
+		{
+			_fileSize = outSizeProcessed;
+			_fileBegin = (void*)((_outBuffer)+offset);
+
+			boost::filesystem::create_directories(StrToPath(partpath).parent_path());
+
+			dev.open(partpath);
+			dev.write((void*)((_outBuffer)+offset),outSizeProcessed);
+			dev.close();
+		}
+		else
+		{
+			_fileSize = 0;
+			_fileBegin = nullptr;
+			throw toy::Exception(TOY_MARK);
+		}
+	}
+
+	closeDir();
 }

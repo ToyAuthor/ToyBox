@@ -1,28 +1,31 @@
 
 #pragma once
 
-#include "toy/file/io/Base.hpp"
+#include "toy/file/ArchiveFacade.hpp"
 #include "contrib/minizip/unzip.h"   // It's come from zlib.
 
 namespace toy{
 namespace file{
 namespace io{
 
-class Zlib : public Base
+class Zlib : public ::toy::file::ArchiveFacade
 {
 	public:
 
 		Zlib(){}
-		virtual ~Zlib(){close();}
+		virtual ~Zlib();
 
 		virtual bool    openDir(std::string path);
+		virtual void    closeDir();
 		virtual bool    open(std::string filepath);
-		virtual auto    read(void *file,uint32_t size)->uint32_t;
-		virtual bool    write(const void *file,uint32_t size);                 // Not finish yet.
-		virtual bool    seek(int option,int32_t offset);                 // Not finish yet.
 		virtual void    close();
+		virtual auto    read(void *file,uint32_t size)->uint32_t;
+		virtual bool    write(const void *file,uint32_t size);           // Never works.
+		virtual bool    seek(int option,int32_t offset);                 // Not finish yet.
 		virtual bool    isEnd();                                         // Not finish yet.
 		virtual bool    isEmpty();
+		virtual auto    getFileName()->std::string;
+		virtual auto    getDirName()->std::string;
 
 	private:
 

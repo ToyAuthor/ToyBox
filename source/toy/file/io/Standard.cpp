@@ -1,45 +1,43 @@
+#include "toy/math/SafeInt.hpp"
 #include "toy/file/io/Standard.hpp"
 
+namespace temp = ::toy::file::io;
 
-using namespace toy;
-using namespace file;
-using namespace io;
-
-bool Standard::isEnd()
+bool temp::Standard::isEnd()
 {
-	if ( std::feof(_file)==0 )
-	{
-		return false;
-	}
-
-	return true;
+	return _file.isEnd();
 }
 
-bool Standard::isEmpty()
+bool temp::Standard::isEmpty()
 {
-	if ( _file==nullptr )
-		return true;
-	else
-		return false;
+	return _file.empty();
 }
 
-void Standard::close()
+void temp::Standard::close()
 {
-	if ( _file )
+	if ( _file.good() )
 	{
-		std::fclose(_file);
-		_file = nullptr;
-		_path.clear();
+		_file.close();
 	}
 }
 
-bool Standard::openDir(std::string path)
+void temp::Standard::closeDir()
 {
+	close();
+
+	_path.clear();
+}
+
+bool temp::Standard::openDir(std::string path)
+{
+	closeDir();
+
 	_path = path;
+
 	return true;
 }
 
-bool Standard::open(std::string filepath)
+bool temp::Standard::open(std::string filepath)
 {
 	close();
 
@@ -48,6 +46,10 @@ bool Standard::open(std::string filepath)
 
 	if ( _path.size()==0 )
 	{
+		return false;
+	}
+	else if ( _path=="." )
+	{
 		path = _fileName;
 	}
 	else
@@ -55,9 +57,9 @@ bool Standard::open(std::string filepath)
 		path = _path + "/" + _fileName;
 	}
 
-	_file = std::fopen(path.c_str(),"rb+");
+	_file.open(path);
 
-	if ( _file )
+	if ( _file.good() )
 	{
 		return true;
 	}
@@ -69,31 +71,17 @@ bool Standard::open(std::string filepath)
 	}
 }
 
-uint32_t Standard::read(void *file,uint32_t sizein32)
+uint32_t temp::Standard::read(void *file,uint32_t sizein32)
 {
-	#if TOY_OPTION_CHECK
-		if ( file==nullptr )
-		{
-			toy::Oops(TOY_MARK);
-			return 0;
-		}
-	#endif
+	if ( _file.empty() )
+	{
+		toy::Oops(TOY_MARK);
+		return 0;
+	}
 
-	if ( isEmpty() )  return 0;
+	auto   size = toy::math::SafeInt<std::size_t>(sizein32,TOY_MARK);
 
-	#if TOY_OPTION_CHECK
-		if ( sizeof(uint32_t) > sizeof(std::size_t) )
-		{
-			if ( sizein32 > static_cast<uint32_t>(std::numeric_limits<std::size_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
-
-	auto   size = static_cast<std::size_t>(sizein32);
-
-	auto   result = std::fread(file,1,size,_file);
+	auto   result = _file.read(file,size);
 
 	if ( result>size )
 	{
@@ -106,44 +94,32 @@ uint32_t Standard::read(void *file,uint32_t sizein32)
 	return result;
 }
 
-bool Standard::write(const void *file,uint32_t sizein32)
+bool temp::Standard::write(const void *file,uint32_t sizein32)
 {
 	if ( isEmpty() ) return false;
 
-	#if TOY_OPTION_CHECK
-		if ( sizeof(uint32_t) > sizeof(std::size_t) )
-		{
-			if ( sizein32 > static_cast<uint32_t>(std::numeric_limits<std::size_t>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
+	auto   size = toy::math::SafeInt<std::size_t>(sizein32,TOY_MARK);
 
-	auto   size = static_cast<std::size_t>(sizein32);
-
-	std::fwrite(file,size,1,_file);
+	_file.write(file,size);
 
 	return true;
 }
 
-bool Standard::seek(int option,int32_t offset32)
+bool temp::Standard::seek(int option,int32_t offset32)
 {
 	if ( isEmpty() ) return false;
 
-	#if TOY_OPTION_CHECK
-		if ( sizeof(int32_t) > sizeof(long) )
-		{
-			if ( offset32 > static_cast<int32_t>(std::numeric_limits<long>::max()) )
-			{
-				toy::Oops(TOY_MARK);
-			}
-		}
-	#endif
+	long offset = toy::math::SafeInt<long>(offset32,TOY_MARK);
 
-	long offset = static_cast<long>(offset32);
+	return _file.seek(option, offset);
+}
 
-	std::fseek( _file, offset, option );
+std::string temp::Standard::getFileName()
+{
+	return _fileName;
+}
 
-	return true;
+std::string temp::Standard::getDirName()
+{
+	return _path;
 }

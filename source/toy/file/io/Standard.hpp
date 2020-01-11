@@ -1,13 +1,14 @@
 
 #pragma once
 
-#include "toy/file/io/Base.hpp"
+#include "toy/io/Stream.hpp"
+#include "toy/file/ArchiveFacade.hpp"
 
 namespace toy{
 namespace file{
 namespace io{
 
-class Standard : public Base
+class Standard : public ::toy::file::ArchiveFacade
 {
 	public:
 
@@ -15,6 +16,7 @@ class Standard : public Base
 		virtual ~Standard(){close();}
 
 		virtual bool    openDir(std::string path);
+		virtual void    closeDir();
 		virtual bool    open(std::string filepath);
 		virtual auto    read(void *file,uint32_t size)->uint32_t;
 		virtual bool    write(const void *file,uint32_t size);
@@ -22,11 +24,14 @@ class Standard : public Base
 		virtual void    close();
 		virtual bool    isEnd();
 		virtual bool    isEmpty();
+		virtual auto    getFileName()->std::string;
+		virtual auto    getDirName()->std::string;
 
 	private:
 
-		std::FILE*   _file = nullptr;
-		std::string  _path;
+		toy::io::Stream    _file;
+		std::string        _path;
+		std::string        _fileName;
 };
 
 }}}

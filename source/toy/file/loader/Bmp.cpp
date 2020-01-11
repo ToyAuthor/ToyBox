@@ -1,4 +1,8 @@
-﻿#include "toy/ImageBuffer.hpp"
+﻿#include "toy/ErrorTag.hpp"
+#include "toy/Throw.hpp"
+#include "toy/Catch.hpp"
+#include "toy/Oops.hpp"
+#include "toy/ImageBuffer.hpp"
 #include "toy/file/loader/Bmp.hpp"
 #include "toy/file/File.hpp"
 
@@ -144,7 +148,7 @@ static inline void LoadImage( toy::File *pIO, toy::ImageBuffer *image )
 
 	if ( image->_getAllocator()->size((size/3)*4)==false )  // Allocate more memory. May be we need it later.
 	{
-		throw toy::Exception(TOY_MARK);
+		toy::Throw(TOY_MARK,toy::MEMORY_ISSUE);
 	}
 
 	// I need to checkout memory enough over here.
@@ -160,9 +164,9 @@ bool loader::bmp::Load(toy::File *pIO,toy::ImageBuffer *image)
 	{
 		LoadImage( pIO, image );
 	}
-	catch(std::exception &e)
+	catch ( std::exception &e )
 	{
-		toy::Log(e);
+		toy::Catch(e);
 		return false;
 	}
 

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "toy/file/io/Base.hpp"
+#include "toy/file/ArchiveFacade.hpp"
 
 //------Come from 7zip------start
 #include "C/7z.h"
@@ -17,24 +17,31 @@ namespace toy{
 namespace file{
 namespace io{
 
-class SevenZip : public Base
+class SevenZip : public ::toy::file::ArchiveFacade
 {
 	public:
 
 		SevenZip();
-		virtual ~SevenZip(){close();}
+		virtual ~SevenZip();
 
 		virtual bool    openDir(std::string path);
+		virtual void    closeDir();
 		virtual bool    open(std::string filepath);
+		virtual void    close();
 		virtual auto    read(void *file,uint32_t size)->uint32_t;
 		virtual bool    write(const void *file,uint32_t size);   // Not finish yet.
 		virtual bool    seek(int option,int32_t offset);
-		virtual void    close();
 		virtual bool    isEnd();
 		virtual bool    isEmpty();
+		virtual auto    getFileName()->std::string;
+		virtual auto    getDirName()->std::string;
+
+		void extractFileOut(const std::string &input,const std::string &output);
 
 	private:
 
+		bool            _isArchiveOpen = false;
+		bool            _isFileOpen = false;
 		CFileInStream   _archiveStream;
 		CLookToRead     _lookStream;
 		CSzArEx         _db;

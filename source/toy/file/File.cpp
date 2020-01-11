@@ -1,6 +1,6 @@
 #include "toy/file/File.hpp"
-#include "toy/file/io/Base.hpp"
 #include "toy/file/io/Standard.hpp"
+#include "toy/file/io/DefaultZip.hpp"
 #include "toy/file/io/Zlib.hpp"
 #include "toy/file/io/SevenZip.hpp"
 #include "toy/file/io/Android.hpp"
@@ -12,6 +12,11 @@ File::File(enum toy::Option mode)
 	changeMode(mode);
 }
 
+File::File(std::shared_ptr<toy::file::ArchiveFacade> facade)
+{
+	changeMode(facade);
+}
+
 File::~File()
 {
 	freeIO();
@@ -21,15 +26,16 @@ void File::freeIO()
 {
 	if (_io)
 	{
-		delete _io;
 		_mode = toy::NOTHING;
 		_io = nullptr;
 	}
 }
 
-void File::close()
+void File::changeMode(std::shared_ptr<toy::file::ArchiveFacade> facade)
 {
-	_io->close();
+	freeIO();
+	_mode = toy::SPECIAL;
+	_io = facade;
 }
 
 void File::changeMode(enum toy::Option mode)
@@ -54,20 +60,21 @@ void File::changeMode(enum toy::Option mode)
 	switch (mode)
 	{
 		case toy::DIRECTORY:
-			_io = static_cast<file::io::Base*>(new file::io::Standard);
+			_io = std::make_shared<file::io::Standard>();
+			break;
+		case toy::DEFAULT:
+		//	_io = std::make_shared<file::io::DefaultZip>();
+		//	break;
+		case toy::ZIP:
+			_io = std::make_shared<file::io::Zlib>();
 			break;
 		case toy::SEVEN_ZIP:
-			_io = static_cast<file::io::Base*>(new file::io::SevenZip);
-			break;
-		case toy::ZIP:
-			_io = static_cast<file::io::Base*>(new file::io::Zlib);
+			_io = std::make_shared<file::io::SevenZip>();
 			break;
 //		case ANDROID_MGR:
-//			_io = static_cast<file::io::Base*>(new file::io::Android);
+//			_io = std::make_shared<file::io::Android>();
 //			break;
-		case toy::NOTHING:
 		default:
-			// NONE is not a option.
 			toy::Oops(TOY_MARK);
 	}
 }
@@ -77,9 +84,19 @@ bool File::openDir(std::string path)
 	return _io->openDir(path);
 }
 
+void File::closeDir()
+{
+	_io->closeDir();
+}
+
 bool File::open(std::string filepath)
 {
 	return _io->open(filepath);
+}
+
+void File::close()
+{
+	_io->close();
 }
 
 uint32_t File::read(void *file,uint32_t size)
@@ -109,11 +126,6 @@ bool File::seek(int option,int32_t offset)
 	return _io->seek(option,offset);
 }
 
-std::string File::getFileName()
-{
-	return _io->getFileName();
-}
-
 bool File::isEnd()
 {
 	return _io->isEnd();
@@ -122,4 +134,14 @@ bool File::isEnd()
 bool File::isEmpty()
 {
 	return _io->isEmpty();
+}
+
+std::string File::getFileName()
+{
+	return _io->getFileName();
+}
+
+std::string File::getDirName()
+{
+	return _io->getDirName();
 }
