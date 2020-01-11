@@ -83,13 +83,13 @@ print("This message just for demo")
 	writer.print(text);
 }
 
-static inline int IsHere(std::string file)
+static inline bool IsHere(std::string file)
 {
 	if ( IsFileExist(file) )
 	{
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 static inline std::string CompleteScriptName( const std::string &main_path, const std::string &main_script )

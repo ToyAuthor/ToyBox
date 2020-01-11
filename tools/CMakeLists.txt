@@ -5,4 +5,5 @@ if(NOT TOY_RELEASE)
 endif()
 
 add_subdirectory(Player)
+add_subdirectory(PlayerGUI)
 add_subdirectory(Interpreter)
