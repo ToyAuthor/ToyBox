@@ -12,7 +12,7 @@ add_subdirectory(font)
 add_subdirectory(file)
 add_subdirectory(canvas)
 
-if(TOY_ENABLE_BETA_API)
+if(TOY_ENABLE_ALPHA_API)
 add_subdirectory(graph)
 add_subdirectory(scene)
 add_subdirectory(webp)

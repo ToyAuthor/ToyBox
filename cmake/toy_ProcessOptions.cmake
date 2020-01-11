@@ -21,7 +21,7 @@ macro(toy_ProcessOptions)
 		add_definitions(-DTOY_OPTION_DYNAMIC_LIBRARY=0)
 	endif()
 
-	if(TOY_ENABLE_BETA_API)
+	if(TOY_ENABLE_ALPHA_API)
 		if(TOY_RELEASE)
 			message(WARNING "ToyBox:Are you sure? Release version shouldn't include beta stuff")
 		endif()
