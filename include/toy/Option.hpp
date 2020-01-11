@@ -35,8 +35,8 @@ enum Option:int
 	BGR,         // 3 byte
 	RGBA,        // 4 byte
 	DIRECTORY,
-	ZIP,
-	SEVEN_ZIP,
+	ZIP,          // zip
+	SEVEN_ZIP,    // 7zip
 	READ_ONLY,
 	_OPTION_END,
 };

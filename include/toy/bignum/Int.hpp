@@ -18,6 +18,8 @@ class TOY_API_BIGNUM Int
 		Int();
 		Int(int32_t            number);
 		Int(uint32_t           number);
+		Int(int64_t            number);
+		Int(uint64_t           number);
 		Int(const Int&         number);
 		Int(const std::string& number);
 
@@ -39,6 +41,8 @@ class TOY_API_BIGNUM Int
 		void operator = (const Int &number);
 		void operator = (int32_t     number);
 		void operator = (uint32_t    number);
+		void operator = (int64_t     number);
+		void operator = (uint64_t    number);
 		void operator = (std::string number);
 
 		bool operator > (const Int &number) const;

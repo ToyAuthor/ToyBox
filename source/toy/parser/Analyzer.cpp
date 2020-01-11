@@ -83,7 +83,7 @@ bool Analyzer::nextWord(std::string *_str)
 
 	if ( i>=get_size )
 	{
-		return 0;
+		return false;
 	}
 
 	str.clear();
@@ -94,7 +94,7 @@ bool Analyzer::nextWord(std::string *_str)
 		{
 			if ( i>=get_size )
 			{
-				return 0;
+				return false;
 			}
 
 			if ( desireWord.front()==_string[i] )
@@ -105,12 +105,12 @@ bool Analyzer::nextWord(std::string *_str)
 					{
 						i+=desireWord.size();
 						str+=desireWord;
-						return 1;
+						return true;
 					}
 				}
 				else
 				{
-					return 0;
+					return false;
 				}
 			}
 		}
@@ -120,7 +120,7 @@ bool Analyzer::nextWord(std::string *_str)
 	{
 		if ( i>=get_size )
 		{
-			return 0;
+			return false;
 		}
 
 		keep_loop=0;
@@ -169,7 +169,7 @@ bool Analyzer::nextWord(std::string *_str)
 				str.push_back(breakTripleChar[j].t[1]);
 				str.push_back(breakTripleChar[j].t[2]);
 				i+=3;
-				return 1;
+				return true;
 			}
 		}
 	}
@@ -194,7 +194,7 @@ bool Analyzer::nextWord(std::string *_str)
 				str.push_back(breakDoubleChar[j].t[0]);
 				str.push_back(breakDoubleChar[j].t[1]);
 				i+=2;
-				return 1;
+				return true;
 			}
 		}
 	}
@@ -217,7 +217,7 @@ bool Analyzer::nextWord(std::string *_str)
 			{
 				str.push_back(_string[i]);
 				i++;
-				return 1;
+				return true;
 			}
 		}
 	}
@@ -226,7 +226,7 @@ bool Analyzer::nextWord(std::string *_str)
 	{
 		if ( i>=get_size )
 		{
-			return 1;
+			return true;
 		}
 
 		#if TOY_OPTION_CHECK
@@ -258,7 +258,7 @@ bool Analyzer::nextWord(std::string *_str)
 		{
 			if ( _string[i] == ignore[j] )
 			{
-				return 1;
+				return true;
 			}
 		}
 
@@ -266,7 +266,7 @@ bool Analyzer::nextWord(std::string *_str)
 		{
 			if ( _string[i] == breakChar[j] )
 			{
-				return 1;
+				return true;
 			}
 		}
 
@@ -278,7 +278,7 @@ bool Analyzer::nextWord(std::string *_str)
 				{
 					if ( _string[i+1] == breakDoubleChar[j].t[1] )
 					{
-						return 1;
+						return true;
 					}
 				}
 			}
@@ -296,7 +296,7 @@ bool Analyzer::nextWord(std::string *_str)
 						{
 							if ( _string[i+2] == breakTripleChar[j].t[2] )
 							{
-								return 1;
+								return true;
 							}
 						}
 					}
@@ -308,7 +308,7 @@ bool Analyzer::nextWord(std::string *_str)
 	}
 
 	toy::Oops(TOY_MARK);
-	return 0;
+	return false;
 }
 
 void Analyzer::pushConfig(ConfigPtr ptr)

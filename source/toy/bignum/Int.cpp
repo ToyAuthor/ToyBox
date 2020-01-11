@@ -1,6 +1,7 @@
 #include <gmp.h>
 #include "toy/Exception.hpp"
 #include "toy/math/NumberFormat.hpp"
+#include "toy/math/SafeInt.hpp"
 #include "toy/bignum/Int.hpp"
 
 namespace toy{
@@ -58,6 +59,42 @@ Int::Int(uint32_t number):_this(new IntPrivate)
 	mpz_set_d(_this->number, temp);
 }
 
+static void SetIntegerNumber64(Int *body,uint64_t number)
+{
+	const Int  temp("0x100000000");
+
+	auto  high = toy::math::SafeInt<uint32_t>(number>>32,TOY_MARK);
+	auto  low = toy::math::SafeInt<uint32_t>(number%0x100000000,TOY_MARK);
+
+	(*body) = high;
+
+	(*body) *= temp;
+	(*body) += low;
+}
+
+Int::Int(int64_t number):_this(new IntPrivate)
+{
+	bool isNegative = false;
+
+	if ( number<0 )
+	{
+		isNegative = true;
+		number = -number;
+	}
+
+	SetIntegerNumber64(this,number);
+
+	if ( isNegative )
+	{
+		(*this) *= -1;
+	}
+}
+
+Int::Int(uint64_t number):_this(new IntPrivate)
+{
+	SetIntegerNumber64(this,number);
+}
+
 static void StringToIntClass(IntPrivate *obj,const std::string& str)
 {
 	toy::math::NumberFormat  report(str);
@@ -103,6 +140,29 @@ void Int::operator = (uint32_t number)
 {
 	double  temp = number;
 	mpz_set_d(_this->number, temp);
+}
+
+void Int::operator = (int64_t number)
+{
+	bool isNegative = false;
+
+	if ( number<0 )
+	{
+		isNegative = true;
+		number = -number;
+	}
+
+	SetIntegerNumber64(this,number);
+
+	if ( isNegative )
+	{
+		(*this) *= -1;
+	}
+}
+
+void Int::operator = (uint64_t number)
+{
+	SetIntegerNumber64(this,number);
 }
 
 bool Int::get(std::string *number) const

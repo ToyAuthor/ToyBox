@@ -48,22 +48,22 @@ macro(toy_ProcessOptions)
 	list(APPEND TOY_DEFAULT_LINK_DIR    ${TOY_library_sfml})
 
 	if(WIN32)
-		# _WIN32_WINNT 0x0A00 Windows 10
-		# _WIN32_WINNT 0x0603 Windows 8.1
-		# _WIN32_WINNT 0x0602 Windows 8
-		# _WIN32_WINNT 0x0601 Windows 7
-		# _WIN32_WINNT 0x0600 Windows Vista
-		# _WIN32_WINNT 0x0501 Windows XP
-		# _WIN32_WINNT 0x0500 Windows 2000
-		# _WIN32_WINNT 0x0410 Windows 98
-		# _WIN32_WINNT 0x0400 Windows 95
+		# 0x0A00 Windows 10
+		# 0x0603 Windows 8.1
+		# 0x0602 Windows 8
+		# 0x0601 Windows 7
+		# 0x0600 Windows Vista
+		# 0x0501 Windows XP
+		# 0x0500 Windows 2000
+		# 0x0410 Windows 98
+		# 0x0400 Windows 95
 		# Boost need this to build library on Windows 2000 or later releases.
 		add_definitions(-D_WIN32_WINNT=0x0501)
 	endif()
 
 	# To suppress some warning like this:
 	#     MACOSX_RPATH is not specified for the following targets:
-	#     This warning is for project developers.  Use -Wno-dev to suppress it.
+	#     This warning is for project developers. Use -Wno-dev to suppress it.
 	if(APPLE)
 		if (NOT CMAKE_VERSION VERSION_LESS 2.8.12)
 			set(CMAKE_MACOSX_RPATH ON)
