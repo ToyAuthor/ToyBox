@@ -6,5 +6,6 @@ else()
 	add_subdirectory(Window)
 endif()
 
+add_subdirectory(Cpp)
 add_subdirectory(Env)
 
