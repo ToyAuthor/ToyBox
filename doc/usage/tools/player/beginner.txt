@@ -1,0 +1,20 @@
+
+Step 1: Find your player location
+	Check "ToyBox/build/bin".
+	Or just download from website.
+
+Step 2: Make sure there is a file named "default-config.lua" in the same folder.
+	Check "ToyBox/build/bin".
+	Or you can create a new default "default-config.lua" by typing following command.
+	$ player.exe --reset
+
+Step 3: Choose the script you try to run.
+	Just edit "default-config.lua".
+	Then type following command.
+	$ player.exe
+
+Type this command to get more usage of player.
+$ player.exe --help
+
+
+There is an other player named "player-gui.exe", and it has GUI.
