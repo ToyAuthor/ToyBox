@@ -1,6 +1,8 @@
+/*
+ * Print message on terminal or user given target.
+ */
 
 #include <luapp.hpp>
-#include <toy/Version.hpp>
 #include <toy/Log.hpp>
 #include <toy/Utf.hpp>
 #include <toy/io/Writer.hpp>
@@ -40,19 +42,6 @@ static int LogWithNewLine(lua::NativeState L)
 	PrintString(L);
 	toy::Logger<<toy::NewLine;
 	return 0;
-}
-
-static int Version(lua::NativeState L)
-{
-	lua::Table  ver;
-
-	ver["major"] = toy::GetMajorVersion();
-	ver["minor"] = toy::GetMinorVersion();
-	ver["patch"] = toy::GetPatchVersion();
-
-	lua::PushVarToLua( L, ver );
-
-	return 1;
 }
 
 static int CleanOutputLog(lua::NativeState)
@@ -108,7 +97,6 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua::NativeState L)
 	lua.setFunc( "is_utf8",     module::IsUTF8 );
 	lua.setFunc( "as_file",     module::SetOutputLog );
 	lua.setFunc( "reset",       module::CleanOutputLog );
-	lua.setFunc( "version",     module::Version );
 
 	return 1;
 }
