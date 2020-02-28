@@ -45,7 +45,7 @@ std::shared_ptr<toy::Block> Archiver::decompress(const std::string &input)
 	return _this->dev.decompress(input);
 }
 
-#if TOY_OPTION_ENABLE_BETA_API
+#if TOY_OPTION_ENABLE_ALPHA_API
 bool Archiver::compress( const std::string &input,
                          const std::string &output,
                          const ::toy::archive::Config& config)

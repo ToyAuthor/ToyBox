@@ -21,7 +21,7 @@ class TOY_API_ARCHIVE Archiver
 
 		bool compress(const toy::Block &input,const std::string &output);
 		auto decompress(const std::string &input)->std::shared_ptr<toy::Block>;
-		#if TOY_OPTION_ENABLE_BETA_API
+		#if TOY_OPTION_ENABLE_ALPHA_API
 		bool compress(   const std::string &input,
 		                 const std::string &output,
 		                 const ::toy::archive::Config&);
@@ -39,7 +39,7 @@ class TOY_API_ARCHIVE Archiver
 
 }
 
-#if TOY_OPTION_ENABLE_BETA_API
+#if TOY_OPTION_ENABLE_ALPHA_API
 namespace toy{
 namespace archive{
 

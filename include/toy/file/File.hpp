@@ -66,7 +66,7 @@ class TOY_API_FILE File
 		std::shared_ptr<::toy::file::ArchiveFacade>  _io   = nullptr;         // Always keep a object when it alive.
 		enum toy::Option                             _mode = toy::NOTHING;    // Default mode is STD.
 
-		#if TOY_OPTION_ENABLE_BETA_API
+		#if TOY_OPTION_ENABLE_ALPHA_API
 	public:
 		#endif
 
