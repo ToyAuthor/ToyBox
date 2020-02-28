@@ -28,6 +28,11 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 
 add_library(sqlite3 STATIC ${SOURCE})
 
+if(UNIX)
+	# Link them if you want to create C extension module.
+	target_link_libraries(sqlite3 dl)
+endif()
+
 if(MSVC)
 	set_target_properties( sqlite3 PROPERTIES
 			LIBRARY_OUTPUT_DIRECTORY            ${TOY_ROOT_BINARY_DIR}/bin
