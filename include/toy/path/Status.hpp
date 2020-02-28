@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <memory>
 #include "toy/CompilerConfig.hpp"
@@ -37,8 +38,9 @@ TOY_API extern bool IsExist(const std::string &filename);
 TOY_API extern bool IsFile(const std::string &filename);
 TOY_API extern bool IsFolder(const std::string &filename);
 TOY_API extern bool IsEmptyFolder(const std::string &filename);
-TOY_API extern void Remove(const std::string &filename);
-TOY_API extern void MakeDir(const std::string &filename);
+TOY_API extern uintmax_t Remove(const std::string &filename);
+TOY_API extern bool MakeDir(const std::string &filename);
 TOY_API extern auto GetFileSize(const std::string &filename)->uint64_t;
+TOY_API extern bool OpenFolder(const std::string &filename);
 
 }}

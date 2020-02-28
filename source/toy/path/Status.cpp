@@ -1,7 +1,11 @@
-#include "toy/Boost.hpp"
-#include "toy/Utf.hpp"
+#include "toy/Standard.hpp"
 #include "toy/math/SafeInt.hpp"
-#include "toy/path/Status.hpp"
+
+#ifdef TOY_WINDOWS
+#include "toy/Windows.hpp"
+#include <shellapi.h>
+//#pragma comment(lib,"shell32.lib")
+#endif
 
 namespace toy{
 namespace path{
@@ -81,19 +85,37 @@ bool IsExist(const std::string &filename)
 	return boost::filesystem::exists(StrToPath(filename));
 }
 
-void Remove(const std::string &filename)
+uintmax_t Remove(const std::string &filename)
 {
-	boost::filesystem::remove_all(StrToPath(filename));
+	return boost::filesystem::remove_all(StrToPath(filename));
 }
 
-void MakeDir(const std::string &filename)
+bool MakeDir(const std::string &filename)
 {
-	boost::filesystem::create_directories(StrToPath(filename));
+	return boost::filesystem::create_directories(StrToPath(filename));
 }
 
 uint64_t GetFileSize(const std::string &filename)
 {
 	return toy::math::SafeInt<uint64_t>(boost::filesystem::file_size(StrToPath(filename)),TOY_MARK);
+}
+
+// Linux   $ xdg-open [directory]
+// Mac     $ open [directory]
+// Windows $ start [directory]
+bool OpenFolder(const std::string &filename)
+{
+	#ifdef TOY_WINDOWS
+	ShellExecuteW(nullptr,L"open",nullptr,nullptr,toy::utf::UTF8ToWChar(filename).c_str(),SW_SHOWNORMAL);
+	#elif defined(TOY_MAC)
+	toy::Execute((std::string("open ")+filename).c_str());
+	#else
+	// Open up by default file manager
+	toy::Execute((std::string("xdg-open ")+filename).c_str());
+//	toy::Execute((std::string("nautilus ")+filename).c_str());
+	#endif
+
+	return true;
 }
 
 }}

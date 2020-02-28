@@ -12,7 +12,7 @@ class TOY_API ImageBuffer
 	public:
 
 		ImageBuffer();
-		~ImageBuffer();
+		virtual ~ImageBuffer();
 
 		void    clean();
 

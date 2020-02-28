@@ -74,9 +74,15 @@ bool Stream::open(std::string filename,enum toy::Option option)
 	{
 		auto location = status.location();
 
-		if ( ! location.empty() )
+		if ( false==location.empty() )
 		{
-			toy::path::MakeDir(location);
+			if ( false==toy::path::IsFolder(location) )
+			{
+				if ( false==toy::path::MakeDir(location) )
+				{
+					return false;
+				}
+			}
 		}
 
 		#ifdef TOY_WINDOWS

@@ -14,3 +14,7 @@
 #include "toy/Log.hpp"
 #include "toy/Utf.hpp"
 #include "toy/Text.hpp"
+
+namespace toy{
+TOY_API extern void Execute(const char* cmd);
+}
