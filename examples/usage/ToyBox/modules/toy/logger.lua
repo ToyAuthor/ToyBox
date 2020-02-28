@@ -1,14 +1,15 @@
 
 local  msg = require "toy.logger"
+local  utf_str = "log system日誌系統"
 
 --------------------------------------------------------------------------------
 
-msg.printf("log system日誌系統")  -- Print message without new line.
-msg.print("log system日誌系統")   -- Print message with new line.
+msg.printf(utf_str)  -- Print message without new line.
+msg.print(utf_str)   -- Print message with new line.
 
 --------------------------------------------------------------------------------
 
-if msg.is_utf8("ansi key code") then
+if msg.is_utf8(utf_str) then
 	msg.print("It's utf-8 encode")
 else
 	msg.print("It's not utf-8 encode")

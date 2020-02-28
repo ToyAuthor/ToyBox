@@ -13,12 +13,6 @@ return
 		msg.print("Warning:" .. debug.getinfo(2,'S').source .. ":" .. debug.getinfo(2,'l').currentline )
 	end,
 
-	stop = function(str)
-		msg.print("Error:" .. str)
-		msg.print("Error:" .. debug.getinfo(2,'S').source .. ":" .. debug.getinfo(2,'l').currentline )
-		error()
-	end,
-
 	quit = function(...)
 		local first_arg = select(1,...)
 
@@ -50,7 +44,9 @@ return
 		if status==false then
 			result = true
 
-			msg.print(err)
+			if type(err)=="string" then
+				msg.print(err)
+			end
 
 			if type(ret)=="string" then
 				msg.print(ret)

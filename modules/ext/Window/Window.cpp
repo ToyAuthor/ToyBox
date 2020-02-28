@@ -11,6 +11,8 @@ static void BindSimpleWindow(lua::State<> *lua)
 	lua->bindMethod( "error",       &ToySimpleWindow::error );
 
 	lua->bindClass1ArgEx<ToySimpleWindow,lua::Var>("create_window");
+
+	lua->cleanUnusedResource<ToySimpleWindow>();
 }
 
 #ifdef TOY_WINDOWS

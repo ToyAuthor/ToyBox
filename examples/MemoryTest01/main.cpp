@@ -1,3 +1,8 @@
+/*
+ * Memory pool has better performance than standard library.
+ * But also waste more memories.
+ */
+
 #include <ctime>
 #include <iostream>
 #include <toy/Standard.hpp>

@@ -281,14 +281,14 @@ static void CallBackExit(int signal)
 			break;
 		#ifndef TOY_WINDOWS
 		case SIGSTOP:
-			str = "SIGINT";
+			str = "SIGSTOP";
 			break;
 		case SIGQUIT:
-			str = "SIGINT";
+			str = "SIGQUIT";
 			break;
 		#endif
 		case SIGTERM:
-			str = "SIGINT";
+			str = "SIGTERM";
 			break;
 		default:
 			str = "unknown ID";

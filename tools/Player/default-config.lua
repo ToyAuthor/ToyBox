@@ -27,4 +27,7 @@ script = "main.lua"
 -- Set a path for searching main script of project.
   main_path = TOY_RESOURCE_PATH_FOR_DEMO .. "/lua/examples/HelloWorld"
 --main_path = TOY_RESOURCE_PATH_FOR_DEMO .. "/lua/examples/Window"              -- Show a empty window.
+--main_path = TOY_RESOURCE_PATH_FOR_DEMO .. "/lua/examples/Sound"
+--main_path = TOY_RESOURCE_PATH_FOR_DEMO .. "/lua/examples/LogSystem"
+--main_path = TOY_RESOURCE_PATH_FOR_DEMO .. "/lua/examples/SQLite"
 --main_path = TOY_RESOURCE_PATH_FOR_DEMO .. "/lua/test"

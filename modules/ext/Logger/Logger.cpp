@@ -3,6 +3,7 @@
  */
 
 #include <luapp.hpp>
+#include <toy/Oops.hpp>
 #include <toy/Log.hpp>
 #include <toy/Utf.hpp>
 #include <toy/io/Writer.hpp>
@@ -24,7 +25,15 @@ static inline void PrintString(lua::NativeState L)
 {
 	lua::Str   str;
 
-	lua::CheckVarFromLua(L,&str,-1);
+	if ( lua::IsType<lua::Str>(L,-1) )
+	{
+		lua::CheckVarFromLua(L,&str,-1);
+	}
+	else
+	{
+		toy::Oops(TOY_MARK);
+		str = "[Error]";
+	}
 
 	lua::Pop(L,1);
 

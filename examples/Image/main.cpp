@@ -3,6 +3,7 @@
  */
 
 #include <toy/Canvas.hpp>
+#include <toy/photo/Tools.hpp>
 #include <toy_example/File.hpp>
 #include <toy_example/sfml/Window.hpp>
 
@@ -45,6 +46,8 @@ static auto CreateImage(std::shared_ptr<toy::canvas::Brush> brush)->std::shared_
 		toy::Oops(TOY_MARK);
 		throw std::runtime_error("Oops");
 	}
+
+	toy::photo::UpsideDown(&image);
 
 	auto    texture = brush->newTexture(image);
 

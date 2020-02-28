@@ -10,3 +10,6 @@ if(TOY_ENABLE_ALPHA_API)
 endif()
 
 add_subdirectory(ext)
+add_subdirectory(file)
+add_subdirectory(text)
+add_subdirectory(math)

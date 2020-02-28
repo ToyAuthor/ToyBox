@@ -1,4 +1,7 @@
 
+-- This module just only works for player.
+-- So it's useless on other lua interpreters.
+
 local  MARCO = _G._TOY_SYSTEM_MESSAGE
 local  oops = require("toy.debug").oops
 

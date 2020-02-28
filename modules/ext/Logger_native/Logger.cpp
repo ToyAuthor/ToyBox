@@ -1,6 +1,5 @@
 
 #include <lua.hpp>
-#include <toy/Version.hpp>
 #include <toy/Log.hpp>
 #include <toy/Utf.hpp>
 #include <toy/io/Writer.hpp>
@@ -59,26 +58,6 @@ static int LogWithNewLine(lua_State* L)
 	return 0;
 }
 
-static int Version(lua_State* L)
-{
-	auto   setValue = [L](const char* key,lua_Integer value)
-	{
-		lua_pushstring(L, key);      // ... [T] [key]
-		lua_pushinteger(L, value);   // ... [T] [key] [value]
-		lua_settable(L,-3);          // ... [T]
-	};
-
-	                    // ...
-	lua_newtable(L);    // ... [T]
-
-	setValue("major",toy::GetMajorVersion());
-	setValue("minor",toy::GetMinorVersion());
-	setValue("patch",toy::GetPatchVersion());
-
-	                    // ... [T]
-	return 1;
-}
-
 static int SetOutputLog(lua_State* L)
 {
 	std::string    str;
@@ -130,7 +109,7 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua_State* L)
 {
 	namespace module = ::toy::luamodule::logger;
 
-	luaL_Reg   reg[7];
+	luaL_Reg   reg[6];
 
 	reg[0].name = "printf";
 	reg[0].func = module::Log;
@@ -138,14 +117,12 @@ extern "C" MY_DLL_API int luaopen_toy_logger(lua_State* L)
 	reg[1].func = module::LogWithNewLine;
 	reg[2].name = "is_utf8";
 	reg[2].func = module::IsUTF8;
-	reg[3].name = "version";
-	reg[3].func = module::Version;
-	reg[4].name = "as_file";
-	reg[4].func = module::SetOutputLog;
-	reg[5].name = "reset";
-	reg[5].func = module::CleanOutputLog;
-	reg[6].name = nullptr;
-	reg[6].func = nullptr;
+	reg[3].name = "as_file";
+	reg[3].func = module::SetOutputLog;
+	reg[4].name = "reset";
+	reg[4].func = module::CleanOutputLog;
+	reg[5].name = nullptr;
+	reg[5].func = nullptr;
 
 	luaL_newlib(L,reg);
 

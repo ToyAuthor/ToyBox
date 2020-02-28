@@ -2,27 +2,27 @@
 local  opt = require "config"
 local  env = require "toy.env"
 
-local  Run
-local  Print
+local  run
+local  print
 
-if opt.support_print_UTF8 then
-	Print = require("toy.logger").print
+if opt.support_print_utf8 then
+	print = require("toy.logger").print
 else
-	Print = print
+	print = _G.print
 end
 
 if env.os()=="windows" then
-	Run = function(item)
+	run = function(item)
 		os.execute(item)
 	end
 else
-	Run = function(item)
+	run = function(item)
 		os.execute("./" .. item)
 	end
 end
 
 return
 {
-	run = Run,
-	print = Print,
+	run = run,
+	print = print,
 }
