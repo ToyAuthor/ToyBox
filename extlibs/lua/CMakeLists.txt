@@ -2,7 +2,7 @@
 
 project(ToyLua)
 
-set(VERSION "5.3.0")
+set(VERSION "5.3.3")
 
 toy_StdReady()
 

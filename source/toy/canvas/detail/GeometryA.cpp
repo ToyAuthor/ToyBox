@@ -3,16 +3,6 @@
 #include "toy/canvas/detail/GcArrayBufferA.hpp"
 #include "toy/canvas/detail/GeometryA.hpp"
 
-//--------------------------Build a common program for geometry--------------------------start
-
-struct MyCommonProgram
-{
-	std::shared_ptr<toy::canvas::Program>  program = nullptr;
-	int                                   count = 0;
-};
-
-static MyCommonProgram   *CommonProgram = nullptr;
-
 static inline std::string GetVertexShaderCode()
 {
 	#if defined(TOY_LINUX)
@@ -57,39 +47,19 @@ static inline auto BuildDefaultProgram(std::shared_ptr<toy::canvas::Brush> brush
 static inline auto InitCommonProgram(std::shared_ptr<::toy::canvas::Brush> brush)
 ->std::shared_ptr<toy::canvas::Program>
 {
-	if ( CommonProgram==nullptr )
+	static std::weak_ptr<::toy::canvas::Program>   program;
+
+	if ( program.expired() )
 	{
-		CommonProgram = new MyCommonProgram;
-		CommonProgram->program = BuildDefaultProgram(brush);
-		CommonProgram->count = 1;
+		auto  ptr = BuildDefaultProgram(brush);
+		program = ptr;
+		return ptr;
 	}
 	else
 	{
-		CommonProgram->count = CommonProgram->count + 1;
-	}
-
-	return CommonProgram->program;
-}
-
-static inline void DropCommonProgram()
-{
-	if ( CommonProgram==nullptr )
-	{
-		toy::Oops(TOY_MARK);
-	}
-	else
-	{
-		CommonProgram->count = CommonProgram->count - 1;
-
-		if ( CommonProgram->count==0 )
-		{
-			delete CommonProgram;
-			CommonProgram = nullptr;
-		}
+		return program.lock();
 	}
 }
-
-//--------------------------Build a common program for geometry--------------------------end
 
 using namespace toy;
 using namespace canvas;
@@ -102,7 +72,7 @@ GeometryA::GeometryA(std::shared_ptr<toy::canvas::Brush> brush)
 
 GeometryA::~GeometryA()
 {
-	DropCommonProgram();
+	;
 }
 
 void GeometryA::visible(bool show)
