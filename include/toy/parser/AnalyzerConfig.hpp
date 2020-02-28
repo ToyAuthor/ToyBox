@@ -11,14 +11,14 @@ class TOY_API_PARSER AnalyzerConfig
 {
 	public:
 
-		struct CChar
+		struct DChar
 		{
-			CChar(char c1,char c2)
+			DChar(char c1,char c2)
 			{
 				t[0]=c1;
 				t[1]=c2;
 			}
-			CChar()
+			DChar()
 			{
 				t[0]='b';
 				t[1]='t';
@@ -46,8 +46,6 @@ class TOY_API_PARSER AnalyzerConfig
 		template<typename T>
 		class List
 		{
-			friend class Analyzer;
-
 			public:
 
 				List(){}
@@ -68,6 +66,11 @@ class TOY_API_PARSER AnalyzerConfig
 					array.clear();
 				}
 
+				std::vector<T>& _getRef()
+				{
+					return array;
+				}
+
 			private:
 
 				std::vector<T>    array;
@@ -82,11 +85,11 @@ class TOY_API_PARSER AnalyzerConfig
 		void    useDefaultBreak02();
 		void    useDefaultBreak03();
 
-		List<char>    breakCharList;
-		List<CChar>   breakDoubleCharList;
-		List<TChar>   breakTripleCharList;
-		List<char>    ignoreCharList;
 		std::string   desireWord;
+		List<char>    ignoreCharList;
+		List<TChar>   breakTripleCharList;
+		List<DChar>   breakDoubleCharList;
+		List<char>    breakCharList;
 };
 
 inline std::shared_ptr<toy::parser::AnalyzerConfig> NewAnalyzerConfig()

@@ -59,11 +59,11 @@ void AnalyzerConfig::useDefaultBreak01()
 
 void AnalyzerConfig::useDefaultBreak02()
 {
-//	breakDoubleCharList.push(CChar('\r','\n'));
-	breakDoubleCharList.push(CChar('=','='));    // ==
-	breakDoubleCharList.push(CChar('!','='));    // !=
-	breakDoubleCharList.push(CChar('>','='));    // >=
-	breakDoubleCharList.push(CChar('<','='));    // <=
+//	breakDoubleCharList.push(DChar('\r','\n'));
+	breakDoubleCharList.push(DChar('=','='));    // ==
+	breakDoubleCharList.push(DChar('!','='));    // !=
+	breakDoubleCharList.push(DChar('>','='));    // >=
+	breakDoubleCharList.push(DChar('<','='));    // <=
 }
 
 void AnalyzerConfig::useDefaultBreak03()

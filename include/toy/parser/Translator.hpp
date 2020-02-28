@@ -18,10 +18,10 @@ class TOY_API_PARSER Translator
 		Translator();
 		~Translator();
 
-		bool    isExist(std::string key);
 		void    transle(std::string key);
 		void    publishNextLine();
 		void    publishUnknown(std::string key);
+		bool    isExist(std::string key);
 		void    pushDictionary(DictionaryPtr);
 		void    popDictionary(int number=1);
 		void    drop();

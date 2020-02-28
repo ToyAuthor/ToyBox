@@ -6,9 +6,9 @@
 #pragma once
 
 #include <toy/graph/Brush.hpp>
-#include <toy/graph/Painter.hpp>
 #include <toy/graph/Array.hpp>
 #include <toy/graph/Image.hpp>
 #include <toy/graph/Geometry.hpp>
 #include <toy/graph/Program.hpp>
 #include <toy/graph/Uniform.hpp>
+#include <toy/graph/Canvas.hpp>
