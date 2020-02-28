@@ -60,18 +60,6 @@ bool Archiver::decompress( const std::string &input,
 	return _this->dev.decompress(input,output,config);
 }
 
-std::shared_ptr<::toy::archive::Stream> Archiver::makeStream(const std::string &name) const
-{
-	(void)name;
-	return std::make_shared<::toy::archive::Stream>();
-}
-
-::toy::archive::Stream* Archiver::makeStreamRawPtr(const std::string &name) const
-{
-	(void)name;
-	return new ::toy::archive::Stream;
-}
-
 //------------------------------------------------------------------------------
 
 #include "toy/io/Stream.hpp"

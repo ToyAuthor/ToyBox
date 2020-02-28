@@ -54,6 +54,7 @@ void SzFreeTemp(void *p, void *address)
 	free(address);
 }
 
+/*
 static ISzAlloc g_Alloc = { SzAlloc, SzFree };
 
 static int Buf_EnsureSize(CBuf *dest, size_t size)
@@ -189,7 +190,7 @@ static int SzCheckName(const char *name1,UInt16 *name2)
 	else
 		return 0;
 }
-
+*/
 //---------------------------Come from 7zip example---------------------------end
 
 #ifdef TOY_WINDOWS
@@ -342,7 +343,8 @@ bool temp::SevenZip::open(std::string filepath)
 
 		SzArEx_GetFileNameUtf16(&(_db), i, _temp);
 
-		if ( SzCheckName(filepath.c_str(),_temp) )
+	//	if ( SzCheckName(filepath.c_str(),_temp) )
+		if ( filepath==toy::utf::UTF16ToUTF8(_temp) )
 		{
 			res = SzArEx_Extract(&(_db), &(_lookStream.s), i,
 			&blockIndex, &(_outBuffer), &outBufferSize,

@@ -15,6 +15,6 @@ namespace loader{
 namespace png{
 
 TOY_API_FILE bool Load(::toy::File *f,::toy::ImageBuffer *m);
-TOY_API_FILE bool Save(std::string filename,::toy::ImageBuffer *map);
+TOY_API_FILE bool Save(const std::string &filename,::toy::ImageBuffer *map);     // Not support UTF-8 on Windows
 
 }}}}

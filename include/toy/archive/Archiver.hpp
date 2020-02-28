@@ -6,7 +6,6 @@
 #include "toy/Block.hpp"
 #include "toy/archive/Export.hpp"
 #include "toy/archive/Config.hpp"
-#include "toy/archive/Stream.hpp"
 
 namespace toy{
 namespace archive{
@@ -29,8 +28,6 @@ class TOY_API_ARCHIVE Archiver
 		bool decompress( const std::string &input,
 		                 const std::string &output,
 		                 ::toy::archive::Config *config=nullptr);
-		auto makeStream(const std::string &name) const -> std::shared_ptr<::toy::archive::Stream>;
-		auto makeStreamRawPtr(const std::string &name) const -> ::toy::archive::Stream*;
 		#endif
 		void init();
 		void drop();

@@ -15,7 +15,7 @@ bool loader::png::Load(toy::File *pIO,toy::ImageBuffer *map)
 	return loader::Load(pIO,map);
 }
 
-bool loader::png::Save(std::string filename,toy::ImageBuffer *map)
+bool loader::png::Save(const std::string &filename,toy::ImageBuffer *map)
 {
 	return loader::_SavePng(filename,map);
 }

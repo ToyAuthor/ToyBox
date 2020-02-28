@@ -79,7 +79,7 @@ bool loader::Load(toy::File *f,toy::ImageBuffer *map)
 	return true;
 }
 
-bool loader::Save(std::string filename,toy::ImageBuffer *map)
+bool loader::Save(const std::string &filename,toy::ImageBuffer *map)
 {
 	int   width  = map->width();
 	int   height = map->height();
@@ -87,7 +87,14 @@ bool loader::Save(std::string filename,toy::ImageBuffer *map)
 	if ( static_cast<uint32_t>( width)!=map->width()  ) return false;
 	if ( static_cast<uint32_t>(height)!=map->height() ) return false;
 
-	if ( stbi_write_tga(filename.c_str(), width, height, 4, map->data())==1 )
+	int fmt = 4;
+
+	if ( map->format()==toy::RGB )
+	{
+		fmt = 3;
+	}
+
+	if ( stbi_write_png(filename.c_str(), width, height, fmt, map->data(), 0)==1 )
 	{
 		return true;
 	}
@@ -98,12 +105,7 @@ bool loader::Save(std::string filename,toy::ImageBuffer *map)
 namespace loader{
 bool _SavePng(const std::string &filename,toy::ImageBuffer *map)
 {
-	if ( stbi_write_png(filename.c_str(), map->width(), map->height(), 4, map->data(), 0)==1 )
-	{
-		return true;
-	}
-
-	return false;
+	return loader::Save(filename,map);
 }
 }
 
