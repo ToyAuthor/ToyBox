@@ -1,0 +1,10 @@
+
+Player is the most easy way to use ToyBox.
+Because you don't have to setup compiler, environment, etc.
+Just download player.zip!
+It's a portable software with simple interface.
+
+Download
+	https://toyauthor.github.io/ToyBoxDoc/html/
+
+See "ToyBox/tools/Player/readme.txt" to get more information.

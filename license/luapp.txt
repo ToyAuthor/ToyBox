@@ -1,7 +1,7 @@
 
 The MIT License (MIT)
 
-Copyright (c) Yan Xin Wu
+Copyright (c) Yan-Xin Wu
 
 https://github.com/ToyAuthor/luapp
 

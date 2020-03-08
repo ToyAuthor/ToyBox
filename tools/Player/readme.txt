@@ -4,11 +4,7 @@ What is player?
 
 License
 	Player is a part of ToyBox.
-	They have same license.
-
-Supported platforms
-	Same as ToyBox.
-	ToyBox/doc/info/environment.txt
+	They have same license, same version, same platforms supported.
 
 Usage
 	ToyBox/doc/usage/tools/player/readme.txt

@@ -1,4 +1,7 @@
 
+The most easy way to use ToyBox
+	ToyBox/doc/usage/shortcut.txt
+
 How to build ToyBox
 	ToyBox/doc/usage/build/readme.txt
 
