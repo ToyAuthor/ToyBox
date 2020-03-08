@@ -47,7 +47,7 @@ static auto CreateImage(std::shared_ptr<toy::canvas::Brush> brush)->std::shared_
 		throw std::runtime_error("Oops");
 	}
 
-	toy::photo::UpsideDown(&image);
+	toy::photo::Flip(&image,toy::VERTICAL);
 
 	auto    texture = brush->newTexture(image);
 

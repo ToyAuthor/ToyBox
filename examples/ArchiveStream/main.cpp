@@ -17,7 +17,7 @@ static int main2()
 		return EXIT_FAILURE;
 	}
 
-	toy::photo::UpsideDown(&buffer);
+	toy::photo::Flip(&buffer,toy::VERTICAL);
 	toy::file::loader::png::Save("temp/ArchiveStream/image.png",&buffer);
 
 	return EXIT_SUCCESS;

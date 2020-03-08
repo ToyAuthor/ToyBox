@@ -38,7 +38,9 @@ set(SOURCE
 	main.cpp
 )
 
-toy_BuildExe(Image
+toy_BuildExe(ImageTag
 	SOURCES     ${SOURCE}
 	LINKLIBS    ${LIBS}
 )
+
+set_target_properties(ImageTag PROPERTIES OUTPUT_NAME Image)
