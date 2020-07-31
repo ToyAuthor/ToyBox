@@ -3,7 +3,15 @@ project(PlayerGUI)
 toy_StdReady()
 
 # Hide console window
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
+#if(MSVC)
+#	if(TOY_RELEASE)
+#		set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+#	else()
+#		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+#	endif()
+#else()
+#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
+#endif()
 
 file(GLOB SOURCE *.cpp */*.cpp)
 
@@ -22,7 +30,7 @@ set(LIBS
 
 #if(UNIX)
 #	list(APPEND LIBS X11)
-#endif(WIN32)
+#endif()
 
 if(TOY_ENABLE_SHARED_LIBS AND WIN32)
 	add_definitions(-DLUA_BUILD_AS_DLL)

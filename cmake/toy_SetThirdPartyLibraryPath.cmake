@@ -127,7 +127,7 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_libname_sfml_window "sfml-window" )
 	set(TOY_libname_sfml_graph  "sfml-graphics" )
 	set(TOY_libname_sfml_audio  "sfml-audio" )
-	set(TOY_libname_sfml_network"sfml-network" )
+	set(TOY_libname_sfml_network "sfml-network" )
 
 
 	set(TOY_include_fltk        "${TOY_SDK_INC}" )

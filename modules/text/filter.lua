@@ -1,6 +1,5 @@
 
 local  rex = require "toy.regex"
-local  oops = require("toy.debug").oops
 
 -- "image.jpg" -> "jpg"
 -- "/opt/map/image.jpg" -> "jpg"

@@ -2,7 +2,6 @@
 local  msg = require "toy.logger"
 local  snd = require "toy.audio"
 local  tim = require "toy.time"
-local  bfs = require "toy.path"
 local  sys = require "toy.root"
 local  bug = require "toy.debug"
 

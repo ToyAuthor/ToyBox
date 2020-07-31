@@ -1,7 +1,7 @@
 
 local msg01 = [[
 TOY_RESOURCE_PATH_FOR_DEMO is just a string for demo.
-Release version doesn't has it.
+Release version doesn't have it.
 
 Declare it again, if you want to show demo in release mode.
 

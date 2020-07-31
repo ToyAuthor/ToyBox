@@ -11,8 +11,8 @@ struct ImageMakerPrivate
 {
 	FT_Library    library = nullptr;
 	FT_Face       face = nullptr;
-	int           spaceWidth = 0;
-	int           fullwidthSpaceWidth = 0;
+	float         spaceWidth = 0;
+	float         fullwidthSpaceWidth = 0;
 };
 }}
 

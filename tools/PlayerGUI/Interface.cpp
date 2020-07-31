@@ -286,6 +286,9 @@ Interface::Interface(PlayerConfig *config):_config(config),_database("player-gui
 		_input = new Fl_Input(100, 40, 350, 25, "*Project Path");
 		_resource = new Fl_Input(100, 70, 350, 25, "Resource");
 
+		_script->labelcolor(88);
+		_input->labelcolor(88);
+
 	//	_window->resizable(new Fl_Box(FL_FRAME_BOX, 100, 100, 20, 50, 0));
 		_window->resizable(new Fl_Box(FL_NO_BOX, 100, 100, 20, 50, 0));
 

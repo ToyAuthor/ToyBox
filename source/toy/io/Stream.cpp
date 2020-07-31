@@ -95,7 +95,14 @@ bool Stream::open(std::string filename,enum toy::Option option)
 	}
 
 	#ifdef TOY_WINDOWS
-		_this->handle = ::_wfopen(toy::utf::UTF8ToWChar(filename).c_str(),toy::utf::UTF8ToWChar(str).c_str());
+		#ifdef TOY_MSVC
+			if ( 0 != ::_wfopen_s(&(_this->handle),toy::utf::UTF8ToWChar(filename).c_str(),toy::utf::UTF8ToWChar(str).c_str()) )
+			{
+				return false;
+			}
+		#else
+			_this->handle = ::_wfopen(toy::utf::UTF8ToWChar(filename).c_str(),toy::utf::UTF8ToWChar(str).c_str());
+		#endif
 	#elif defined(TOY_ANDROID)
 		_this->handle = fopen(filename.c_str(),str.c_str());
 	#else

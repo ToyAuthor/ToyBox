@@ -1,5 +1,6 @@
 
 local  msg = require "toy.logger"
+local  bug = require "toy.debug"
 
 local function create_window()
 
@@ -15,15 +16,17 @@ end
 
 msg.print("Starting")
 
-local  window = create_window()
+local function main()
+	local  window = create_window()
 
-if window:good() then
 	-- handleEvent:Mouse event, keyboard event, system event, etc.
 	while window:handle_event() do
 		window:display()           -- Refresh screen.
 	end
-else
-	msg.print("error:" .. window:error())
+end
+
+if bug.catch(main) then
+	bug.oops()
 end
 
 msg.print("Quit")

@@ -1,5 +1,5 @@
 
-The most easy way to use ToyBox
+The easiest way to use ToyBox
 	ToyBox/doc/usage/shortcut.txt
 
 How to build ToyBox

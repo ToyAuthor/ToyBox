@@ -12,7 +12,7 @@
 template<typename T>
 static inline double CalPeriod(T period)
 {
-    return static_cast<double>(period) / static_cast<double>(CLOCKS_PER_SEC);
+	return static_cast<double>(period) / static_cast<double>(CLOCKS_PER_SEC);
 }
 
 static void DoTheTest( std::function<void*(size_t)> malloc_f,
