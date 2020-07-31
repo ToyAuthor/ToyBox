@@ -5,6 +5,7 @@
 #include "toy/ImageBuffer.hpp"
 #include "toy/file/loader/Bmp.hpp"
 #include "toy/file/File.hpp"
+#include "toy/math/SafeInt.hpp"
 
 namespace toy{
 namespace file{
@@ -31,9 +32,8 @@ struct BMP_Head
 	uint32_t     bfSize;
 	uint16_t     bfReserved1;
 	uint16_t     bfReserved2;
-	uint32_t     bfOffBits;  // bfOffBits == sizeof(BMP_Head) + sizeof(BMP_Info)
+	uint32_t     bfOffBits;  // bfOffBits == sizeof(BMP_Head) + sizeof(BMP_Info) + Palette
 };
-#pragma pack(pop)       // Restore original setting.
 
 struct BMP_Info
 {
@@ -48,11 +48,8 @@ struct BMP_Info
 	int32_t      biYPelsPerMeter;
 	uint32_t     biClrUsed;
 	uint32_t     biClrImportant;
-	uint8_t      rgb_Blue;
-	uint8_t      rgb_Green;
-	uint8_t      rgb_Red;
-	uint8_t      rgb_Reserved;
 };
+#pragma pack(pop)       // Restore original setting.
 
 static inline bool Compare2Pixel(uint8_t *pix1,uint8_t *pix2)
 {
@@ -175,76 +172,183 @@ bool loader::bmp::Load(toy::File *pIO,toy::ImageBuffer *image)
 	return true;
 }
 
-// no good
+static void ExtensionSize(const uint8_t *oldData,uint32_t oldWidth,uint32_t oldHeight,int pixel,uint8_t *newData,uint32_t newWidth, uint32_t newHeight)
+{
+	if ( oldData != newData )
+	{
+		std::memcpy(newData,oldData,newWidth*newHeight*pixel);
+	}
+
+	if ( newWidth!=oldWidth )
+	{
+		uint8_t  *data01 = newData + ((newWidth*(oldHeight-1))*pixel);
+		uint8_t  *data02 = newData + ((oldWidth*(oldHeight-1))*pixel);
+
+		for ( auto j = oldHeight; j>0 ;--j )
+		{
+			for ( auto i = oldWidth*pixel; i>0 ;--i )
+			{
+				data01[i-1] = data02[i-1];
+			}
+
+			data01 -= newWidth*pixel;
+			data02 -= oldWidth*pixel;
+		}
+	}
+}
+
 bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 {
-	if ( map->format()!=toy::RGB && map->format()!=toy::BGR )
+	if ( map->empty() ) return false;
+
+	if ( map->format()!=toy::RGB && map->format()!=toy::BGR && map->format()!=toy::GREY )
 	{
 		return false;
 	}
 
 	struct BMP_Head     head;
 	struct BMP_Info     info;
-	int32_t             width = map->width();
-	int32_t             height= map->height();
+	uint32_t            width = map->width();
+	uint32_t            height= map->height();
 
 	if ( static_cast<uint32_t>( width)!=map->width()  ) return false;
 	if ( static_cast<uint32_t>(height)!=map->height() ) return false;
 
 	pIO->seek(SEEK_SET,0);
 
-	info.biSize = sizeof(struct BMP_Head);
-	info.biWidth = width;
-	info.biHeight = height;
+	info.biSize = 40;
+	info.biWidth = toy::math::SafeInt<int32_t>(width,TOY_MARK);
+	info.biHeight = toy::math::SafeInt<int32_t>(height,TOY_MARK);
 	info.biPlanes = 1;
-	info.biSizeImage = width * height * 3;
-	info.biBitCount = 24;
+	info.biClrImportant = 0;
+	info.biCompression = 0;
+
+	info.biXPelsPerMeter = 0;      // 72dpi=2835, 96dpi=3780
+	info.biYPelsPerMeter = 0;      // 120dpi=4724, 300dpi=11811
+
+	width = (width+3) & (~3);
+
+	if ( map->format()==toy::GREY )
+	{
+		info.biSizeImage = width * height;
+		info.biBitCount = 8;
+		info.biClrUsed = 256;
+	}
+	else
+	{
+		info.biSizeImage = width * height * 3;
+		info.biBitCount = 24;
+		info.biClrUsed = 0;
+	}
 
 	head.bfType = 0x4d42;
-	head.bfOffBits = sizeof(struct BMP_Head) + sizeof(struct BMP_Info);
+	head.bfOffBits = sizeof(struct BMP_Head) + sizeof(struct BMP_Info)+((map->format()==toy::GREY)?1024:0);
 	head.bfSize = head.bfOffBits + info.biSizeImage;
 	head.bfReserved1 = head.bfReserved2 = 0;
-
-	if ( map->format()==toy::RGB )
-	{
-		RGB_to_BGR(map->_data(),info.biSizeImage);
-		map->_setFormat(toy::BGR);
-	}
 
 	pIO->write(&head, sizeof(struct BMP_Head));
 	pIO->write(&info, sizeof(struct BMP_Info));
 
+	if ( map->format()==toy::RGB )
+	{
+		RGB_to_BGR(map->_data(),map->size());
+
+		if ( width==map->width() )
+		{
+			map->_setFormat(toy::BGR);
+		}
+		else
+		{
+			map->_getAllocator()->size(info.biSizeImage*3);
+			ExtensionSize(map->data(),map->width(),height,3,map->_data(),width, height);
+		}
+	}
+	else if ( map->format()==toy::BGR )
+	{
+		if ( width!=map->width() )
+		{
+			map->_getAllocator()->size(info.biSizeImage*3);
+			ExtensionSize(map->data(),map->width(),height,3,map->_data(),width, height);
+		}
+	}
+	else if ( map->format()==toy::GREY )
+	{
+		uint8_t buf[4];
+
+		for( int i = 0; i<256 ; ++i )
+		{
+			buf[0] = static_cast<uint8_t>(i);
+			buf[1] = static_cast<uint8_t>(i);
+			buf[2] = static_cast<uint8_t>(i);
+			buf[3] = 0;
+			pIO->write(buf, 4);
+		}
+
+		if ( width!=map->width() )
+		{
+			map->_getAllocator()->size(info.biSizeImage);
+			ExtensionSize(map->data(),map->width(),height,1,map->_data(),width, height);
+		}
+	}
+	else
+	{
+		toy::Oops(TOY_MARK);
+		return false;
+	}
+
 	pIO->write(map->data(), info.biSizeImage);
+
+	if ( width!=map->width() )
+	{
+		map->_getAllocator()->free();
+	}
 
 	return true;
 }
 
 bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 {
-	if ( map->format()!=toy::RGB && map->format()!=toy::BGR )
+	if ( map->empty() ) return false;
+
+	if ( map->format()!=toy::RGB && map->format()!=toy::BGR && map->format()!=toy::GREY )
 	{
 		return false;
 	}
 
 	struct BMP_Head     head;
 	struct BMP_Info     info;
-	int32_t             width = map->width();
-	int32_t             height= map->height();
-
-	if ( static_cast<uint32_t>( width)!=map->width()  ) return false;
-	if ( static_cast<uint32_t>(height)!=map->height() ) return false;
+	uint32_t            width = map->width();
+	uint32_t            height= map->height();
 
 	pIO->seek(SEEK_SET,0);
 
-	info.biSize = sizeof(struct BMP_Head);
-	info.biWidth = width;
-	info.biHeight = height;
+	info.biSize = 40;
+	info.biWidth = toy::math::SafeInt<int32_t>(width,TOY_MARK);
+	info.biHeight = toy::math::SafeInt<int32_t>(height,TOY_MARK);
 	info.biPlanes = 1;
-	info.biSizeImage = width * height * 3;
-	info.biBitCount = 24;
+	info.biClrImportant = 0;
+	info.biCompression = 0;
+
+	info.biXPelsPerMeter = 0;      // 72dpi=2835, 96dpi=3780
+	info.biYPelsPerMeter = 0;      // 120dpi=4724, 300dpi=11811
+
+	width = (width+3) & (~3);
+
+	if ( map->format()==toy::GREY )
+	{
+		info.biSizeImage = width * height;
+		info.biBitCount = 8;
+		info.biClrUsed = 256;
+	}
+	else
+	{
+		info.biSizeImage = width * height * 3;
+		info.biBitCount = 24;
+		info.biClrUsed = 0;
+	}
 
 	head.bfType = 0x4d42;
-	head.bfOffBits = sizeof(struct BMP_Head) + sizeof(struct BMP_Info);
+	head.bfOffBits = sizeof(struct BMP_Head) + sizeof(struct BMP_Info)+((map->format()==toy::GREY)?1024:0);
 	head.bfSize = head.bfOffBits + info.biSizeImage;
 	head.bfReserved1 = head.bfReserved2 = 0;
 
@@ -255,9 +359,14 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 	{
 		uint8_t *pBuf = (uint8_t*)malloc(info.biSizeImage);
 
-		std::memcpy(pBuf,map->data(),info.biSizeImage);
+		std::memcpy(pBuf,map->data(),map->size());
 
-		RGB_to_BGR(pBuf,info.biSizeImage);
+		RGB_to_BGR(pBuf, map->size());
+
+		if ( width!=map->width() )
+		{
+			ExtensionSize(pBuf,map->width(),height,3,pBuf,width, height);
+		}
 
 		pIO->write(pBuf, info.biSizeImage);
 
@@ -265,11 +374,58 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 	}
 	else if ( map->format()==toy::BGR )
 	{
-		pIO->write(map->data(), info.biSizeImage);
+		if ( width==map->width() )
+		{
+			pIO->write(map->data(), info.biSizeImage);
+		}
+		else
+		{
+			uint8_t *pBuf = (uint8_t*)malloc(info.biSizeImage);
+
+			std::memcpy(pBuf,map->data(),map->size());
+
+			ExtensionSize(pBuf,map->width(),height,3,pBuf,width, height);
+
+			pIO->write(pBuf, info.biSizeImage);
+
+			free(pBuf);
+		}
+	}
+	else if ( map->format()==toy::GREY )
+	{
+		uint8_t buf[4];
+
+		for( int i = 0; i<256 ; ++i )
+		{
+			buf[0] = static_cast<uint8_t>(i);
+			buf[1] = static_cast<uint8_t>(i);
+			buf[2] = static_cast<uint8_t>(i);
+			buf[3] = 0;
+			pIO->write(buf, 4);
+		}
+
+		if ( width==map->width() )
+		{
+			pIO->write(map->data(), info.biSizeImage);
+		}
+		else
+		{
+			uint8_t *pBuf = (uint8_t*)malloc(info.biSizeImage);
+
+			std::memcpy(pBuf,map->data(),map->size());
+
+			ExtensionSize(pBuf,map->width(),height,1,pBuf,width, height);
+
+			pIO->write(pBuf, info.biSizeImage);
+
+			free(pBuf);
+		}
+
 	}
 	else
 	{
 		toy::Oops(TOY_MARK);
+		return false;
 	}
 
 	return true;

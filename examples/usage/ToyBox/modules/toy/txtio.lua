@@ -10,12 +10,12 @@ local function print_text(filename)
 
 	local   reader = txt.new_reader(filename)
 
-	repeat
-		local   str = reader:next_line()   -- Return nil if there is no next line.
-		if str then
-			msg.print(str)
-		end
-	until ( str==nil )
+	local   str = reader:next_line()   -- Return nil if there is no next line.
+
+	while str do
+		msg.print(str)
+		str = reader:next_line()
+	end
 
 	msg.print("File " .. filename .. " end")
 end
@@ -26,7 +26,7 @@ print_text("D:/log.txt")
 --------------------------------------------------------------------------------
 
 local function make_text(filename)
-	local   writer = txt.new_writer(clone)
+	local   writer = txt.new_writer(filename)
 
 	--[[
 	output.txt

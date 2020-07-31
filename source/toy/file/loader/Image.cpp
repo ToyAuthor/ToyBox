@@ -87,11 +87,15 @@ bool loader::Save(const std::string &filename,toy::ImageBuffer *map)
 	if ( static_cast<uint32_t>( width)!=map->width()  ) return false;
 	if ( static_cast<uint32_t>(height)!=map->height() ) return false;
 
-	int fmt = 4;
+	int fmt = 4;   // toy::RGBA
 
 	if ( map->format()==toy::RGB )
 	{
 		fmt = 3;
+	}
+	else if ( map->format()==toy::GREY )
+	{
+		fmt = 1;
 	}
 
 	if ( stbi_write_png(filename.c_str(), width, height, fmt, map->data(), 0)==1 )

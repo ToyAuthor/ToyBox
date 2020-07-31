@@ -49,6 +49,7 @@ extern "C" MY_DLL_API int luaopen_toy_file(lua::NativeState L)
 	lua.cleanUnusedResource<::toy::luamodule::file::Stream>();
 
 	lua.setFunc( "_export_png_file",          ::toy::luamodule::file::ExportPngFile );
+	lua.setFunc( "_export_bmp_file",          ::toy::luamodule::file::ExportBmpFile );
 	lua.setFunc( "create_image_buffer",          CreateImageBuffer );
 //	lua.bindClass<toy::ImageBuffer>("create_image_buffer");
 //	lua.cleanUnusedResource<toy::ImageBuffer>();

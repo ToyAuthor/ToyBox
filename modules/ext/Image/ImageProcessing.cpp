@@ -18,6 +18,32 @@ static int UpsideDown(lua::NativeState L)
 	return 0;
 }
 
+static int Resize(lua::NativeState L)
+{
+	lua::Obj<toy::ImageBuffer>   buffer;
+	lua::Int                     topward;
+	lua::Int                     downward;
+	lua::Int                     leftward;
+	lua::Int                     rightward;
+
+	lua::PullArgs(L,buffer,topward,downward,leftward,rightward);
+
+	toy::photo::Resize(buffer.ptr(),topward,downward,leftward,rightward);
+
+	return 0;
+}
+
+static int ForceToGrey(lua::NativeState L)
+{
+	lua::Obj<toy::ImageBuffer>   buffer;
+
+	lua::PullArgs(L,buffer);
+
+	buffer.ptr()->toGREY();
+
+	return 0;
+}
+
 }}}
 
 #ifdef TOY_WINDOWS
@@ -33,6 +59,8 @@ extern "C" MY_DLL_API int luaopen_toy_image(lua::NativeState L)
 	lua::State<>    lua(L);
 
 	lua.setFunc( "invert",     module::UpsideDown );
+	lua.setFunc( "resize",     module::Resize );
+	lua.setFunc( "force_grey", module::ForceToGrey );
 
 	return 1;
 }

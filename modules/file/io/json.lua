@@ -1,6 +1,8 @@
 -- The original author put "json.lua" in the public domain.
 -- https://gist.github.com/tylerneylon/59f4bcf316be525b30ab
 
+local token_of_null = {}
+
 local function kind_of(obj)
 	if type(obj) ~= 'table' then
 		return type(obj)
@@ -180,7 +182,7 @@ local function import_json_file(str, pos, end_delim)
 	elseif first == end_delim then  -- End of an object or array.
 		return nil, pos + 1
 	else  -- Parse true, false, or null.
-		local literals = {['true'] = true, ['false'] = false, ['null'] = {} }
+		local literals = {['true'] = true, ['false'] = false, ['null'] = token_of_null }
 
 		for lit_str, lit_val in pairs(literals) do
 			local lit_end = pos + #lit_str - 1
@@ -196,5 +198,5 @@ return
 {
 	import = function(t) return import_json_file(t) end,
 	export = function(t) return export_json_file(t) end,
-	null = {},                    -- This is a one-off table to represent the null value.
+	null = token_of_null,                    -- This is a one-off table to represent the null value.
 }

@@ -8,5 +8,6 @@ namespace luamodule{
 namespace file{
 
 int ExportPngFile(lua::NativeState L);
+int ExportBmpFile(lua::NativeState L);
 
 }}}
