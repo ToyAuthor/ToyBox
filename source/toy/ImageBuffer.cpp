@@ -31,7 +31,9 @@ static inline void RGB_to_GREY( uint8_t* data, uint32_t size )
 
 	do
 	{
-		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+//		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+		pp1[0] = uint8_t(( uint_fast16_t(pp2[0])*38+uint_fast16_t(pp2[1])*75+uint_fast16_t(pp2[2])*15 )>>7);
+//		pp1[0] = uint8_t(( uint_fast16_t(pp2[0])+uint_fast16_t(pp2[1])<<1+uint_fast16_t(pp2[2]) )>>1);
 
 		pp1 += 1;
 		pp2 += 3;
@@ -48,7 +50,9 @@ static inline void RGBA_to_GREY( uint8_t* data, uint32_t size )
 
 	do
 	{
-		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+//		pp1[0] = uint8_t( (float(pp2[0])+float(pp2[1])+float(pp2[2]))/3 );
+		pp1[0] = uint8_t(( uint_fast16_t(pp2[0])*38+uint_fast16_t(pp2[1])*75+uint_fast16_t(pp2[2])*15 )>>7);
+//		pp1[0] = uint8_t(( uint_fast16_t(pp2[0])+uint_fast16_t(pp2[1])<<1+uint_fast16_t(pp2[2]) )>>1);
 
 		pp1 += 1;
 		pp2 += 4;
@@ -248,7 +252,7 @@ bool ImageBuffer::toGREY()
 			return false;
 	}
 
-	_format = toy::RGBA;
+	_format = toy::GREY;
 
 	return true;
 }
@@ -448,9 +452,7 @@ static inline uint8_t BlendColor(uint8_t ac,uint8_t bc,uint8_t aa,uint8_t ba)
 		res = 255.0f;
 	}
 
-	uint8_t   result = res;
-
-	return result;
+	return static_cast<uint8_t>(res);
 }
 
 static inline uint8_t BlendAlpha(uint8_t a,uint8_t b)

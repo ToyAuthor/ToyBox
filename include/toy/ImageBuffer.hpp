@@ -25,7 +25,7 @@ class TOY_API ImageBuffer
 			return (uint8_t*)(_allocator.data());
 		}
 
-		bool empty()
+		bool empty() const
 		{
 			if ( this->data()==nullptr )
 			{
