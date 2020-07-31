@@ -11,6 +11,7 @@
 namespace toy{
 namespace thread{
 
+// It's a thread-safe event queue.
 template<typename T>
 class Mailbox
 {
@@ -36,7 +37,7 @@ class Mailbox
 		 * To enqueue a element.
 		 * It's a non-blocking method!
 		 */
-		void send(T t)
+		void post(T t)
 		{
 			std::lock_guard<std::mutex>   guard(_mutex);
 			_queue.push(t);
@@ -44,7 +45,7 @@ class Mailbox
 		}
 
 		/*
-		 * To dequeue a element, if queue isn't empty.
+		 * To dequeue a element, if the queue isn't empty.
 		 * It's a non-blocking method!
 		 */
 		bool peek(T *t)
@@ -81,19 +82,23 @@ class Mailbox
 			return result;
 		}
 
-		bool peek(T *t,float sec)
+		/*
+		 * To dequeue a element.
+		 * It will be blocked unstil time's up, if the queue still empty.
+		 */
+		bool read(T *t,float seconds)
 		{
 			std::unique_lock<std::mutex>   guard(_mutex);
 
-			if ( _queue.empty() && sec!=float(0) )
+			if ( _queue.empty() && seconds!=float(0) )
 			{
-				if ( sec<float(0) )
+				if ( seconds<float(0) )
 				{
 					throw toy::Exception(TOY_MARK);
 				}
-				else if ( sec<float(4294967) )
+				else if ( seconds<float(4294967) )
 				{
-					_condi.wait(guard,std::chrono::duration<uint32_t,std::ratio<1,1000>>(static_cast<uint32_t>(sec*float(1000))));
+					_condi.wait(guard,std::chrono::duration<uint32_t,std::ratio<1,1000>>(static_cast<uint32_t>(seconds*float(1000))));
 				}
 				else
 				{

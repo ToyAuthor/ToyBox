@@ -32,11 +32,11 @@ RwMutex::~RwMutex()
 	;
 }
 
-void RwMutex::readLock()
+void RwMutex::lockShared()
 {
 	std::unique_lock<std::mutex>    guard(_this->mutex);
 
-	for ( ; _this->writersWaitCount>0 || _this->writersCount>0 ; )
+	while ( _this->writersWaitCount>0 || _this->writersCount>0 )
 	{
 		_this->readGate.wait(guard);
 	}
@@ -44,7 +44,7 @@ void RwMutex::readLock()
 	++(_this->readersCount);
 }
 
-void RwMutex::readUnlock()
+void RwMutex::unlockShared()
 {
 	std::unique_lock<std::mutex>    guard(_this->mutex);
 
@@ -62,13 +62,13 @@ void RwMutex::readUnlock()
 	}
 }
 
-void RwMutex::writeLock()
+void RwMutex::lock()
 {
 	std::unique_lock<std::mutex>    guard(_this->mutex);
 
 	++(_this->writersWaitCount);
 
-	for ( ; _this->readersCount>0 || _this->writersCount>0 ; )
+	while ( _this->readersCount>0 || _this->writersCount>0 )
 	{
 		_this->writeGate.wait(guard);
 	}
@@ -77,7 +77,7 @@ void RwMutex::writeLock()
 	++(_this->writersCount);
 }
 
-void RwMutex::writeUnlock()
+void RwMutex::unlock()
 {
 	std::unique_lock<std::mutex>    guard(_this->mutex);
 

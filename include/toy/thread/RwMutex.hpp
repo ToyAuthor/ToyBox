@@ -17,10 +17,10 @@ class TOY_API_THREAD RwMutex
 		RwMutex();
 		~RwMutex();
 
-		void readLock();
-		void readUnlock();
-		void writeLock();
-		void writeUnlock();
+		void lockShared();
+		void unlockShared();
+		void lock();
+		void unlock();
 
 	private:
 
@@ -34,12 +34,12 @@ class ReadLockGuard
 
 		ReadLockGuard(::toy::thread::RwMutex &mute):_mutex(mute)
 		{
-			_mutex.readLock();
+			_mutex.lockShared();
 		}
 
 		~ReadLockGuard()
 		{
-			_mutex.readUnlock();
+			_mutex.unlockShared();
 		}
 
 	private:
@@ -53,12 +53,12 @@ class WriteLockGuard
 
 		WriteLockGuard(::toy::thread::RwMutex &mute):_mutex(mute)
 		{
-			_mutex.writeLock();
+			_mutex.lock();
 		}
 
 		~WriteLockGuard()
 		{
-			_mutex.writeUnlock();
+			_mutex.unlock();
 		}
 
 	private:
