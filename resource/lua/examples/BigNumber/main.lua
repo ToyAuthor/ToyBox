@@ -56,12 +56,11 @@ local function main2()
 	msg.print("look c:" .. c )
 	msg.print("look d:" .. d )
 
-	if a~=b then
+	if a>b then
 		msg.print("a>b")
 	else
 		msg.print("a<=b")
 	end
-
 end
 
 if bug.catch(main2) then
