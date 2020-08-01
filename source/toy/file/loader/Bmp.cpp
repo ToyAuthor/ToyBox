@@ -116,6 +116,21 @@ static inline void BGR_to_RGBA(toy::ImageBuffer *image)
 	RGB_to_RGBA(data,size,0);
 }
 
+static inline void RGBA_to_BGRA( uint8_t* data,   // The address of image.
+                                 uint32_t size)   // The size of image.
+{
+	uint8_t      *ptr = data + size - 4;
+
+	uint8_t temp = 0;
+
+	for( ; ptr != data ; ptr-=4 )
+	{
+		temp = ptr[0];
+		ptr[0] = ptr[2];
+		ptr[2] = temp;
+	}
+}
+
 static inline void ReadInfo(toy::File *pIO, struct BMP_Info *info)
 {
 	struct BMP_Head     head;
@@ -201,7 +216,7 @@ bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 {
 	if ( map->empty() ) return false;
 
-	if ( map->format()!=toy::RGB && map->format()!=toy::BGR && map->format()!=toy::GREY )
+	if ( map->format()!=toy::RGB && map->format()!=toy::BGR && map->format()!=toy::GREY && map->format()!=toy::RGBA )
 	{
 		return false;
 	}
@@ -233,6 +248,12 @@ bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 		info.biSizeImage = width * height;
 		info.biBitCount = 8;
 		info.biClrUsed = 256;
+	}
+	else if( map->format()==toy::RGBA )
+	{
+		info.biSizeImage = width * height * 4;
+		info.biBitCount = 32;
+		info.biClrUsed = 0;
 	}
 	else
 	{
@@ -269,6 +290,20 @@ bool loader::bmp::Save(toy::File *pIO,toy::ImageBuffer *map)
 		{
 			map->_getAllocator()->size(info.biSizeImage*3);
 			ExtensionSize(map->data(),map->width(),height,3,map->_data(),width, height);
+		}
+	}
+	else if ( map->format()==toy::RGBA )
+	{
+		RGBA_to_BGRA(map->_data(),map->size());
+
+		if ( width==map->width() )
+		{
+			map->_setFormat(toy::RGBA);
+		}
+		else
+		{
+			map->_getAllocator()->size(info.biSizeImage*4);
+			ExtensionSize(map->data(),map->width(),height,4,map->_data(),width, height);
 		}
 	}
 	else if ( map->format()==toy::GREY )
@@ -310,7 +345,7 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 {
 	if ( map->empty() ) return false;
 
-	if ( map->format()!=toy::RGB && map->format()!=toy::BGR && map->format()!=toy::GREY )
+	if ( map->format()!=toy::RGB && map->format()!=toy::BGR && map->format()!=toy::GREY && map->format()!=toy::RGBA )
 	{
 		return false;
 	}
@@ -340,6 +375,12 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 		info.biBitCount = 8;
 		info.biClrUsed = 256;
 	}
+	else if( map->format()==toy::RGBA )
+	{
+		info.biSizeImage = width * height * 4;
+		info.biBitCount = 32;
+		info.biClrUsed = 0;
+	}
 	else
 	{
 		info.biSizeImage = width * height * 3;
@@ -359,7 +400,7 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 	{
 		uint8_t *pBuf = (uint8_t*)malloc(info.biSizeImage);
 
-		std::memcpy(pBuf,map->data(),map->size());
+		std::memcpy(pBuf,map->data(),map->size()*3);
 
 		RGB_to_BGR(pBuf, map->size());
 
@@ -382,7 +423,7 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 		{
 			uint8_t *pBuf = (uint8_t*)malloc(info.biSizeImage);
 
-			std::memcpy(pBuf,map->data(),map->size());
+			std::memcpy(pBuf,map->data(),map->size()*3);
 
 			ExtensionSize(pBuf,map->width(),height,3,pBuf,width, height);
 
@@ -390,6 +431,23 @@ bool loader::bmp::Save(toy::File *pIO,const toy::ImageBuffer *map)
 
 			free(pBuf);
 		}
+	}
+	else if ( map->format()==toy::RGBA )
+	{
+		uint8_t *pBuf = (uint8_t*)malloc(info.biSizeImage);
+
+		std::memcpy(pBuf,map->data(),map->size()*4);
+
+		RGBA_to_BGRA(pBuf, map->size());
+
+		if ( width!=map->width() )
+		{
+			ExtensionSize(pBuf,map->width(),height,4,pBuf,width, height);
+		}
+
+		pIO->write(pBuf, info.biSizeImage);
+
+		free(pBuf);
 	}
 	else if ( map->format()==toy::GREY )
 	{
