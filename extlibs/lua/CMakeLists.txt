@@ -2,9 +2,11 @@
 
 project(ToyLua)
 
-set(VERSION "5.3.3")
+set(VERSION "5.4.0")
 
 toy_StdReady()
+
+add_definitions(-DLUA_UCID)
 
 if(TOY_ENABLE_3RD_PARTY_SHARED_LIB AND WIN32)
 	add_definitions(-DLUA_BUILD_AS_DLL)

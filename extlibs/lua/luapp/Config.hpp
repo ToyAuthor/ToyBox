@@ -1,9 +1,9 @@
 #pragma once
 
 #define LUAPP_VERSION_MAJOR "2"
-#define LUAPP_VERSION_MINOR "4"
+#define LUAPP_VERSION_MINOR "5"
 #define LUAPP_VERSION_PATCH "0"
-#define LUAPP_AUTHOR "Yan Xin Wu"
+#define LUAPP_AUTHOR "Yan-Xin Wu"
 
 
 #include "luapp/Environment.hpp"
@@ -21,10 +21,10 @@
 #define _LUAPP_CHECK_CAREFUL_
 
 // You can keep lua variable at C++ side, but it make luapp slow down.
-#define _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+//#define _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 
 // Release shared pointer when lua::State deconstruction. It make luapp slow down.
-#define _LUAPP_CLEAN_LUA_HANDLE_
+//#define _LUAPP_CLEAN_LUA_HANDLE_
 
 // Enable boolean index for lua::Table.
 #define _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
