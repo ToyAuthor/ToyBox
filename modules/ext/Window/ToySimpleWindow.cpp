@@ -6,8 +6,6 @@
 #include "ToySimpleWindow.hpp"
 #include "HandleSystemEvent.hpp"
 
-#define TOY_NO_ERROR_MESSAGE "good"
-
 struct WindowConfig
 {
 	lua::Str   title      = "ToyBox";
@@ -31,41 +29,24 @@ static inline sf::String UTF8ToSfString(std::string str)
 	return sf::String::fromUtf8( str.begin(), str.end() );
 }
 
-ToySimpleWindow::ToySimpleWindow(lua::Var table):_errorMessage(TOY_NO_ERROR_MESSAGE)
+ToySimpleWindow::ToySimpleWindow(lua::Var table)
 {
-	try
+	WindowConfig   config;
+
+	CopyWindowConfig(&config,table);
+
+	auto  style = sf::Style::Default;
+
+	if ( config.fullscreen )
 	{
-		WindowConfig   config;
-
-		CopyWindowConfig(&config,table);
-
-		auto  style = sf::Style::Default;
-
-		if ( config.fullscreen )
-		{
-			style = sf::Style::Fullscreen;
-		}
-
-		_window = std::make_shared<sf::Window>(
-				sf::VideoMode(config.width, config.height),
-				UTF8ToSfString(config.title),
-				style,
-				sf::ContextSettings(24) );
-	}
-	catch(std::exception &e)
-	{
-		_errorMessage = e.what();
-	}
-}
-
-lua::Bool ToySimpleWindow::good()
-{
-	if ( _errorMessage==TOY_NO_ERROR_MESSAGE )
-	{
-		return true;
+		style = sf::Style::Fullscreen;
 	}
 
-	return false;
+	_window = std::make_shared<sf::Window>(
+			sf::VideoMode(config.width, config.height),
+			UTF8ToSfString(config.title),
+			style,
+			sf::ContextSettings(24) );
 }
 
 lua::Bool ToySimpleWindow::isOpen()

@@ -1,11 +1,11 @@
 
-local png  = require "toy.file.export.png"
-local bug  = require "toy.debug"
-local file = require "toy.file"
+local png = require "toy.file.export.png"
+local bug = require "toy.debug"
+local fs  = require "toy.file"
 
 local function load_image_file(folder,filename)
-	local  stream = file.create_stream("default")   -- Create a file stream using <cstdio>.
-	local  buffer = file.create_image_buffer()      -- Create a buffer for loading image data.
+	local  stream = fs.create_stream("default")   -- Create a file stream using <cstdio>.
+	local  buffer = fs.create_image_buffer()      -- Create a buffer for loading image data.
 
 	stream:open_dir(folder)
 	stream:open(filename)

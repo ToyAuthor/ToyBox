@@ -31,7 +31,7 @@ auto ::toy::Catch(std::exception &e)-> enum ::toy::ErrorTag
 		if ( id=='\0' )
 		{
 			toy::Oops(TOY_MARK);
-			throw std::exception(e);
+			throw;
 		}
 		else
 		{
@@ -57,7 +57,7 @@ auto ::toy::Catch_ForTest(std::exception &e)-> enum ::toy::ErrorTag
 
 		if ( id=='\0' )
 		{
-			throw std::exception(e);
+			throw;
 		}
 		else
 		{

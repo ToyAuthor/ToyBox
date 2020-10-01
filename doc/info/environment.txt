@@ -12,4 +12,4 @@ Windows 7
 	Visual Studio 2015
 
 
-¡° Not plan to make Android/iOS version.
+â€» Not plan to make Android/iOS version.

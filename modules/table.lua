@@ -24,6 +24,11 @@ local function make_enum( source_table, init_value )
 	return result
 end
 
+--[[
+local function fast_clone(t)
+	return {unpack(t)}
+end]]
+
 local function fast_clone(t)
 	local result = {}
 
@@ -119,12 +124,8 @@ end
 
 --local default_pointer = _G.print                     -- Native Lua output device.
   local default_pointer = require("toy.logger").print  -- It support UTF-8 encoding.
-local function print_table(ttt,my_printer_t)
-	local my_printer = default_pointer
-
-	if my_printer_t then
-		my_printer = my_printer_t
-	end
+local function print_table(ttt,my_printer)
+	my_printer = my_printer or default_pointer
 
 	local indent_dev =
 	{
@@ -198,4 +199,9 @@ return
 	copy = clone,
 	deep_copy = deep_clone,
 	series = make_series,
+	--[[
+	is_empty = function(t)
+		return next(t)==nil
+	end,
+	]]
 }

@@ -9,7 +9,7 @@ local text = [===[
 }
 ]===]
 
-local msg = require "toy.logger"
+local log = require "toy.logger"
 local jsn = require "toy.file.io.json"
 
 -- Convert string to table.
@@ -18,8 +18,8 @@ local tab = jsn.import(text)
 -- Convert table to string.
 local str = jsn.export(tab)
 
-msg.print("---------------------------")
+log.print("---------------------------")
 require("toy.table").print(tab)
-msg.print("---------------------------")
-msg.print(str)
-msg.print("---------------------------")
+log.print("---------------------------")
+log.print(str)
+log.print("---------------------------")

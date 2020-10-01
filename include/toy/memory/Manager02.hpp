@@ -137,6 +137,11 @@ class Manager02
 			return _size;
 		}
 
+		size_t realSize() const
+		{
+			return _trueSize;
+		}
+
 	private:
 
 		void*   _data = nullptr;

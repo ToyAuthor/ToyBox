@@ -190,12 +190,6 @@ static int NewSoundBuffer(lua::NativeState L)
 
 }}}
 
-static inline void BindAudioSoundBuffer(lua::State<> *lua)
-{
-	namespace module = ::toy::luamodule::audio;
-	lua->bindClass1ArgEx<module::SoundBuffer,lua::Obj<std::shared_ptr<sf::InputStream>>>("_new_sound_buffer2");
-}
-
 static inline void BindAudioSound(lua::State<> *lua)
 {
 	namespace module = ::toy::luamodule::audio;
@@ -230,14 +224,12 @@ extern "C" MY_DLL_API int luaopen_toy_audio(lua::NativeState L)
 {
 	lua::State<>    lua(L);
 
-	BindAudioSoundBuffer(&lua);
 	BindAudioSound(&lua);
 	BindAudioMusic(&lua);
 
 	namespace module = ::toy::luamodule::audio;
 	lua.setFunc( "new_sound_buffer",    module::NewSoundBuffer );
 
-	lua.cleanUnusedResource<module::SoundBuffer>();
 	lua.cleanUnusedResource<module::Sound>();
 	lua.cleanUnusedResource<module::Music>();
 

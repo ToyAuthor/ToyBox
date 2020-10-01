@@ -226,11 +226,9 @@ bool Stream::seek(int option,int32_t offset)
 	#endif
 
 	#if defined(TOY_ANDROID)
-//	fseek( _this->handle, offset, option );
-	std::fseek(_this->handle,toy::math::SafeInt<long>(offset,TOY_MARK),option);
+	fseek(_this->handle,toy::math::SafeInt<long>(offset,TOY_MARK),option);
 	#else
 	std::fseek(_this->handle,toy::math::SafeInt<long>(offset,TOY_MARK),option);
-//	std::fseek( _this->handle, offset, option );
 	#endif
 
 	return true;
@@ -260,7 +258,7 @@ void Stream::operator <<(uint64_t offset)
 	}
 }
 
-void Stream::remove(const std::string &filename)
+void Stream::remove(const std::string &filename) const
 {
 	toy::path::Remove(filename);
 }

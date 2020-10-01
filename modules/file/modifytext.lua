@@ -25,15 +25,15 @@ end
 local function modify_text_line_by_line(source,target,func)
 	make_sure_folder_ok(target)
 
-	local   reader = txt.new_reader(source)
-	local   writer = txt.new_writer(target)
+	local   reader<close> = txt.new_reader(source)
+	local   writer<close> = txt.new_writer(target)
 
-	repeat
-		local   str = reader:next_line()
-		if str then
-			func(str,function(tt) writer:print(tt) end)
-		end
-	until ( str==nil )
+	local   str = reader:next_line()
+
+	while str~=nil do
+		func(str,function(tt) writer:print(tt) end)
+		str = reader:next_line()
+	end
 end
 
 local function modify_text(source,target,func)

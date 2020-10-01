@@ -20,21 +20,14 @@ class ToySimpleWindow
 		auto isOpen()->lua::Bool;
 		auto handleEvent()->lua::Bool;
 		void display();
-		auto good()->lua::Bool;
 
 		void fullscreen(lua::Bool flag)
 		{
 			(void)flag;
 		}
 
-		lua::Str error()
-		{
-			return _errorMessage;
-		}
-
 	private:
 
 		std::shared_ptr<sf::Window> _window = nullptr;
-		lua::Str                    _errorMessage;
 		EventFunctorList            _functorList;
 };

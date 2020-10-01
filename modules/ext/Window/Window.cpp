@@ -7,8 +7,6 @@ static void BindSimpleWindow(lua::State<> *lua)
 	lua->bindMethod( "is_open",      &ToySimpleWindow::isOpen );
 	lua->bindMethod( "display",     &ToySimpleWindow::display );
 	lua->bindMethod( "fullscreen",  &ToySimpleWindow::fullscreen );
-	lua->bindMethod( "good",        &ToySimpleWindow::good );
-	lua->bindMethod( "error",       &ToySimpleWindow::error );
 
 	lua->bindClass1ArgEx<ToySimpleWindow,lua::Var>("create_window");
 

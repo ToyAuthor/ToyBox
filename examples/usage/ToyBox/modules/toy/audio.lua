@@ -1,5 +1,5 @@
 
-local  msg = require "toy.logger"
+local  log = require "toy.logger"
 local  snd = require "toy.audio"
 local  tim = require "toy.time"
 local  bfs = require "toy.path"
@@ -14,7 +14,7 @@ end
 
 -- [[
 local function create_sound()
-	local  stream = require("toy.file").create_stream("default")
+	local  stream<close> = require("toy.file").create_stream("default")
 
 	stream:open_dir("target_folder")
 	stream:open("target_file.wav")
@@ -26,9 +26,9 @@ local function main()
 	local  dev = create_sound()
 
 	dev:play()
-	msg.print("Sound start")
+	log.print("Sound start")
 	wait_audio_stop(dev)
-	msg.print("Sound stop")
+	log.print("Sound stop")
 end
 --]]
 
@@ -37,9 +37,9 @@ local function main()
 	local  dev = snd.new_music("target_folder/target_file.ogg")
 
 	dev:play()
-	msg.print("Music start")
+	log.print("Music start")
 	wait_audio_stop(dev)
-	msg.print("Music stop")
+	log.print("Music stop")
 end
 --]]
 

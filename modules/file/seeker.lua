@@ -142,7 +142,7 @@ local function find_word_in_file(word,file_name,config)
 	set_default_value_to_undefine_option(config)
 
 	if bfs.is_file(file_name) then
-		local   reader = txt.new_reader(file_name)
+		local   reader<close> = txt.new_reader(file_name)
 
 		if config.only_search_one_line then
 			reader_loop_for_one_line(file_name,word,reader,config)

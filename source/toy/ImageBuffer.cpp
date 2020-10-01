@@ -396,10 +396,13 @@ static void SwitchPixel(toy::ImageBuffer *image,const uint8_t *data,enum ::toy::
 
 bool CreateImageBuffer(toy::ImageBuffer *image,const uint32_t width,const uint32_t height,const uint8_t *data,enum ::toy::Option option)
 {
+	if ( false==image->_getAllocator()->size(width * height * 4) )
+	{
+		return false;
+	}
+
 	image->_setWidth(width);
 	image->_setHeight(height);
-
-	image->_getAllocator()->size(width * height * 4);
 
 	SwitchPixel(image,data,option);
 

@@ -21,10 +21,10 @@ class WriterWrapper
 		void print(lua::Str str);
 		void printf(lua::Str str);
 		void newLine();
+		void drop();
 
 	private:
 
-		void drop();
 		auto newText(lua::Str filename)->lua::Bool;
 
 		std::shared_ptr<toy::io::Writer<toy::io::Stream>>   _writer;

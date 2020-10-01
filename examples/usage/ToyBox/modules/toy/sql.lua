@@ -1,5 +1,5 @@
 
-local  msg = require "toy.logger"
+local  log = require "toy.logger"
 local  sql = require "toy.sql"
 local  bug = require "toy.debug"
 
@@ -18,7 +18,7 @@ local function main()
 	dev:cmd("INSERT INTO COMPANY VALUES (1, 'James', 24, 'Houston', 10000.00 );")
 
 	local callback_func = function(name,value)
-		msg.print(name .. ":" .. value)
+		log.print(name .. ":" .. value)
 	end
 
 	-- Print everything on the table.
@@ -28,14 +28,14 @@ local function main()
 --	dev:fuss(false)         -- Let dev.cmd() return false when error happened.
 
 	if dev:fuss() then
-		msg.print("You just set dev:fuss(true)")
+		log.print("You just set dev:fuss(true)")
 	else
-		msg.print("You just set dev:fuss(false)")
+		log.print("You just set dev:fuss(false)")
 	end
 
 	-- Show you how to handle error message.
 	if false==dev:cmd("definitely_wrong_command;") then
-		msg.print("Error message from SQLite:" .. dev:error_msg())
+		log.print("Error message from SQLite:" .. dev:error_msg())
 	end
 end
 

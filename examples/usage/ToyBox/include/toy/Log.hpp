@@ -11,7 +11,7 @@ static void ChangeOutputDevice(std::string outputFileName)
 	auto writer = std::make_shared<toy::io::Writer<>>(outputFileName);
 
 	toy::log::PushDevice( [writer](const char* str){writer->printf(str);},
-						  [writer](const wchar_t* str){writer->printf(toy::utf::WCharToUTF8(str).c_str());});
+	                      [writer](const wchar_t* str){writer->printf(toy::utf::WCharToUTF8(str).c_str());});
 }
 
 int main()

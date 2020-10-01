@@ -18,8 +18,8 @@ class TOY_API Stream
 	public:
 
 		Stream();
+		// Option same as Stream::open
 		Stream(std::string filename,enum toy::Option option=toy::DEFAULT);
-		//Stream(std::string filename,std::string option);
 		~Stream();
 
 		bool empty();
@@ -30,7 +30,6 @@ class TOY_API Stream
 		 *     READ_ONLY :return false if target doesn't exist
 		 */
 		bool open(std::string filename,enum toy::Option option=toy::DEFAULT);
-	//	bool open(std::string filename,std::string option);
 		auto read(void *ptr,uint64_t size)->uint64_t;
 		bool write(const void *ptr,uint64_t size);
 		bool isEnd();
@@ -39,7 +38,7 @@ class TOY_API Stream
 		void rewind();
 		void operator >>(uint64_t offset);    // Just fseek(,offset,SEEK_CUR);
 		void operator <<(uint64_t offset);
-		void remove(const std::string &filename);   // Force remove target file.
+		void remove(const std::string &filename) const;   // Force remove target file.
 
 	private:
 

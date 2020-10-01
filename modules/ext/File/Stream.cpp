@@ -36,6 +36,11 @@ Stream::~Stream()
 	;
 }
 
+void Stream::drop()
+{
+	_file = nullptr;
+}
+
 void Stream::openDir(lua::Str path)
 {
 	if ( ! _file->openDir(path) )

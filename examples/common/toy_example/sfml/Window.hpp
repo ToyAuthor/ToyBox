@@ -6,6 +6,7 @@
 #include <memory>
 #include <SFML/Window.hpp>
 #include <toy/Environment.hpp>
+#include <toy/Utf.hpp>
 
 namespace toy{
 namespace example{
@@ -20,7 +21,7 @@ static inline auto CreateWindow( std::string title, uint32_t width, uint32_t hei
 
 	return std::make_shared<sf::Window>(
 			sf::VideoMode(width, height),
-			sf::String::fromUtf8(title.begin(),title.end()),
+			sf::String(toy::utf::UTF8ToWChar( title ).c_str()),
 			sf::Style::Default,
 			settings );
 }

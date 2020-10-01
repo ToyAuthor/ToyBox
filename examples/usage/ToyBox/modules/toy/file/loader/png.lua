@@ -1,9 +1,7 @@
 
-local  msg  = require "toy.logger"
-local  bug  = require "toy.debug"
-local  sys  = require "toy.root"
-local  file = require "toy.file"
-local  png  = require "toy.file.loader.png"
+local  bug = require "toy.debug"
+local  fs  = require "toy.file"
+local  png = require "toy.file.loader.png"
 
 local function create_window()
 	local  config =
@@ -17,8 +15,8 @@ local function create_window()
 end
 
 local function load_image_file(folder,filename)
-	local  stream = file.create_stream("default")
-	local  buffer = file.create_image_buffer()
+	local  stream = fs.create_stream("default")
+	local  buffer = fs.create_image_buffer()
 
 	stream:open_dir(folder)
 	stream:open(filename)

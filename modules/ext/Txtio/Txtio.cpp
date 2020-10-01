@@ -7,6 +7,7 @@ static void BindReaderWrapper(lua::State<> *lua)
 {
 	lua->bindMethod( "next_line",   &ReaderWrapper::nextLine );
 	lua->bindMethod( "open",        &ReaderWrapper::open );
+	lua->bindMethod( "__close",     &ReaderWrapper::drop );
 
 	lua->bindClass1ArgEx<ReaderWrapper,lua::Str>("new_reader");
 }
@@ -16,6 +17,7 @@ static void BindWriterWrapper(lua::State<> *lua)
 	lua->bindMethod( "new_line",    &WriterWrapper::newLine );
 	lua->bindMethod( "print",       &WriterWrapper::print );
 	lua->bindMethod( "printf",      &WriterWrapper::printf );
+	lua->bindMethod( "__close",     &WriterWrapper::drop );
 
 	lua->bindClass1ArgEx<WriterWrapper,lua::Str>("new_writer");
 }

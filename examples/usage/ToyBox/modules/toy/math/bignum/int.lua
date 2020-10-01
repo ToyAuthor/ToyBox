@@ -1,6 +1,6 @@
 
 local bug = require "toy.debug"
-local msg = require "toy.logger"
+local log = require "toy.logger"
 local int = require("toy.math.bignum.int").new
 
 local function main()
@@ -9,16 +9,16 @@ local function main()
 	local  c = a+b
 	local  d = int()    -- Default value is zero
 
---	msg.print("look a:" .. a:str() )
-	msg.print("look a:" .. a )
-	msg.print("look b:" .. b )
-	msg.print("look c:" .. c )
-	msg.print("look d:" .. d )
+--	log.print("look a:" .. a:str() )
+	log.print("look a:" .. a )
+	log.print("look b:" .. b )
+	log.print("look c:" .. c )
+	log.print("look d:" .. d )
 
 	if a>b then
-		msg.print("a>b")
+		log.print("a>b")
 	else
-		msg.print("a<=b")
+		log.print("a<=b")
 	end
 
 --	local  clone = b                      ----------(X)  Not a deep copy

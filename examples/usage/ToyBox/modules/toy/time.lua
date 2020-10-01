@@ -1,5 +1,5 @@
 
-local msg = require "toy.logger"
+local log = require "toy.logger"
 local tim = require "toy.time"
 
 --------------------------------------------------------------------------------
@@ -14,15 +14,15 @@ timer:restart()    -- Start to counting
 
 tim.sleep(10)
 
-msg.print(timer:restart() .. " seconds has been passed.")   -- Recounting
+log.print(timer:restart() .. " seconds has been passed.")   -- Recounting
 
 tim.sleep(10)
 
-msg.print(timer:passed() .. " seconds has been passed.")    -- No recount
+log.print(timer:passed() .. " seconds has been passed.")    -- No recount
 
 tim.sleep(10)
 
-msg.print(timer:passed() .. " seconds has been passed.")
+log.print(timer:passed() .. " seconds has been passed.")
 
 --[[
 Output:

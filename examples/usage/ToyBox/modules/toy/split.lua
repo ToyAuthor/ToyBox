@@ -1,5 +1,5 @@
 
-local  msg = require "toy.logger"
+local log = require "toy.logger"
 
 local splitter = require("toy.split").create_splitter()
 
@@ -11,7 +11,7 @@ local splitter = require("toy.split").create_splitter()
 local str = splitter:next()   -- Return nil if no next token exist.
 
 while str do
-	msg.print("str:" .. str)
+	log.print("str:" .. str)
 	str = splitter:next()
 end
 

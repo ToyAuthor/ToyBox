@@ -65,6 +65,7 @@ class Stream
 		Stream(lua::Var var);
 		~Stream();
 
+		void drop();
 		void openDir(lua::Str path);
 		void open(lua::Str filename);
 		void close();
