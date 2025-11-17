@@ -13,7 +13,7 @@ Version
 
 
 Environment(supported platform,compiler,etc)
-	ToyBox/doc/info/environment.txt
+	ToyBox/docs/info/environment.txt
 
 
 Language

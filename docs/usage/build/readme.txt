@@ -1,6 +1,6 @@
 
 Options of building system(optional)
-	ToyBox/doc/usage/build/options.txt
+	ToyBox/docs/usage/build/options.txt
 
 
 Step 1 : Download tools
@@ -8,7 +8,7 @@ Step 1 : Download tools
 	CMake
 
 Step 2 : Get third-party libraries
-	ToyBox/doc/usage/build/extlibs.txt
+	ToyBox/docs/usage/build/extlibs.txt
 
 Step 3 : Run CMake
 
