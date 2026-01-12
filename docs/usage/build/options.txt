@@ -1,9 +1,0 @@
-
-A switch from release mode to debug mode
-	Edit "ToyBox/CMakeLists.txt".
-	It always depend on "CMAKE_BUILD_TYPE".
-
-
-The other options:
-	ToyBox/cmake/toy_Option.cmake
-	ToyBox/include/toy/CompilerConfig.hpp
