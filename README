@@ -31,7 +31,7 @@
 
    resource     Something like font file, image file, lua script, etc.
 
-   source       The source code of ToyBox.
+   src          The source code of ToyBox.
 
    test         Test code.
 
