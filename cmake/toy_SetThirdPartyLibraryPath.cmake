@@ -1,4 +1,6 @@
 
+# ToyBox intentionally does NOT use CMake `find_package`.
+# All third-party libraries are configured via explicit paths.
 # The complete list of third-party libraries:"ToyBox/extlibs/readme.txt"
 macro(toy_SetThirdPartyLibraryPath)
 
@@ -9,8 +11,11 @@ macro(toy_SetThirdPartyLibraryPath)
 	# Visual Studio
 	elseif(MSVC)
 		set(TOY_SDK_INC "D:/ToyBoxSDK/include" )
-		if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win64"))
+		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+	#	if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win64"))
 			set(TOY_SDK_LIB "D:/ToyBoxSDK/lib/msvc2015_x64_win32_release" )
+		elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+			set(TOY_SDK_LIB "D:/ToyBoxSDK/lib/msvc2022_x64_release" )
 		else()
 			message(WARNING "ToyBox:ToyBoxSDK doesn't have this version")
 		endif()
@@ -32,7 +37,7 @@ macro(toy_SetThirdPartyLibraryPath)
 		endif()
 	endif()
 
-	if(NOT EXISTS ${TOY_SDK_INC} AND NOT EXISTS ${TOY_SDK_LIB})
+	if(NOT EXISTS "${TOY_SDK_INC}" OR NOT EXISTS "${TOY_SDK_LIB}")
 		# TOY_SDK_INC and TOY_SDK_LIB is not necessary.
 		# You can just modify those paths and ignore this error.
 		# Take a look!

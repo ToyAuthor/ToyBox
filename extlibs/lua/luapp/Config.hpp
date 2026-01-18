@@ -9,7 +9,7 @@
 #include "luapp/Environment.hpp"
 
 // if ( version >= C++11 )
-#if (__cplusplus > 201100L) || defined(TOY_VC_2013) || defined(TOY_VC_2015) || defined(TOY_VC_2017)
+#if (__cplusplus > 201100L) || defined(TOY_VC_2013) || defined(TOY_VC_2015) || defined(TOY_VC_2017) || defined(TOY_VC_2022)
 	#define _LUAPP_CPP11_
 #endif
 
