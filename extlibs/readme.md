@@ -1,9 +1,9 @@
 # Third-Party Libraries
-To keep the ToyBox project directory lightweight,
-only compact third-party libraries are included in the directory.
+To keep the ToyBox project directory lightweight, 
+only compact third-party libraries are included in the directory. 
 Other required third-party dependencies are not bundled.
 
-For the included libraries, non-essential files are removed to reduce size,
+For the included libraries, non-essential files are removed to reduce size, 
 while the source code itself remains unmodified to comply with their respective licenses.
 
 
@@ -48,5 +48,5 @@ Please see `ToyBox/license`.
 
 
 ## Usage
-Refer to `ToyBox/cmake/toy_SetThirdPartyLibraryPath.cmake`
+Refer to `ToyBox/cmake/toy_SetThirdPartyLibraryPath.cmake` 
 for the expected layout and configuration of third-party libraries.

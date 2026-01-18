@@ -7,7 +7,7 @@ macro(toy_CheckEnvironment)
 
 	if(CMAKE_BUILD_TYPE MATCHES Release)
 		if(TOY_ENABLE_ALPHA_API)
-			message(WARNING "ToyBox:Release version shouldn't include beta stuff.")
+			message(WARNING "ToyBox:Release version should turn off TOY_ENABLE_ALPHA_API.")
 		endif()
 	endif()
 
