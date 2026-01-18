@@ -3,7 +3,7 @@
 #define LUAPP_VERSION_MAJOR "2"
 #define LUAPP_VERSION_MINOR "5"
 #define LUAPP_VERSION_PATCH "0"
-#define LUAPP_AUTHOR "Yan-Xin Wu"
+#define LUAPP_AUTHOR "Wu Yan-Xin"
 
 
 #include "luapp/Environment.hpp"

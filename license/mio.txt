@@ -1,6 +1,7 @@
-The MIT License (MIT)
+MIT License
 
-Copyright (c) 1994-2020 Lua.org, PUC-Rio.
+Copyright (c) 2018 https://github.com/mandreyel/
+Currently maintained at https://github.com/vimpunk/mio
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

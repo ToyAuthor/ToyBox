@@ -1,7 +1,7 @@
 
 # ToyBox intentionally does NOT use CMake `find_package`.
 # All third-party libraries are configured via explicit paths.
-# The complete list of third-party libraries:"ToyBox/extlibs/readme.txt"
+# The complete list of third-party libraries:"ToyBox/extlibs/readme.md"
 macro(toy_SetThirdPartyLibraryPath)
 
 	# Mac LLVM-GCC
@@ -42,7 +42,6 @@ macro(toy_SetThirdPartyLibraryPath)
 		# You can just modify those paths and ignore this error.
 		# Take a look!
 		# https://github.com/ToyAuthor/ToyBoxSDK
-		# ToyBox/doc/usage/build/extlibs.txt
 		message(FATAL_ERROR "ToyBox:Are you sure you have all the third-party libraries?")
 	else()
 		# Mac
@@ -109,10 +108,11 @@ macro(toy_SetThirdPartyLibraryPath)
 
 
 	set(TOY_include_glm         "${TOY_ROOT_SOURCE_DIR}/extlibs/glm" )
+	set(TOY_include_mio         "${TOY_ROOT_SOURCE_DIR}/extlibs/mio" )
 
 
-	set(TOY_library_gmp         "${TOY_SDK_LIB}/GMP" )
 	set(TOY_include_gmp         "${TOY_SDK_LIB}/GMP" )
+	set(TOY_library_gmp         "${TOY_SDK_LIB}/GMP" )
 	if(MSVC)
 	set(TOY_libname_gmp         "mpir" )
 	else()
@@ -151,5 +151,10 @@ macro(toy_SetThirdPartyLibraryPath)
 	set(TOY_include_sqlite      "${TOY_ROOT_SOURCE_DIR}/extlibs/sqlite" )
 	set(TOY_library_sqlite      "${TOY_ROOT_BINARY_DIR}/extlibs/sqlite" )
 	set(TOY_libname_sqlite      "sqlite3" )
+
+
+	set(TOY_include_linenoise   "${TOY_ROOT_SOURCE_DIR}/extlibs/linenoise/include" )
+	set(TOY_library_linenoise   "${TOY_ROOT_BINARY_DIR}/extlibs/linenoise" )
+	set(TOY_libname_linenoise   "linenoise" )
 
 endmacro(toy_SetThirdPartyLibraryPath)

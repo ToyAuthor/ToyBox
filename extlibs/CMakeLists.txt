@@ -14,6 +14,7 @@ add_subdirectory(boost)
 add_subdirectory(zlib)
 add_subdirectory(lz4)
 add_subdirectory(sqlite)
+add_subdirectory(linenoise)
 
 
 if(UNIX)
