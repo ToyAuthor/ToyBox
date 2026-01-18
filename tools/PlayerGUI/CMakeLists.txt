@@ -2,22 +2,25 @@ project(PlayerGUI)
 
 toy_StdReady()
 
-# Hide console window
-#if(MSVC)
-#	if(TOY_RELEASE)
-#		set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-#	else()
-#		set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-#	endif()
-#else()
-#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
-#endif()
+# Hide console window in release mode
+if(MSVC)
+	if(TOY_RELEASE)
+		set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+	else()
+		#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+	endif()
+else()
+	if(TOY_RELEASE)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows")
+	endif()
+endif()
 
 file(GLOB SOURCE *.cpp */*.cpp)
 
 include_directories(${TOY_include_lua})
 link_directories(${TOY_library_lua})
 include_directories(${TOY_include_fltk})
+include_directories(${TOY_library_fltk})
 link_directories(${TOY_library_fltk})
 
 set(LIBS
