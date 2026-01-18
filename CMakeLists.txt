@@ -1,6 +1,7 @@
 
+cmake_minimum_required(VERSION 3.15)
+
 project(ToyBox)
-cmake_minimum_required(VERSION 2.8)
 
 if(NOT CMAKE_BUILD_TYPE)
 #	set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build" FORCE)

@@ -14,11 +14,11 @@
 #include <string.h>
 
 #include <signal.h>
-
+extern "C" {
 #include "lua.h"
-
 #include "lauxlib.h"
 #include "lualib.h"
+}
 
 
 #if !defined(LUA_PROGNAME)
