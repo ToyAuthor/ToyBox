@@ -31,17 +31,45 @@ class TOY_API Color
 	public:
 
 		Color();
+
+		Color(uint8_t v);
+		Color(float   v);
+		Color(uint8_t v,uint8_t a);
+		Color(float   v,float   a);
+		Color(uint8_t r,uint8_t g,uint8_t b);
+		Color(float   r,float   g,float   b);
 		Color(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
 		Color(float   r,float   g,float   b,float   a);
 		Color(const Color&);
 		Color& operator = (const Color&);
 		~Color();
 
-		void data(uint8_t  r,uint8_t  g,uint8_t  b,uint8_t  a);
-		void data(uint8_t* r,uint8_t* g,uint8_t* b,uint8_t* a) const;
-		void data(float    r,float    g,float    b,float    a);
-		void data(float*   r,float*   g,float*   b,float*   a) const;
+		//-------------Grey scale-------------
+		void set(uint8_t  v);
+		void get(uint8_t* v) const;
+		void set(float    v);
+		void get(float*   v) const;
 
+		//-------------Grey alpha-------------
+		void set(uint8_t  v,uint8_t  a);
+		void get(uint8_t* v,uint8_t* a) const;
+		void set(float    v,float    a);
+		void get(float*   v,float*   a) const;
+
+		//-------------RGB-------------
+		void set(uint8_t  r,uint8_t  g,uint8_t  b);
+		void get(uint8_t* r,uint8_t* g,uint8_t* b) const;
+		void set(float    r,float    g,float    b);
+		void get(float*   r,float*   g,float*   b) const;
+
+		//-------------RGBA-------------
+		void set(uint8_t  r,uint8_t  g,uint8_t  b,uint8_t  a);
+		void get(uint8_t* r,uint8_t* g,uint8_t* b,uint8_t* a) const;
+		void set(float    r,float    g,float    b,float    a);
+		void get(float*   r,float*   g,float*   b,float*   a) const;
+
+		void grey(float);
+		void grey(uint8_t);
 		void red(float);
 		void red(uint8_t);
 		void green(float);
@@ -51,6 +79,7 @@ class TOY_API Color
 		void alpha(float);
 		void alpha(uint8_t);
 
+		auto grey()   const -> ::toy::_PrimaryColor;
 		auto red()   const -> ::toy::_PrimaryColor;
 		auto green() const -> ::toy::_PrimaryColor;
 		auto blue()  const -> ::toy::_PrimaryColor;

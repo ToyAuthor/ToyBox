@@ -47,7 +47,7 @@ static void Resize_RGBA_EditDownwardOnly(toy::ImageBuffer *image,int32_t downwar
 		for ( ; downward>0 ; downward-- )
 		{
 			ptr += 4;
-			color.data(ptr,ptr+1,ptr+2,ptr+3);
+			color.get(ptr,ptr+1,ptr+2,ptr+3);
 		}
 
 		return;
